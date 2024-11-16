@@ -141,15 +141,69 @@ function updateCamera() {
     cameraY = lerp(cameraY, player.y, smoothness);
 }
 
-// Clear the canvas and redraw the game elements
+
+
+
+
+// Sprite animation setup
+const spriteSheet = new Image();
+spriteSheet.src = "./img/Slime_Medium_Green.png"; // Path to your sprite sheet
+
+// Sprite properties
+const spriteWidth = 32; // Width of each frame
+const spriteHeight = 32; // Height of each frame
+const totalFrames = 4; // Total number of frames in the idle animation
+let currentFrame = 0; // Track the current frame
+const frameRate = 10; // Frames per second
+let frameTimer = 0; // Timer for frame updates
+
+// Define the row of the animation
+const animationRow = 2; // 0-based index for the third row
+const sourceY = animationRow * spriteHeight; // Y position in the sprite sheet
+
+// Sprite animation function
+function drawSprite(player) {
+    // Update frame timer
+    frameTimer++;
+    if (frameTimer >= 60 / frameRate) {
+        currentFrame = (currentFrame + 1) % totalFrames; // Loop through frames
+        frameTimer = 0;
+    }
+
+    // Draw the sprite at the player's position
+    ctx.drawImage(
+        spriteSheet,
+        currentFrame * spriteWidth, // Source X position
+        sourceY, // Source Y position (calculated from the row)
+        spriteWidth,
+        spriteHeight,
+        canvas.width / 2 - player.w / 2, // Center on the canvas
+        canvas.height / 2 - player.h / 2, // Center on the canvas
+        spriteWidth,
+        spriteHeight
+    );
+}
+
+
+
+
+
+
+// Start the game loop after the sprite sheet is loaded
+spriteSheet.onload = () => {
+    updateGame();
+};
+
+
 function updateGame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     updateCamera();
-
     
-    player.move();
-    drawPlayer();
+    // Draw the sprite and other player elements
+    drawSprite(player);
 
+
+    //drawPlayer();
     aimer.draw();
     for(i=0; i < arrayBox.length; i++){
 
