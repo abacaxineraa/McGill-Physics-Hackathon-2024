@@ -85,7 +85,7 @@ function spawnRandomBox() {
 
 // setting up player
 let player = new Player(canvas.width/2, canvas.height/2, 30, 30, 3, 3, 1, 1, true)
-let aimer = new Aimer(0, 40, 20)
+let aimer = new Aimer(0, 30, 10)
 // Math functions
 function dist(x1, y1, x2, y2){
     return (Math.sqrt((x1-x2)**2 + (y1-y2)**2))
@@ -139,18 +139,10 @@ function lerp(start, end, t) {
 // Draw the player
 function drawPlayer() {
     ctx.fillStyle = '#007bff';
+    console.log(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h)
     ctx.fillRect(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h); // Adjust for camera
     
-    // Draw aimer (Rotate, draw, rotate back)
-    ctx.fillStyle = "black";
-    ctx.translate(aimer.x, aimer.y);
-    ctx.rotate(aimer.angle);
-    ctx.translate(-aimer.x, -aimer.y);
-    ctx.fillRect(aimer.x - aimer.w/2, aimer.y - aimer.h/2, aimer.w, aimer.h);
     
-    ctx.translate(aimer.x, aimer.y);
-    ctx.rotate(-aimer.angle);
-    ctx.translate(-aimer.x, -aimer.y);
  
     // ctx.fillRect(canvas.width/2  + player.x - cameraX + 30*Math.cos(aimer.angle) -5 , canvas.height/2 + player.y - cameraY + 30*Math.sin(aimer.angle) - 5, 10, 10); // Adjust for camera
        
@@ -165,8 +157,6 @@ function moveAim(event){
     } else if (event.offsetX < trueX){
         aimer.angle = (Math.atan((event.offsetY - trueY)/(event.offsetX - trueX)) + Math.PI)
     }
-    aimer.x = canvas.width/2  + player.x - cameraX + 30*Math.cos(aimer.angle) 
-    aimer.y = canvas.height/2 + player.y - cameraY + 30*Math.sin(aimer.angle)
 }
 
 
@@ -182,6 +172,7 @@ function updateGame() {
     updateCamera();
 
     drawPlayer();
+    aimer.draw();
     for(i=0; i < arrayBox.length; i++){
 
         arrayBox[i].draw();
