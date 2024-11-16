@@ -85,8 +85,8 @@ class Box {
 
 // Player and camera settings
 const playerSize = 30;
-const playerSpeed = 5;
-const smoothness = 0.2; // Smoothness for camera movement (lower is smoother but slower)
+const playerSpeed = 3;
+const smoothness = 0.1; // Smoothness for camera movement (lower is smoother but slower)
 
 let playerX = canvas.width / 2;
 let playerY = canvas.height / 2;
@@ -148,7 +148,6 @@ function lerp(start, end, t) {
 // Draw the player
 function drawPlayer() {
     ctx.fillStyle = '#007bff';
-    ctx.fillRect(canvas.width/2 - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Adjust for camera
     ctx.fillRect(canvas.width/2  + playerX - cameraX - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Adjust for camera
     ctx.fillStyle = "black";
     ctx.fillRect(canvas.width/2  + playerX - cameraX + 30*Math.cos(aimerAngle) -5 , canvas.height/2 + playerY - cameraY + 30*Math.sin(aimerAngle) - 5, 10, 10); // Adjust for camera
