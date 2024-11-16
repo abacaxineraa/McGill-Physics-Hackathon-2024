@@ -121,6 +121,7 @@ class Photons {
         ctx.fillRect(canvas.width / 2 + this.x - cameraX - this.w / 2, 
             canvas.height / 2 + this.y - cameraY - this.h / 2, 
             this.w, this.h);
+        
     }
     move(){
         this.x += this.vx;
