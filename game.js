@@ -158,17 +158,17 @@ function updateCamera() {
 
 // Sprite animation setup
 const spriteSheet = new Image();
-spriteSheet.src = "./img/Slime_Medium_Green.png"; // Path to your sprite sheet
+spriteSheet.src = "./img/Slime_Medium_Green copy.png"; // Path to your sprite sheet
 
 // Sprite properties
-const spriteWidth = 32; // Width of each frame
-const spriteHeight = 32; // Height of each frame
+const spriteWidth = 128; // Width of each frame
+const spriteHeight = 128; // Height of each frame
 const totalFrames = 4; // Total number of frames in the idle animation
 let currentFrame = 0; // Track the current frame
 const frameRate = 10; // Frames per second
 let frameTimer = 0; // Timer for frame updates
 
-// Define the row of the animation
+// Define the starting row for the sprite png
 const animationRow = 2; // 0-based index for the third row
 const sourceY = animationRow * spriteHeight; // Y position in the sprite sheet
 
@@ -181,6 +181,10 @@ function drawSprite(player) {
         frameTimer = 0;
     }
 
+// Calculate the player's position relative to the camera
+   const drawX = canvas.width / 2 + (player.x - cameraX) - spriteWidth / 2;
+   const drawY = canvas.height / 2 + (player.y - cameraY) - spriteHeight / 2;
+
     // Draw the sprite at the player's position
     ctx.drawImage(
         spriteSheet,
@@ -188,15 +192,12 @@ function drawSprite(player) {
         sourceY, // Source Y position (calculated from the row)
         spriteWidth,
         spriteHeight,
-        canvas.width / 2 - player.w / 2, // Center on the canvas
-        canvas.height / 2 - player.h / 2, // Center on the canvas
+        canvas.width / 2 - 4*player.w / 2, // Center on the canvas
+        canvas.height / 2 - 4*player.h / 2, // Center on the canvas
         spriteWidth,
         spriteHeight
     );
 }
-
-
-
 
 
 
@@ -209,7 +210,7 @@ spriteSheet.onload = () => {
 function updateGame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     updateCamera();
-    
+
     // Draw the sprite and other player elements
     drawSprite(player);
 
