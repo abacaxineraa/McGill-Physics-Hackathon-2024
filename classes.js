@@ -85,8 +85,9 @@ class Aimer {
 
     draw(){// Draw aimer (Rotate, draw, rotate back)
         ctx.globalAlpha = 0.5;
-        this.x = player.x + 30*Math.cos(aimer.angle) 
-        this.y = player.y + 30*Math.sin(aimer.angle)
+        let playerR = Math.sqrt(player.w**2 + player.h**2)/(2*Math.sqrt(2))
+        this.x = player.x + playerR*Math.cos(aimer.angle)  
+        this.y = player.y + playerR*Math.sin(aimer.angle)
         ctx.fillStyle = "black";
         ctx.translate(canvas.width/2 + this.x - cameraX, canvas.height/2 + this.y - cameraY);
         ctx.rotate(this.angle);

@@ -118,10 +118,10 @@ function lerp(start, end, t) {
 }
 
 // Draw the player
-function drawPlayer() {
-    ctx.fillStyle = '#007bff';
-    ctx.fillRect(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h); // Adjust for camera
-}
+// function drawPlayer() {
+//     ctx.fillStyle = '#007bff';
+//     ctx.fillRect(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h); // Adjust for camera
+// }
 
 // Draw and update aimer()
 function moveAim(event){
@@ -145,57 +145,11 @@ function updateCamera() {
 
 
 
-// Sprite animation setup
-const spriteSheet = new Image();
-spriteSheet.src = "./img/Slime_Medium_Green copy.png"; // Path to your sprite sheet
-
-// Sprite properties
-const spriteWidth = 128; // Width of each frame
-const spriteHeight = 128; // Height of each frame
-const totalFrames = 4; // Total number of frames in the idle animation
-let currentFrame = 0; // Track the current frame
-const frameRate = 10; // Frames per second
-let frameTimer = 0; // Timer for frame updates
-
-// Define the starting row for the sprite png
-const animationRow = 2; // 0-based index for the third row
-const sourceY = animationRow * spriteHeight; // Y position in the sprite sheet
-
-// Sprite animation function
-function drawSprite(player) {
-    player.move()
-
-    // Update frame timer
-    frameTimer++;
-    if (frameTimer >= 60 / frameRate) {
-        currentFrame = (currentFrame + 1) % totalFrames; // Loop through frames
-        frameTimer = 0;
-    }
-
-// Calculate the player's position relative to the camera
-   const drawX = canvas.width / 2 + (player.x - cameraX) - spriteWidth / 2;
-   const drawY = canvas.height / 2 + (player.y - cameraY) - spriteHeight / 2;
-
-    // Draw the sprite at the player's position
-    ctx.drawImage(
-        spriteSheet,
-        currentFrame * spriteWidth, // Source X position
-        sourceY, // Source Y position (calculated from the row)
-        spriteWidth,
-        spriteHeight,
-        canvas.width / 2 + player.x - cameraX - player.w / 2, // Center on the canvas
-        canvas.height / 2 + player.y - cameraY - player.h / 2, // Center on the canvas
-        player.w,
-        player.h
-    );
-    
-    console.log(canvas.width / 2 + player.x - cameraX - player.w / 2)
-}
 
 
 
 // Start the game loop after the sprite sheet is loaded
-spriteSheet.onload = () => {
+player.spriteSheet.onload = () => {
     updateGame();
 };
 
@@ -205,7 +159,9 @@ function updateGame() {
     updateCamera();
 
     // Draw the sprite and other player elements
-    drawSprite(player);
+    // Inside updateGame function:
+    player.draw(ctx, player.spriteSheet, cameraX, cameraY, canvas);
+
 
 
     //drawPlayer();
