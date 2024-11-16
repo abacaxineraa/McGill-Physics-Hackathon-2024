@@ -141,11 +141,3 @@ class Walls {
 
     }
 }
-
-class Box {
-    constructor(x,y,c){this.x = x; this.y=y; this.c = c}
-    draw() {
-        ctx.fillStyle = 'red';
-        ctx.fillRect( canvas.width/2 + this.x - cameraX -this.c/2, canvas.height/2 + this.y - cameraY -this.c/2, this.c, this.c);
-    }
-}

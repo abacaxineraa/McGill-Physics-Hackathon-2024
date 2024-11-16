@@ -4,11 +4,12 @@ const ctx = canvas.getContext('2d');
 
 
 let monsters = [];
+let spawnRate = 0.03;
 
 // Function to spawn monsters outside the frame
 function spawnMonster() {
     // Only spawn a monster if the number of monsters is less than 5
-    if (monsters.length >= 5) return;
+    if (monsters.length >= Math.round(5 + 10 * spawnRate)) return;
 
     // Random position outside the player's current view
     let spawnX = player.x + (Math.random() * 800 - 400);  // Spawn outside the screen on X-axis
@@ -25,17 +26,11 @@ function spawnMonster() {
     
     // Random glow effect for the monster
     let glow = Math.random() < 0.5;
-    let ran = Math.random() * Math.min(canvas.height/2, canvas.width/2) + 2.5 * Math.min(player.w, player.h)
+    let ran = (1-spawnRate) * Math.random() * Math.min(canvas.height/2, canvas.width/2) + 2.5 * Math.min(player.w, player.h)
     
     // Create a new monster and add it to the monsters array
     monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow, ran));
-    console.log("here!")
 }
-
-
-
-
-
 
 // Player and camera settings
 const smoothness = 0.1; // Smoothness for camera movement (lower is smoother but slower)
@@ -43,26 +38,22 @@ const smoothness = 0.1; // Smoothness for camera movement (lower is smoother but
 let cameraX = canvas.width/2;
 let cameraY = canvas.height/2;
 
-arrayBox=[]
-arrayBox.push(new Box(300, 200, 100))
-arrayBox.push(new Box(400, 200, 50))
-
-function spawnRandomBox() {
-    const randomX = player.x + (Math.random() * 400 - 200); // Random x within ±200 pixels of player
-    const randomY = player.y + (Math.random() * 400 - 200); // Random y within ±200 pixels of player
-    const randomSize = Math.random() * 50 + 20; // Random size between 20 and 70
-    arrayBox.push(new Box(randomX, randomY, randomSize));
-}
-
 
 
 
 // setting up player
 let player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.25, 0.25, true)
 let aimer = new Aimer(0, 30, 10)
+
+
 // Math functions
 function dist(x1, y1, x2, y2){
     return (Math.sqrt((x1-x2)**2 + (y1-y2)**2))
+}
+
+function collision(obj1, obj2){
+    return (Math.abs(obj1.x - obj2.x) <= (obj1.w/2 + obj2.w/2) && // Distance between x-coordinates <= Sum of half-widths
+            Math.abs(obj1.y - obj2.y) <= (obj1.h/2 + obj2.h/2)) // Distance between y-coordinates <= Sum of half-heights  
 }
 
 
@@ -104,9 +95,7 @@ function movePlayer() {
 
     
         
-        if (Math.random() < 0.2) {  // 20% chance to spawn a monster after every move
-            spawnMonster();
-        }
+        
     }
     
 }
@@ -145,11 +134,12 @@ let c = 5; // speed of light
 let photons = []
 
 function shoot(){
+    if (photons.length < 4){
     let shootVX = c * Math.cos(aimer.angle);
     let shootVY = c * Math.sin(aimer.angle);  
     let shootR = Math.min(canvas.width/2,canvas.height/2);
     photons.push(new Photons(aimer.x + aimer.w * Math.cos(aimer.angle), aimer.y + aimer.w * Math.sin(aimer.angle),5,5,shootVX,shootVY,shootR));
-
+    }
 }
 
 
@@ -206,8 +196,6 @@ function drawSprite(player) {
         player.w,
         player.h
     );
-    
-    console.log(canvas.width / 2 + player.x - cameraX - player.w / 2)
 }
 
 
@@ -222,17 +210,13 @@ function updateGame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     updateCamera();
 
+    if (Math.random() < spawnRate) {  //  chance to spawn a monster every refresh
+        spawnMonster();
+    }
     // Draw the sprite and other player elements
     drawSprite(player);
+    aimer.draw()
 
-
-    //drawPlayer();
-    aimer.draw();
-    for(i=0; i < arrayBox.length; i++){
-
-        arrayBox[i].draw();
-
-    }
     
     // Draw the monsters
     for(i=0; i < monsters.length; i++){
@@ -254,6 +238,18 @@ function updateGame() {
         photons[i].draw();
         photons[i].move();
         
+    }
+
+    // Check monsters-photons
+    monsters = monsters.filter(checkCollision);
+    function checkCollision(monster){
+        for (i = 0; i < photons.length; i++){
+            if (collision(monster, photons[i])) {
+                spawnRate *= 1.05
+                console.log(spawnRate)
+                return false}
+        }
+        return true
     }
 
     // Request the next animation frame
