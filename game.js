@@ -20,25 +20,19 @@ function spawnMonster() {
     // Random velocity for the monster (to make them move)
     let vx = Math.random() * 2 - 1; // Random velocity between -1 and 1
     let vy = Math.random() * 2 - 1; // Random velocity between -1 and 1
-    
-    // Random health for the monster
-    let hp = Math.floor(Math.random() * 50 + 30);
+ 
+    let hp = true;
     
     // Random glow effect for the monster
     let glow = Math.random() < 0.5;
+    let ran = Math.random() * Math.min(canvas.height/2, canvas.width/2) + 2.5 * Math.min(player.w, player.h)
     
     // Create a new monster and add it to the monsters array
-    monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow));
+    monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow, ran));
+    console.log("here!")
 }
 
 
-function updateMonsters() {
-    monsters.forEach(monster => {
-        // Update monster's position based on velocity
-        monster.x += monster.vx;
-        monster.y += monster.vy;
-    });
-}
 
 
 
@@ -88,10 +82,10 @@ function movePlayer() {
     let dy = 0;
 
     // Check the keys that are currently pressed and set dx and dy accordingly
-    if (keysPressed['ArrowUp'] || keysPressed['w']) dy = -1;
-    if (keysPressed['ArrowDown'] || keysPressed['s']) dy = 1;
-    if (keysPressed['ArrowLeft'] || keysPressed['a']) dx = -1;
-    if (keysPressed['ArrowRight'] || keysPressed['d']) dx = 1;
+    if (keysPressed['ArrowUp'] || keysPressed['w'] || keysPressed['W']) dy = -1;
+    if (keysPressed['ArrowDown'] || keysPressed['s'] || keysPressed['S']) dy = 1;
+    if (keysPressed['ArrowLeft'] || keysPressed['a'] || keysPressed['A']) dx = -1;
+    if (keysPressed['ArrowRight'] || keysPressed['d'] || keysPressed['D']) dx = 1;
     
     // Normalize the movement vector if both x and y directions are active
     
@@ -127,18 +121,13 @@ function lerp(start, end, t) {
 function drawPlayer() {
     ctx.fillStyle = '#007bff';
     ctx.fillRect(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h); // Adjust for camera
-    
-    
- 
-    // ctx.fillRect(canvas.width/2  + player.x - cameraX + 30*Math.cos(aimer.angle) -5 , canvas.height/2 + player.y - cameraY + 30*Math.sin(aimer.angle) - 5, 10, 10); // Adjust for camera
-       
 }
 
 // Draw and update aimer()
 function moveAim(event){
     let trueX = canvas.width/2 + player.x -cameraX
     let trueY = canvas.height/2 + player.y -cameraY
-    if (event.offsetX > (trueX)){
+    if (event.offsetX >= (trueX)){
         aimer.angle = Math.atan((event.offsetY - trueY)/(event.offsetX - trueX))
     } else if (event.offsetX < trueX){
         aimer.angle = (Math.atan((event.offsetY - trueY)/(event.offsetX - trueX)) + Math.PI)
@@ -224,9 +213,20 @@ function updateGame() {
     }
     
     // Draw the monsters
-    monsters.forEach(monster => monster.draw());
+    for(i=0; i < monsters.length; i++){
+        monsters[i].move()
+        monsters[i].draw();
+
+    }
     
 
     // Request the next animation frame
     requestAnimationFrame(updateGame);
 }
+
+// Listen for key presses to move the player
+document.addEventListener('keydown', movePlayer);
+canvas.addEventListener('mousemove', moveAim);
+
+// Start the game loop
+updateGame();
