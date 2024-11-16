@@ -5,9 +5,15 @@ const ctx = canvas.getContext('2d');
 
 class Box {
     constructor(x,y,c){this.x = x; this.y=y; this.c = c}
-    create() {
+    draw() {
         ctx.fillStyle = 'red';
         ctx.fillRect(this.x-this.c/2, canvas.height/2 + this.y - cameraY -this.c/2, this.c, this.c);
+    }
+}
+
+class Player {
+    constructor(){
+        
     }
 }
 
@@ -77,7 +83,7 @@ function updateGame() {
     // Draw the player at the updated position
     drawPlayer();
     for(i=0; i < arrayBox.length; i++){
-        arrayBox[i].create()
+        arrayBox[i].draw()
     }
 
     // Request the next animation frame
