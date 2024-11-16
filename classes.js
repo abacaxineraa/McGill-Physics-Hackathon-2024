@@ -1,22 +1,20 @@
 
+class Player {
 
-
-class Player {    
     // position, width, height, velocity, acceleration, health
-    constructor(x, y, w, h, vx, vy, ax, ay, hp) {
+    constructor(x,y,w,h,vx,vy,ax,ay,hp){
         this.x = x;
         this.y = y;
-        this.w = w;
+        this.w = w; 
         this.h = h;
-        this.vx = vx;
+        this.vx = vx; 
         this.vy = vy;
         this.ax = ax;
-        this.ay = ay;
+        this.ay = ay; 
         this.hp = hp;
-        
         // Sprite properties (moved to the constructor)
-	this.spriteSheet = new Image();
-	this.spriteSheet.src = "./img/Slime_Medium_Green copy.png"; //
+        this.spriteSheet = new Image();
+        this.spriteSheet.src = "./img/Slime_Medium_Green copy.png"; //
         this.spriteWidth = 128; // Width of each frame
         this.spriteHeight = 128; // Height of each frame
         this.totalFrames = 4; // Total number of frames in the idle animation
@@ -27,23 +25,28 @@ class Player {
         // Define the starting row for the sprite png
         this.animationRow = 2; // 0-based index for the third row
         this.sourceY = this.animationRow * this.spriteHeight; // Y position in the sprite sheet
+
     }
     
-    move() {
-        if (this.vx != 0) {
-            this.vx -= 0.10 * this.vx / Math.abs(this.vx) * this.ax;
+    move(){
+
+        if(this.vx != 0){
+            this.vx -= 0.10 * this.vx/Math.abs(this.vx) * this.ax;
+            
         }
-        if (this.vy != 0) {
-            this.vy -= 0.10 * this.vy / Math.abs(this.vy) * this.ay;
+        
+        if(this.vy != 0){
+            this.vy -= 0.10 * this.vy/Math.abs(this.vy) * this.ay;
         }
+    
+        
         this.x += this.vx;
         this.y += this.vy;
     }
-
     // Sprite animation function
     draw(ctx, spriteSheet, cameraX, cameraY, canvas) {
         this.move();
-        
+
         // Update frame timer
         this.frameTimer++;
         if (this.frameTimer >= 60 / this.frameRate) {
@@ -87,7 +90,6 @@ class Player {
 }
 
 
-
 class Aimer {
 
 
@@ -115,12 +117,13 @@ class Aimer {
         ctx.translate( - canvas.width/2 - this.x + cameraX, - canvas.height/2 - this.y + cameraY);
         ctx.globalAlpha = 1;
     }
+    
 }
 
 class Photons {
 
     // position of photons, velocity of photons, radius, range of photons
-    constructor(x,y,w,h,vx,vy,ran, color){
+    constructor(x,y,w,h,vx,vy,ran){
         this.x = x;
         this.y = y;
         this.w = w;
@@ -128,14 +131,14 @@ class Photons {
         this.vx = vx;
         this.vy = vy;
         this.ran = ran;
-        this.color = color;
     }
 
     draw(){
-        ctx.fillStyle = this.color;
+        ctx.fillStyle = 'red';
         ctx.fillRect(canvas.width / 2 + this.x - cameraX - this.w / 2, 
             canvas.height / 2 + this.y - cameraY - this.h / 2, 
             this.w, this.h);
+        
     }
     move(){
         this.x += this.vx;
@@ -147,8 +150,8 @@ class Photons {
 
 class Monsters {
 
-    // position of monsters, velocity of monsters, width of monsters, health of monsters, glow of monsters
-    constructor(x,y,vx,vy,w,h,hp,glow, ran){
+    // position of monsters, velocity of monsters, width of monsters, health of monsters, glow of monsters, glow of monsters on or off
+    constructor(x,y,vx,vy,w,h,hp,glow,ran,glowon, t, myinterval){
         this.x = x;
         this.y = y;
         this.vx = vx;
@@ -158,6 +161,8 @@ class Monsters {
         this.hp = hp;
         this.glow = glow;
         this.ran = ran;
+        this.t = t;
+        this.myinterval = myinterval;
 
 	
 
@@ -214,20 +219,20 @@ class Monsters {
     
 
     move() {
-	if (dist(this.x, this.y, player.x, player.y) >= this.ran){
+        if (dist(this.x, this.y, player.x, player.y) >= this.ran){
             let followAngle;
             if (player.x >= this.x){
-		followAngle = Math.atan((player.y - this.y)/(player.x - this.x))
+                followAngle = Math.atan((player.y - this.y)/(player.x - this.x))
             } else if (player.x < this.x){
-		followAngle = Math.atan((player.y - this.y)/(player.x - this.x)) + Math.PI
+                followAngle = Math.atan((player.y - this.y)/(player.x - this.x)) + Math.PI
             }
             // Rebalancing VX and VY so that monster follows player
             let followV = Math.sqrt(this.vx ** 2 + this.vy ** 2)
             this.vx = followV * Math.cos(followAngle)
             this.vy = followV * Math.sin(followAngle)
-	}
-	this.x += this.vx;
-	this.y += this.vy;
+        }
+        this.x += this.vx;
+        this.y += this.vy;
     }
 }
 
