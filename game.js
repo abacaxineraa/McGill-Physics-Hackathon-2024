@@ -183,13 +183,8 @@ function drawSprite(player) {
         sourceY, // Source Y position (calculated from the row)
         spriteWidth,
         spriteHeight,
-<<<<<<< HEAD
         canvas.width / 2 + player.x - cameraX - player.w / 2, // Center on the canvas
         canvas.height / 2 + player.y - cameraY - player.h / 2, // Center on the canvas
-=======
-        canvas.width / 2 - 4*player.w / 2, // Center on the canvas
-        canvas.height / 2 - 4*player.h / 2, // Center on the canvas
->>>>>>> a6844ce31b61ef99d779d95e5a0b585001b9669a
         spriteWidth,
         spriteHeight
     );
