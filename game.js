@@ -154,7 +154,7 @@ function updateCamera() {
 const spriteSheet = new Image();
 spriteSheet.src = "./img/Slime_Medium_Green copy.png"; // Path to your sprite sheet
 
-// Sprite properties
+// Sprite properties from png file
 const spriteWidth = 128; // Width of each frame
 const spriteHeight = 128; // Height of each frame
 const totalFrames = 4; // Total number of frames in the idle animation
