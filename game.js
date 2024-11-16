@@ -41,30 +41,10 @@ function updateMonsters() {
 }
 
 
-class Walls {
-    // position of walls, width of walls, height of walls
-    constructor(x,y,w,h){
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-        
-    }
-}
 
-
-
-
-class Box {
-    constructor(x,y,c){this.x = x; this.y=y; this.c = c}
-    draw() {
-        ctx.fillStyle = 'red';
-        ctx.fillRect( canvas.width/2 + this.x - cameraX -this.c/2, canvas.height/2 + this.y - cameraY -this.c/2, this.c, this.c);
-   }
-}
 
 // Player and camera settings
-const smoothness = 0.1; // Smoothness for camera movement (lower is smoother but slower)
+const smoothness = 0.8; // Smoothness for camera movement (lower is smoother but slower)
 
 let cameraX = canvas.width/2;
 let cameraY = canvas.height/2;
@@ -84,8 +64,8 @@ function spawnRandomBox() {
 
 
 // setting up player
-let player = new Player(canvas.width/2, canvas.height/2, 30, 30, 3, 3, 1, 1, true)
-let aimer = new Aimer(0, 40, 20)
+let player = new Player(canvas.width/2, canvas.height/2, 30, 30, 0, 0, 0.25, 0.25, true)
+let aimer = new Aimer(0, 30, 10)
 // Math functions
 function dist(x1, y1, x2, y2){
     return (Math.sqrt((x1-x2)**2 + (y1-y2)**2))
@@ -114,19 +94,26 @@ function movePlayer() {
     if (keysPressed['ArrowRight'] || keysPressed['d']) dx = 1;
     
     // Normalize the movement vector if both x and y directions are active
+    
     if (dx !== 0 || dy !== 0) {
         const length = Math.sqrt(dx * dx + dy * dy);
         dx /= length;
         dy /= length;
 
         // Update player position with normalized speed
-        player.x += dx * player.vx;
-        player.y += dy * player.vy;
+        if (Math.abs(player.vx) < 3) player.vx += dx * player.ax;
 
+        if (Math.abs(player.vy) < 3) player.vy += dy * player.ay;
+
+    
+        
         if (Math.random() < 0.2) {  // 20% chance to spawn a monster after every move
             spawnMonster();
         }
     }
+    
+    
+    
 
 }
 
@@ -141,16 +128,7 @@ function drawPlayer() {
     ctx.fillStyle = '#007bff';
     ctx.fillRect(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h); // Adjust for camera
     
-    // Draw aimer (Rotate, draw, rotate back)
-    ctx.fillStyle = "black";
-    ctx.translate(aimer.x, aimer.y);
-    ctx.rotate(aimer.angle);
-    ctx.translate(-aimer.x, -aimer.y);
-    ctx.fillRect(aimer.x - aimer.w/2, aimer.y - aimer.h/2, aimer.w, aimer.h);
     
-    ctx.translate(aimer.x, aimer.y);
-    ctx.rotate(-aimer.angle);
-    ctx.translate(-aimer.x, -aimer.y);
  
     // ctx.fillRect(canvas.width/2  + player.x - cameraX + 30*Math.cos(aimer.angle) -5 , canvas.height/2 + player.y - cameraY + 30*Math.sin(aimer.angle) - 5, 10, 10); // Adjust for camera
        
@@ -165,8 +143,6 @@ function moveAim(event){
     } else if (event.offsetX < trueX){
         aimer.angle = (Math.atan((event.offsetY - trueY)/(event.offsetX - trueX)) + Math.PI)
     }
-    aimer.x = canvas.width/2  + player.x - cameraX + 30*Math.cos(aimer.angle) 
-    aimer.y = canvas.height/2 + player.y - cameraY + 30*Math.sin(aimer.angle)
 }
 
 
@@ -181,7 +157,11 @@ function updateGame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     updateCamera();
 
+    
+    player.move();
     drawPlayer();
+
+    aimer.draw();
     for(i=0; i < arrayBox.length; i++){
 
         arrayBox[i].draw();
