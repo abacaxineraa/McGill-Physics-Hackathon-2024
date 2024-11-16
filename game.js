@@ -192,6 +192,28 @@ function updateGame(){
     requestAnimationFrame(updateGame);
 }
 
+// Get the elements
+const welcomeScreen = document.getElementById('welcome-screen');
+const playButton = document.getElementById('play-button');
+
+// Game initialization function (you can replace this with your actual game setup)
+function startGame() {
+    // Fade out the welcome screen
+    welcomeScreen.style.opacity = 0;
+    
+    // After the fade-out is complete, hide the welcome screen and show the canvas
+    setTimeout(() => {
+        welcomeScreen.style.display = 'none'; // Hide the welcome screen
+        canvas.style.display = 'block';   // Show the game canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+        updateGame(); // Start the game loop
+    }, 500); // Duration of the fade-out effect (0.5s)
+}
+
+// Set up the Play button to start the game
+playButton.addEventListener('click', startGame);
+
+
 // Listen for key presses to move the player
 document.addEventListener('keydown', movePlayer);
 canvas.addEventListener('mousemove', moveAim);
