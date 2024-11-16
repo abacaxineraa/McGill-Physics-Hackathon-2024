@@ -9,7 +9,7 @@ let spawnRate = 0.03;
 // Function to spawn monsters outside the frame
 function spawnMonster() {
     // Only spawn a monster if the number of monsters is less than 5
-    if (monsters.length >= Math.round(5 + 10 * spawnRate)) return;
+    if (monsters.length <= Math.round(5 + 10 * spawnRate)) {
 
     // Random position outside the player's current view
     let spawnX = player.x + (Math.random() * 800 - 400);  // Spawn outside the screen on X-axis
@@ -30,6 +30,8 @@ function spawnMonster() {
     
     // Create a new monster and add it to the monsters array
     monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow, ran));
+
+    }
 }
 
 // Player and camera settings
