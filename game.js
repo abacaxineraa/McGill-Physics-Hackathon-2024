@@ -12,7 +12,8 @@ class Player {
         this.h = h;
         this.vx = vx; 
         this.vy = vy;
-        this.ax = ay; 
+        this.ax = ax;
+        this.ay = ay; 
         this.hp = hp;
 
     }
@@ -84,9 +85,7 @@ class Box {
 }
 
 // Player and camera settings
-const playerSize = 30;
-const playerSpeed = 5;
-const smoothness = 0.2; // Smoothness for camera movement (lower is smoother but slower)
+const smoothness = 0.1; // Smoothness for camera movement (lower is smoother but slower)
 
 let playerX = canvas.width / 2;
 let playerY = canvas.height / 2;
@@ -99,8 +98,8 @@ arrayBox.push(new Box(300, 200, 100))
 arrayBox.push(new Box(400, 200, 50))
 
 function spawnRandomBox() {
-    const randomX = playerX + (Math.random() * 400 - 200); // Random x within ±200 pixels of player
-    const randomY = playerY + (Math.random() * 400 - 200); // Random y within ±200 pixels of player
+    const randomX = player.x + (Math.random() * 400 - 200); // Random x within ±200 pixels of player
+    const randomY = player.y + (Math.random() * 400 - 200); // Random y within ±200 pixels of player
     const randomSize = Math.random() * 50 + 20; // Random size between 20 and 70
     arrayBox.push(new Box(randomX, randomY, randomSize));
 }
@@ -109,7 +108,8 @@ function spawnRandomBox() {
 
 
 // setting up player
-let player = new Player()
+let player = new Player(canvas.width/2, canvas.height/2, 30, 30, 3, 3, 1, 1, true)
+let aimer = new Aimer(0, 40, 20)
 // Math functions
 function dist(x1, y1, x2, y2){
     return (Math.sqrt((x1-x2)**2 + (y1-y2)**2))
@@ -144,8 +144,8 @@ function movePlayer() {
         dy /= length;
 
         // Update player position with normalized speed
-        playerX += dx * playerSpeed;
-        playerY += dy * playerSpeed;
+        player.x += dx * player.dx;
+        player.y += dy * player.dy;
     }
 
 }
@@ -159,10 +159,10 @@ function lerp(start, end, t) {
 // Draw the player
 function drawPlayer() {
     ctx.fillStyle = '#007bff';
-    ctx.fillRect(canvas.width/2 - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Adjust for camera
-    ctx.fillRect(canvas.width/2  + playerX - cameraX - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Adjust for camera
+    ctx.fillRect(canvas.width/2  + player.x - cameraX - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Adjust for camera
     ctx.fillStyle = "black";
-    ctx.fillRect(canvas.width/2  + playerX - cameraX + 30*Math.cos(aimerAngle) -5 , canvas.height/2 + playerY - cameraY + 30*Math.sin(aimerAngle) - 5, 10, 10); // Adjust for camera
+    ctx.
+    ctx.fillRect(canvas.width/2  + player.x - cameraX + 30*Math.cos(aimerAngle) -5 , canvas.height/2 + playerY - cameraY + 30*Math.sin(aimerAngle) - 5, 10, 10); // Adjust for camera
        
 }
 
