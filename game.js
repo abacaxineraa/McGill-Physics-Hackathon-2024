@@ -106,7 +106,6 @@ function dist(x1, y1, x2, y2){
     return (Math.sqrt((x1-x2)**2 + (y1-y2)**2))
 }
 
-<<<<<<< HEAD
 let keysPressed = {}; // Tracks keys that are currently pressed
 
 document.addEventListener('keydown', (event) => {
@@ -163,7 +162,7 @@ function moveAim(event){
     } else if (MouseEvent.clientX < playerX){
         aimerAngle = (Math.atan((MouseEvent.clientY - playerY)/(MouseEvent.clientX - playerX)) + Math.PI)
     }
->>>>>>> 1d92afbedc7f028799025afbbf7bd6b9403cd0c5
+
 }
 
 
@@ -184,7 +183,7 @@ function updateGame() {
     // Draw the player at the updated position
     drawPlayer();
     for(i=0; i < arrayBox.length; i++){
-        arrayBox[i].create()
+        arrayBox[i].draw();
     }
 
     // Request the next animation frame
