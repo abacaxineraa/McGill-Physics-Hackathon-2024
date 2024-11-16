@@ -46,27 +46,41 @@ arrayBox.push(new Box(400, 200, 50))
 let player = new Player()
 
 
-// Handle player movement
-function movePlayer(event) {
-    if (event.key === 'ArrowUp') {
-        playerY -= playerSpeed; 
-        updateCamera()       
+let keysPressed = {}; // Tracks keys that are currently pressed
+
+document.addEventListener('keydown', (event) => {
+    keysPressed[event.key] = true;
+    movePlayer();
+});
+
+document.addEventListener('keyup', (event) => {
+    keysPressed[event.key] = false;
+});
+
+function movePlayer() {
+    let dx = 0;
+    let dy = 0;
+
+    // Check the keys that are currently pressed and set dx and dy accordingly
+    if (keysPressed['ArrowUp']) dy = -1;
+    if (keysPressed['ArrowDown']) dy = 1;
+    if (keysPressed['ArrowLeft']) dx = -1;
+    if (keysPressed['ArrowRight']) dx = 1;
+
+    // Normalize the movement vector if both x and y directions are active
+    if (dx !== 0 || dy !== 0) {
+        const length = Math.sqrt(dx * dx + dy * dy);
+        dx /= length;
+        dy /= length;
+
+        // Update player position with normalized speed
+        playerX += dx * playerSpeed;
+        playerY += dy * playerSpeed;
     }
 
-    if (event.key === 'ArrowDown') {
-        playerY += playerSpeed; 
-        updateCamera()  
-       
-    }
-    if (event.key === 'ArrowLeft') {
-        playerX -= playerSpeed;
-	updateCamera()
-    }
-    if (event.key === 'ArrowRight') {
-        playerX += playerSpeed;
-	updateCamera()
-    }
+    updateCamera();
 }
+
 
 // Smooth interpolation (lerp) for the camera to follow the player
 function lerp(start, end, t) {
@@ -76,7 +90,7 @@ function lerp(start, end, t) {
 // Draw the player
 function drawPlayer() {
     ctx.fillStyle = '#007bff';
-    ctx.fillRect(canvas.width/2  + playerX - cameraX - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Adjust for camera
+    ctx.fillRect(canvas.width/2  + playerX - cameraX - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize);
 }
 
 // Update the camera position smoothly
