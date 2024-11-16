@@ -164,7 +164,7 @@ function shoot(){
     let shootVY = c * Math.sin(aimer.angle);  
     let shootR = Math.min(canvas.width/2,canvas.height/2);
     photons.push(new Photons(aimer.x + aimer.w * Math.cos(aimer.angle), aimer.y + aimer.w * Math.sin(aimer.angle),
-        5,5,shootVX,shootVY,shootR, "blue"));
+        5,5,shootVX,shootVY,shootR, "cyan"));
     }
 }
 
@@ -181,7 +181,7 @@ function redshoot(monster, target){
     let shootVX = c * Math.cos(followAngle);
     let shootVY = c * Math.sin(followAngle);  
     let shootR = Math.min(canvas.width/2,canvas.height/2);
-    redphotons.push(new Photons(monster.x, monster.y, 5,5,shootVX,shootVY,shootR, "red"));
+    redphotons.push(new Photons(monster.x, monster.y, 5,5,shootVX,shootVY,shootR, "orange"));
     
 }
 
