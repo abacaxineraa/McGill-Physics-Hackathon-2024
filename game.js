@@ -60,7 +60,55 @@ class Monsters {
         this.hp = hp;
         this.glow = glow;
     }
+
+        draw() {
+        ctx.fillStyle = this.glow ? 'yellow' : 'green';
+        ctx.fillRect(canvas.width / 2 + this.x - cameraX - this.w / 2, 
+                     canvas.height / 2 + this.y - cameraY - this.h / 2, 
+                     this.w, this.h);
+    }
 }
+
+
+
+// Array to store monsters
+let monsters = [];
+
+// Function to spawn monsters outside the frame
+function spawnMonster() {
+    // Only spawn a monster if the number of monsters is less than 5
+    if (monsters.length >= 5) return;
+
+    // Random position outside the player's current view
+    let spawnX = playerX + (Math.random() * 800 - 400);  // Spawn outside the screen on X-axis
+    let spawnY = playerY + (Math.random() * 800 - 400);  // Spawn outside the screen on Y-axis
+
+    // Random size for the monster
+    let size = Math.random() * 40 + 20;
+    
+    // Random velocity for the monster (to make them move)
+    let vx = Math.random() * 2 - 1; // Random velocity between -1 and 1
+    let vy = Math.random() * 2 - 1; // Random velocity between -1 and 1
+    
+    // Random health for the monster
+    let hp = Math.floor(Math.random() * 50 + 30);
+    
+    // Random glow effect for the monster
+    let glow = Math.random() < 0.5;
+    
+    // Create a new monster and add it to the monsters array
+    monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow));
+}
+
+
+function updateMonsters() {
+    monsters.forEach(monster => {
+        // Update monster's position based on velocity
+        monster.x += monster.vx;
+        monster.y += monster.vy;
+    });
+}
+
 
 class Walls {
     // position of walls, width of walls, height of walls
@@ -143,9 +191,16 @@ function movePlayer() {
         dx /= length;
         dy /= length;
 
-        // Update player position with normalized speed
-        player.x += dx * player.dx;
-        player.y += dy * player.dy;
+
+        playerX += dx * playerSpeed;
+        playerY += dy * playerSpeed;
+
+	
+        // Spawn monsters when player is moving
+        if (Math.random() < 0.02) { // Adjust probability as needed
+            spawnMonster();
+        }
+	
     }
 
 }
@@ -200,10 +255,10 @@ function updateGame() {
         arrayBox[i].draw();
 
     }
-
-    if (Math.random() < 0.01) { // Adjust probability as desired
-        spawnRandomBox();
-    }
+    
+    // Draw the monsters
+    monsters.forEach(monster => monster.draw());
+    
 
     // Request the next animation frame
     requestAnimationFrame(updateGame);
