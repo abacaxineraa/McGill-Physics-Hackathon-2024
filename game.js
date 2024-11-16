@@ -108,11 +108,7 @@ function lerp(start, end, t) {
     return start + (end - start) * t;
 }
 
-// Draw the player
-// function drawPlayer() {
-//     ctx.fillStyle = '#007bff';
-//     ctx.fillRect(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h); // Adjust for camera
-// }
+
 
 // Draw and update aimer()
 function moveAim(event){

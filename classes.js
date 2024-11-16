@@ -143,30 +143,76 @@ class Monsters {
         this.hp = hp;
         this.glow = glow;
         this.ran = ran;
+
+	
+
+	// Sprite properties
+	this.spriteSheet = new Image();
+	this.spriteSheet.src =  "./img/monsters_image.png"; // Image file path for the monster sprite sheet
+	this.spriteWidth = 36;  
+	this.spriteHeight = 54; 
+	this.totalFrames = 3;    
+	this.currentFrame = 0;   
+	this.frameRate = 10;    
+	this.frameTimer = 0;   
+	this.animationRow = 0;  
+	this.sourceY = this.animationRow * this.spriteHeight; 
     }
+
+    // draw() {
+    //     ctx.fillStyle = this.glow ? 'yellow' : 'green';
+    //     ctx.fillRect(canvas.width / 2 + this.x - cameraX - this.w / 2, 
+    //                  canvas.height / 2 + this.y - cameraY - this.h / 2, 
+    //                  this.w, this.h);
+    // }
 
     draw() {
-        ctx.fillStyle = this.glow ? 'yellow' : 'green';
-        ctx.fillRect(canvas.width / 2 + this.x - cameraX - this.w / 2, 
-                     canvas.height / 2 + this.y - cameraY - this.h / 2, 
-                     this.w, this.h);
+	// Update frame timer
+	this.frameTimer++;
+	if (this.frameTimer >= 60 / this.frameRate) {
+            this.currentFrame = (this.currentFrame + 1) % this.totalFrames; // Loop through frames
+            this.frameTimer = 0;
+	}
+
+	// Calculate the monster's position relative to the camera
+	this.drawX = canvas.width / 2 + (this.x - cameraX) - this.spriteWidth / 2;
+        this.drawY = canvas.height / 2 + (this.y - cameraY) - this.spriteHeight / 2;
+
+        // Draw the monster sprite at the calculated position
+        ctx.drawImage(
+            this.spriteSheet,
+            this.currentFrame * this.spriteWidth, // Source X position (frame width multiplied by current frame)
+            this.sourceY, // Source Y position (based on the row)
+            this.spriteWidth,
+            this.spriteHeight,
+            this.drawX,  // Draw at monster position
+            this.drawY,  // Draw at monster position
+            this.w,       // Scale to monster's width
+            this.h        // Scale to monster's height
+        );
     }
 
+
+
+
+
+    
+
     move() {
-        if (dist(this.x, this.y, player.x, player.y) >= this.ran){
+	if (dist(this.x, this.y, player.x, player.y) >= this.ran){
             let followAngle;
             if (player.x >= this.x){
-                followAngle = Math.atan((player.y - this.y)/(player.x - this.x))
+		followAngle = Math.atan((player.y - this.y)/(player.x - this.x))
             } else if (player.x < this.x){
-                followAngle = Math.atan((player.y - this.y)/(player.x - this.x)) + Math.PI
+		followAngle = Math.atan((player.y - this.y)/(player.x - this.x)) + Math.PI
             }
             // Rebalancing VX and VY so that monster follows player
             let followV = Math.sqrt(this.vx ** 2 + this.vy ** 2)
             this.vx = followV * Math.cos(followAngle)
             this.vy = followV * Math.sin(followAngle)
-        }
-        this.x += this.vx;
-        this.y += this.vy;
+	}
+	this.x += this.vx;
+	this.y += this.vy;
     }
 }
 
