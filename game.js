@@ -21,7 +21,7 @@ function spawnMonster() {
     // Random velocity for the monster (to make them move)
     let vx = Math.random() * 2 - 1; // Random velocity between -1 and 1
     let vy = Math.random() * 2 - 1; // Random velocity between -1 and 1
-    
+ 
     let hp = true;
     
     // Random glow effect for the monster
@@ -107,15 +107,10 @@ function lerp(start, end, t) {
 }
 
 // Draw the player
-function drawPlayer() {
-    ctx.fillStyle = '#007bff';
-    ctx.fillRect(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h); // Adjust for camera
-    
-    
- 
-    // ctx.fillRect(canvas.width/2  + player.x - cameraX + 30*Math.cos(aimer.angle) -5 , canvas.height/2 + player.y - cameraY + 30*Math.sin(aimer.angle) - 5, 10, 10); // Adjust for camera
-       
-}
+// function drawPlayer() {
+//     ctx.fillStyle = '#007bff';
+//     ctx.fillRect(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h); // Adjust for camera
+// }
 
 // Draw and update aimer()
 function moveAim(event){
@@ -153,6 +148,7 @@ function updateCamera() {
 
 
 
+<<<<<<< HEAD
 // Sprite animation setup
 const spriteSheet = new Image();
 spriteSheet.src = "./img/Slime_Medium_Green copy.png"; // Path to your sprite sheet
@@ -201,7 +197,7 @@ function drawSprite(player) {
 
 
 // Start the game loop after the sprite sheet is loaded
-spriteSheet.onload = () => {
+player.spriteSheet.onload = () => {
     updateGame();
 };
 
@@ -216,6 +212,11 @@ function updateGame() {
     // Draw the sprite and other player elements
     drawSprite(player);
     aimer.draw()
+=======
+    // Inside updateGame function:
+    player.draw(ctx, player.spriteSheet, cameraX, cameraY, canvas);
+
+>>>>>>> 0a53bf956f7fcfe3206875cce987618cc57d5855
 
     
     // Draw the monsters
