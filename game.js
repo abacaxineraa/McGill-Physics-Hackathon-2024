@@ -159,8 +159,6 @@ function updateCamera() {
 
 
 
-
-
 // Start the game loop after the sprite sheet is loaded
 player.spriteSheet.onload = () => {
     updateGame();
