@@ -20,7 +20,7 @@ function spawnMonster() {
     // Random velocity for the monster (to make them move)
     let vx = Math.random() * 2 - 1; // Random velocity between -1 and 1
     let vy = Math.random() * 2 - 1; // Random velocity between -1 and 1
- 
+    
     let hp = true;
     
     // Random glow effect for the monster
@@ -121,6 +121,11 @@ function lerp(start, end, t) {
 function drawPlayer() {
     ctx.fillStyle = '#007bff';
     ctx.fillRect(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h); // Adjust for camera
+    
+    
+ 
+    // ctx.fillRect(canvas.width/2  + player.x - cameraX + 30*Math.cos(aimer.angle) -5 , canvas.height/2 + player.y - cameraY + 30*Math.sin(aimer.angle) - 5, 10, 10); // Adjust for camera
+       
 }
 
 // Draw and update aimer()
@@ -171,7 +176,7 @@ function drawSprite(player) {
         currentFrame = (currentFrame + 1) % totalFrames; // Loop through frames
         frameTimer = 0;
     }
-
+    
 // Calculate the player's position relative to the camera
    const drawX = canvas.width / 2 + (player.x - cameraX) - spriteWidth / 2;
    const drawY = canvas.height / 2 + (player.y - cameraY) - spriteHeight / 2;
