@@ -12,6 +12,19 @@ class Player {
         this.ax = ax;
         this.ay = ay; 
         this.hp = hp;
+        // Sprite properties (moved to the constructor)
+        this.spriteSheet = new Image();
+        this.spriteSheet.src = "./img/Slime_Medium_Green copy.png"; //
+        this.spriteWidth = 128; // Width of each frame
+        this.spriteHeight = 128; // Height of each frame
+        this.totalFrames = 4; // Total number of frames in the idle animation
+        this.currentFrame = 0; // Track the current frame
+        this.frameRate = 10; // Frames per second
+        this.frameTimer = 0; // Timer for frame updates
+
+        // Define the starting row for the sprite png
+        this.animationRow = 2; // 0-based index for the third row
+        this.sourceY = this.animationRow * this.spriteHeight; // Y position in the sprite sheet
 
     }
     
@@ -29,6 +42,34 @@ class Player {
         
         this.x += this.vx;
         this.y += this.vy;
+    }
+    // Sprite animation function
+    draw(ctx, spriteSheet, cameraX, cameraY, canvas) {
+        this.move();
+
+        // Update frame timer
+        this.frameTimer++;
+        if (this.frameTimer >= 60 / this.frameRate) {
+            this.currentFrame = (this.currentFrame + 1) % this.totalFrames; // Loop through frames
+            this.frameTimer = 0;
+        }
+
+        // Calculate the player's position relative to the camera
+        this.drawX = canvas.width / 2 + (this.x - cameraX) - this.spriteWidth / 2;
+        this.drawY = canvas.height / 2 + (this.y - cameraY) - this.spriteHeight / 2;
+
+        // Draw the sprite at the player's position
+        ctx.drawImage(
+            spriteSheet,
+            this.currentFrame * this.spriteWidth, // Source X position
+            this.sourceY, // Source Y position (calculated from the row)
+            this.spriteWidth,
+            this.spriteHeight,
+            canvas.width / 2 + this.x - cameraX - this.w / 2, // Center on the canvas
+            canvas.height / 2 + this.y - cameraY - this.h / 2, // Center on the canvas
+            this.w,
+            this.h
+        );
     }
 
 }
@@ -82,6 +123,7 @@ class Photons {
         ctx.fillRect(canvas.width / 2 + this.x - cameraX - this.w / 2, 
             canvas.height / 2 + this.y - cameraY - this.h / 2, 
             this.w, this.h);
+        
     }
     move(){
         this.x += this.vx;

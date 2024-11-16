@@ -157,6 +157,7 @@ function moveAim(event){
 let c = 5; // speed of light
 
 let photons = []
+let redphotons = []
 
 function shoot(){
     if (photons.length < 4){
@@ -166,6 +167,23 @@ function shoot(){
     photons.push(new Photons(aimer.x + aimer.w * Math.cos(aimer.angle), aimer.y + aimer.w * Math.sin(aimer.angle),
         5,5,shootVX,shootVY,shootR, "blue"));
     }
+}
+
+function redshoot(monster, target){
+    console.log(monster.x, monster.y, target.x, target.y)
+    let followAngle;
+    if (target.x >= monster.x){
+        followAngle = Math.atan((target.y - monster.y)/(target.x - monster.x))
+    } else if (player.x < monster.x){
+        followAngle = Math.atan((target.y - monster.y)/(target.x - monster.x)) + Math.PI
+    }
+    console.log(followAngle)
+    followAngle += Math.PI/12 - Math.random() * Math.PI/6 // Variety in Shooting
+    let shootVX = c * Math.cos(followAngle);
+    let shootVY = c * Math.sin(followAngle);  
+    let shootR = Math.min(canvas.width/2,canvas.height/2);
+    redphotons.push(new Photons(monster.x, monster.y, 5,5,shootVX,shootVY,shootR, "red"));
+    
 }
 
 
@@ -234,7 +252,7 @@ spriteSheet.onload = () => {
 };
 
 
-function updateGame() {
+
 function updateGame(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     updateCamera()
@@ -256,6 +274,7 @@ function updateGame(){
     
     // Check photons
     photons = photons.filter(checkRange);
+    redphotons = redphotons.filter(checkRange);
 
 
     function checkRange(photon) {
@@ -265,8 +284,11 @@ function updateGame(){
     // Draw the photons
     for(i = 0; i < photons.length; i++){
         photons[i].draw();
-        photons[i].move();
-        
+        photons[i].move();  
+    }
+    for(i = 0; i < redphotons.length; i++){
+        redphotons[i].draw();
+        redphotons[i].move();  
     }
 
     // Check monsters-photons
@@ -274,8 +296,8 @@ function updateGame(){
     function checkCollision(monster){
         for (i = 0; i < photons.length; i++){
             if (collision(monster, photons[i])) {
-                spawnRate *= 1.05
-                console.log(spawnRate)
+                if (spawnRate < 1) spawnRate *= 1.05
+                /* if (Math.random() < Math.min(5*spawnRate, 1)) */ redshoot(monster, player)
                 return false}
         }
         return true
@@ -284,6 +306,28 @@ function updateGame(){
     // Request the next animation frame
     requestAnimationFrame(updateGame);
 }
+
+// Get the elements
+const welcomeScreen = document.getElementById('welcome-screen');
+const playButton = document.getElementById('play-button');
+
+// Game initialization function (you can replace this with your actual game setup)
+function startGame() {
+    // Fade out the welcome screen
+    welcomeScreen.style.opacity = 0;
+    
+    // After the fade-out is complete, hide the welcome screen and show the canvas
+    setTimeout(() => {
+        welcomeScreen.style.display = 'none'; // Hide the welcome screen
+        canvas.style.display = 'block';   // Show the game canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+        updateGame(); // Start the game loop
+    }, 500); // Duration of the fade-out effect (0.5s)
+}
+
+// Set up the Play button to start the game
+playButton.addEventListener('click', startGame);
+
 
 // Listen for key presses to move the player
 document.addEventListener('keydown', movePlayer);
