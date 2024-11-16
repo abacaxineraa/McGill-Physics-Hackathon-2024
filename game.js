@@ -58,7 +58,7 @@ function spawnRandomBox() {
 
 
 // setting up player
-let player = new Player(canvas.width/2, canvas.height/2, 30, 30, 0, 0, 0.25, 0.25, true)
+let player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.25, 0.25, true)
 let aimer = new Aimer(0, 30, 10)
 // Math functions
 function dist(x1, y1, x2, y2){
@@ -185,8 +185,8 @@ function drawSprite(player) {
         spriteHeight,
         canvas.width / 2 + player.x - cameraX - player.w / 2, // Center on the canvas
         canvas.height / 2 + player.y - cameraY - player.h / 2, // Center on the canvas
-        spriteWidth,
-        spriteHeight
+        player.w,
+        player.h
     );
     
     console.log(canvas.width / 2 + player.x - cameraX - player.w / 2)
