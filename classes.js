@@ -80,7 +80,7 @@ class Photons {
 class Monsters {
 
     // position of monsters, velocity of monsters, width of monsters, health of monsters, glow of monsters
-    constructor(x,y,vx,vy,w,h,hp,glow){
+    constructor(x,y,vx,vy,w,h,hp,glow, ran){
         this.x = x;
         this.y = y;
         this.vx = vx;
@@ -89,13 +89,32 @@ class Monsters {
         this.h = h;
         this.hp = hp;
         this.glow = glow;
+        this.ran = ran;
     }
 
-        draw() {
+    draw() {
         ctx.fillStyle = this.glow ? 'yellow' : 'green';
         ctx.fillRect(canvas.width / 2 + this.x - cameraX - this.w / 2, 
                      canvas.height / 2 + this.y - cameraY - this.h / 2, 
                      this.w, this.h);
+    }
+
+    move() {
+        if (dist(this.x, this.y, player.x, player.y) >= this.ran){
+            let followAngle;
+            if (player.x >= this.x){
+                followAngle = Math.atan((player.y - this.y)/(player.x - this.x))
+            } else if (player.x < this.x){
+                followAngle = Math.atan((player.y - this.y)/(player.x - this.x)) + Math.PI
+            }
+            // Rebalancing VX and VY so that monster follows player
+            let followV = Math.sqrt(this.vx ** 2 + this.vy ** 2)
+            this.vx = followV * Math.cos(followAngle)
+            this.vy = followV * Math.sin(followAngle)
+        }
+        this.x += this.vx;
+        this.y += this.vy;
+        console.log(this.vx, this.vy)
     }
 }
 
