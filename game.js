@@ -30,7 +30,12 @@ function spawnMonster() {
     
     // Create a new monster and add it to the monsters array
     monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow, ran));
+    // console.log("here!")
 }
+
+
+
+
 
 // Player and camera settings
 const smoothness = 0.1; // Smoothness for camera movement (lower is smoother but slower)
@@ -55,6 +60,23 @@ function collision(obj1, obj2){
     return (Math.abs(obj1.x - obj2.x) <= (obj1.w/2 + obj2.w/2) && // Distance between x-coordinates <= Sum of half-widths
             Math.abs(obj1.y - obj2.y) <= (obj1.h/2 + obj2.h/2)) // Distance between y-coordinates <= Sum of half-heights  
 }
+
+
+// Time functions
+let maxtime = 10 // multiplier for the max seconds -- implies that 10 seconds is the maxtime
+function getRandInt(){
+    return Math.floor(Math.random() * maxtime);
+}
+
+function increment(){
+    myint -= 1
+    console.log(myint)
+
+    if(myint <= 0){
+        clearInterval(myInterval);
+    }
+}
+
 
 
 let keysPressed = {}; // Tracks keys that are currently pressed
@@ -107,10 +129,17 @@ function lerp(start, end, t) {
 }
 
 // Draw the player
-// function drawPlayer() {
-//     ctx.fillStyle = '#007bff';
-//     ctx.fillRect(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h); // Adjust for camera
-// }
+function drawPlayer() {
+    ctx.fillStyle = '#007bff';
+    ctx.fillRect(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h); // Adjust for camera
+    
+    
+ 
+    ctx.fillRect(canvas.width/2  + player.x - cameraX + 30*Math.cos(aimer.angle) -5 , canvas.height/2 + player.y - cameraY + 30*Math.sin(aimer.angle) - 5, 10, 10); // Adjust for camera
+       
+}
+
+
 
 // Draw and update aimer()
 function moveAim(event){
@@ -166,6 +195,63 @@ function updateCamera() {
 
 
 
+
+// Sprite animation setup
+const spriteSheet = new Image();
+spriteSheet.src = "./img/Slime_Medium_Green copy.png"; // Path to your sprite sheet
+
+// Sprite properties from png file
+const spriteWidth = 128; // Width of each frame
+const spriteHeight = 128; // Height of each frame
+const totalFrames = 4; // Total number of frames in the idle animation
+let currentFrame = 0; // Track the current frame
+const frameRate = 10; // Frames per second
+let frameTimer = 0; // Timer for frame updates
+
+// Define the starting row for the sprite png
+const animationRow = 2; // 0-based index for the third row
+const sourceY = animationRow * spriteHeight; // Y position in the sprite sheet
+
+// Sprite animation function
+function drawSprite(player) {
+    player.move()
+
+    // Update frame timer
+    frameTimer++;
+    if (frameTimer >= 60 / frameRate) {
+        currentFrame = (currentFrame + 1) % totalFrames; // Loop through frames
+        frameTimer = 0;
+    }
+    
+// Calculate the player's position relative to the camera
+   const drawX = canvas.width / 2 + (player.x - cameraX) - spriteWidth / 2;
+   const drawY = canvas.height / 2 + (player.y - cameraY) - spriteHeight / 2;
+
+    // Draw the sprite at the player's position
+    ctx.drawImage(
+        spriteSheet,
+        currentFrame * spriteWidth, // Source X position
+        sourceY, // Source Y position (calculated from the row)
+        spriteWidth,
+        spriteHeight,
+        canvas.width / 2 + player.x - cameraX - player.w / 2, // Center on the canvas
+        canvas.height / 2 + player.y - cameraY - player.h / 2, // Center on the canvas
+        player.w,
+        player.h
+    );
+    
+    // console.log(canvas.width / 2 + player.x - cameraX - player.w / 2)
+}
+
+
+
+// Start the game loop after the sprite sheet is loaded
+spriteSheet.onload = () => {
+    updateGame();
+};
+
+
+
 function updateGame(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     updateCamera()
@@ -178,9 +264,11 @@ function updateGame(){
     
     // Draw the monsters
     for(i=0; i < monsters.length; i++){
-        monsters[i].move()
+        monsters[i].move();
         monsters[i].draw();
 
+
+        
     }
     
     // Check photons
@@ -221,6 +309,11 @@ function updateGame(){
 // Listen for key presses to move the player
 document.addEventListener('keydown', movePlayer);
 canvas.addEventListener('mousemove', moveAim);
+
+
+var myint = getRandInt();
+console.log(myint);
+myInterval = setInterval(increment,1000);
 
 // Start the game loop
 updateGame();
