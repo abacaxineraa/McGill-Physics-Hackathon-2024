@@ -4,27 +4,83 @@ const ctx = canvas.getContext('2d');
 
 class Player {
 
-    constructor(x,y,w,h,vx,vy,ax,ay,hp,l){
+    // position, width, height, velocity, acceleration, health
+    constructor(x,y,w,h,vx,vy,ax,ay,hp){
         this.x = x,
         this.y = y,
         this.w = w, 
         this.h = h, 
         this.vx = vx, 
-        this.vy = vy;
+        this.vy = vy,
         this.ax = ay, 
-        this.hp = hp
-        this.l = l};
-    
+        this.hp = hp,
 
+    }
 
 }
 
+
+class Aimer {
+
+
+    // angle, width of aimer and height of aimer
+    constructor(theta,w,h){
+        this.theta = theta,
+        this.w = w,
+        this.h = h,
+    }
+    
+}
+
+class Photons {
+
+    // position of photons, velocity of photons, radius, range of photons
+    constructor(x,y,vx,vy,rad,ran){
+        this.x = x,
+        this.y = y,
+        this.vx = vx,
+        this.vy = vy,
+        this.rad = rad,
+        this.ran = ran,
+    }
+
+}
+
+class Monsters {
+
+    // position of monsters, velocity of monsters, width of monsters, health of monsters, glow of monsters
+    constructor(x,y,vx,vy,w,h,hp,glow){
+        this.x = x,
+        this.y = y,
+        this.vx = vx,
+        this.vy = vy,
+        this.w = w,
+        this.h = h,
+        this.hp = hp,
+        this.glow = glow,
+    }
+}
+
+class Walls {
+    // position of walls, width of walls, height of walls
+    constructor(x,y,w,h){
+        this.x = x,
+        this.y = y,
+        this.w = w,
+        this.h = h,
+        
+    }
+}
+
+
+
+
 class Box {
     constructor(x,y,c){this.x = x; this.y=y; this.c = c}
-    create() {
+    draw() {
         ctx.fillStyle = 'red';
         ctx.fillRect( canvas.width/2 + this.x - cameraX -this.c/2, canvas.height/2 + this.y - cameraY -this.c/2, this.c, this.c);
-    }
+   }
 }
 
 // Player and camera settings
@@ -45,8 +101,6 @@ arrayBox.push(new Box(300, 200, 100))
 arrayBox.push(new Box(400, 200, 50))
 // setting up player
 let player = new Player()
-
-
 // Math functions
 function dist(x1, y1, x2, y2){
     return (Math.sqrt((x1-x2)**2 + (y1-y2)**2))
@@ -81,6 +135,7 @@ function lerp(start, end, t) {
 // Draw the player
 function drawPlayer() {
     ctx.fillStyle = '#007bff';
+    ctx.fillRect(canvas.width/2 - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Adjust for camera
     ctx.fillRect(canvas.width/2  + playerX - cameraX - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Adjust for camera
     ctx.fillRect(canvas.width/2 - playerSize/2 + 30 *Math.cos(aimerAngle), canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Aimer for now
 }
@@ -92,6 +147,7 @@ function moveAim(event){
     } else if (MouseEvent.clientX < playerX){
         aimerAngle = (Math.atan((MouseEvent.clientY - playerY)/(MouseEvent.clientX - playerX)) + Math.PI)
     }
+}
 }
 
 // Update the camera position smoothly
@@ -122,8 +178,7 @@ function updateGame() {
 document.addEventListener('keydown', movePlayer);
 canvas.addEventListener('mousemove', moveAim)
 
-for(i = 0; i < 5; i++){
-    i += 1;
-}
+
+
 // Start the game loop
 updateGame();
