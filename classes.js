@@ -68,6 +68,7 @@ class Player {
             this.h
         );
     }
+
 }
 
 
@@ -99,7 +100,6 @@ class Aimer {
         ctx.translate( - canvas.width/2 - this.x + cameraX, - canvas.height/2 - this.y + cameraY);
         ctx.globalAlpha = 1;
     }
-    
 }
 
 class Photons {
