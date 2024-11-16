@@ -29,9 +29,8 @@ function spawnMonster() {
     
     // Create a new monster and add it to the monsters array
     monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow, ran));
-    console.log("here!")
+    // console.log("here!")
 }
-
 
 
 
@@ -64,6 +63,23 @@ let aimer = new Aimer(0, 30, 10)
 function dist(x1, y1, x2, y2){
     return (Math.sqrt((x1-x2)**2 + (y1-y2)**2))
 }
+
+
+// Time functions
+let maxtime = 10 // multiplier for the max seconds -- implies that 10 seconds is the maxtime
+function getRandInt(){
+    return Math.floor(Math.random() * maxtime);
+}
+
+function increment(){
+    myint -= 1
+    console.log(myint)
+
+    if(myint <= 0){
+        clearInterval(myInterval);
+    }
+}
+
 
 
 let keysPressed = {}; // Tracks keys that are currently pressed
@@ -124,7 +140,7 @@ function drawPlayer() {
     
     
  
-    // ctx.fillRect(canvas.width/2  + player.x - cameraX + 30*Math.cos(aimer.angle) -5 , canvas.height/2 + player.y - cameraY + 30*Math.sin(aimer.angle) - 5, 10, 10); // Adjust for camera
+    ctx.fillRect(canvas.width/2  + player.x - cameraX + 30*Math.cos(aimer.angle) -5 , canvas.height/2 + player.y - cameraY + 30*Math.sin(aimer.angle) - 5, 10, 10); // Adjust for camera
        
 }
 
@@ -207,7 +223,7 @@ function drawSprite(player) {
         player.h
     );
     
-    console.log(canvas.width / 2 + player.x - cameraX - player.w / 2)
+    // console.log(canvas.width / 2 + player.x - cameraX - player.w / 2)
 }
 
 
@@ -236,9 +252,11 @@ function updateGame() {
     
     // Draw the monsters
     for(i=0; i < monsters.length; i++){
-        monsters[i].move()
+        monsters[i].move();
         monsters[i].draw();
 
+
+        
     }
     
     // Check photons
@@ -255,7 +273,7 @@ function updateGame() {
         photons[i].move();
         
     }
-
+    
     // Request the next animation frame
     requestAnimationFrame(updateGame);
 }
@@ -263,6 +281,11 @@ function updateGame() {
 // Listen for key presses to move the player
 document.addEventListener('keydown', movePlayer);
 canvas.addEventListener('mousemove', moveAim);
+
+
+var myint = getRandInt();
+console.log(myint);
+myInterval = setInterval(increment,1000);
 
 // Start the game loop
 updateGame();
