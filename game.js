@@ -91,9 +91,7 @@ const smoothness = 0.2; // Smoothness for camera movement (lower is smoother but
 let playerX = canvas.width / 2;
 let playerY = canvas.height / 2;
 let cameraX = canvas.width/2;
-let cameraY = canvas.width/2;
-let cameraNewX;
-let cameraNewY = cameraY;
+let cameraY = canvas.height/2;
 let aimerAngle;
 
 arrayBox=[]
@@ -105,6 +103,7 @@ let player = new Player()
 function dist(x1, y1, x2, y2){
     return (Math.sqrt((x1-x2)**2 + (y1-y2)**2))
 }
+
 
 let keysPressed = {}; // Tracks keys that are currently pressed
 
@@ -138,7 +137,6 @@ function movePlayer() {
         playerY += dy * playerSpeed;
     }
 
-    updateCamera();
 }
 
 
@@ -152,23 +150,31 @@ function drawPlayer() {
     ctx.fillStyle = '#007bff';
     ctx.fillRect(canvas.width/2 - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Adjust for camera
     ctx.fillRect(canvas.width/2  + playerX - cameraX - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Adjust for camera
-    ctx.fillRect(canvas.width/2 - playerSize/2 + 30 *Math.cos(aimerAngle), canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Aimer for now
+    ctx.fillStyle = "black";
+    ctx.fillRect(canvas.width/2  + playerX - cameraX + 30*Math.cos(aimerAngle) -5 , canvas.height/2 + playerY - cameraY + 30*Math.sin(aimerAngle) - 5, 10, 10); // Adjust for camera
+        
 }
 
 // Draw and update aimer()
 function moveAim(event){
-    if (MouseEvent.clientX > playerX){
-        aimerAngle = Math.atan((MouseEvent.clientY - playerY)/(MouseEvent.clientX - playerX))
-    } else if (MouseEvent.clientX < playerX){
-        aimerAngle = (Math.atan((MouseEvent.clientY - playerY)/(MouseEvent.clientX - playerX)) + Math.PI)
+    let trueX = canvas.width/2 + playerX -cameraX
+    let trueY = canvas.height/2 + playerY -cameraY
+    console.log(trueX, trueY)
+    console.log(event.offsetX, event.offsetY)
+    if (event.offsetX > (trueX)){
+        aimerAngle = Math.atan((event.offsetY - trueY)/(event.offsetX - trueX))
+        console.log(aimerAngle)
+        console.log("hi")
+    } else if (event.offsetX < trueX){
+        aimerAngle = (Math.atan((event.offsetY - trueY)/(event.offsetX - trueX)) + Math.PI)
+        console.log("BEHIND: " + aimerAngle)
     }
-
 }
 
 
 // Update the camera position smoothly
 function updateCamera() {
-    cameraX = lerp(cameraX, playerX - canvas.width / 2 + playerSize / 2, smoothness);
+    cameraX = lerp(cameraX, playerX, smoothness);
     cameraY = lerp(cameraY, playerY, smoothness);
 }
 
@@ -183,7 +189,9 @@ function updateGame() {
     // Draw the player at the updated position
     drawPlayer();
     for(i=0; i < arrayBox.length; i++){
+
         arrayBox[i].draw();
+
     }
 
     // Request the next animation frame
@@ -193,8 +201,6 @@ function updateGame() {
 // Listen for key presses to move the player
 document.addEventListener('keydown', movePlayer);
 canvas.addEventListener('mousemove', moveAim)
-
-
 
 // Start the game loop
 updateGame();
