@@ -44,7 +44,7 @@ function updateMonsters() {
 
 
 // Player and camera settings
-const smoothness = 0.1; // Smoothness for camera movement (lower is smoother but slower)
+const smoothness = 0.8; // Smoothness for camera movement (lower is smoother but slower)
 
 let cameraX = canvas.width/2;
 let cameraY = canvas.height/2;
@@ -64,7 +64,7 @@ function spawnRandomBox() {
 
 
 // setting up player
-let player = new Player(canvas.width/2, canvas.height/2, 30, 30, 3, 3, 1, 1, true)
+let player = new Player(canvas.width/2, canvas.height/2, 30, 30, 0, 0, 0.25, 0.25, true)
 let aimer = new Aimer(0, 30, 10)
 // Math functions
 function dist(x1, y1, x2, y2){
@@ -94,19 +94,26 @@ function movePlayer() {
     if (keysPressed['ArrowRight'] || keysPressed['d']) dx = 1;
     
     // Normalize the movement vector if both x and y directions are active
+    
     if (dx !== 0 || dy !== 0) {
         const length = Math.sqrt(dx * dx + dy * dy);
         dx /= length;
         dy /= length;
 
         // Update player position with normalized speed
-        player.x += dx * player.vx;
-        player.y += dy * player.vy;
+        if (Math.abs(player.vx) < 3) player.vx += dx * player.ax;
 
+        if (Math.abs(player.vy) < 3) player.vy += dy * player.ay;
+
+    
+        
         if (Math.random() < 0.2) {  // 20% chance to spawn a monster after every move
             spawnMonster();
         }
     }
+    
+    
+    
 
 }
 
@@ -119,7 +126,6 @@ function lerp(start, end, t) {
 // Draw the player
 function drawPlayer() {
     ctx.fillStyle = '#007bff';
-    console.log(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h)
     ctx.fillRect(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h); // Adjust for camera
     
     
@@ -203,8 +209,7 @@ spriteSheet.onload = () => {
 function updateGame() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     updateCamera();
-
-
+    
     // Draw the sprite and other player elements
     drawSprite(player);
 

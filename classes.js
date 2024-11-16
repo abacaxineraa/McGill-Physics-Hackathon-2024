@@ -14,6 +14,22 @@ class Player {
         this.hp = hp;
 
     }
+    
+    move(){
+
+        if(this.vx != 0){
+            this.vx -= 0.10 * this.vx/Math.abs(this.vx) * this.ax;
+            
+        }
+        
+        if(this.vy != 0){
+            this.vy -= 0.10 * this.vy/Math.abs(this.vy) * this.ay;
+        }
+    
+        
+        this.x += this.vx;
+        this.y += this.vy;
+    }
 
 }
 
