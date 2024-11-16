@@ -80,8 +80,8 @@ function spawnMonster() {
     if (monsters.length >= 5) return;
 
     // Random position outside the player's current view
-    let spawnX = playerX + (Math.random() * 800 - 400);  // Spawn outside the screen on X-axis
-    let spawnY = playerY + (Math.random() * 800 - 400);  // Spawn outside the screen on Y-axis
+    let spawnX = player.x + (Math.random() * 800 - 400);  // Spawn outside the screen on X-axis
+    let spawnY = player.y + (Math.random() * 800 - 400);  // Spawn outside the screen on Y-axis
 
     // Random size for the monster
     let size = Math.random() * 40 + 20;
@@ -193,7 +193,9 @@ function movePlayer() {
         player.x += dx * player.vx;
         player.y += dy * player.vy;
 
-        console.log(player.x, player.y)
+        if (Math.random() < 0.2) {  // 20% chance to spawn a monster after every move
+            spawnMonster();
+        }
     }
 
 }
