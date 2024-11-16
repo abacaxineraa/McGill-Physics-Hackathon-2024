@@ -13,7 +13,7 @@ class Box {
 
 class Player {
     constructor(){
-        
+
     }
 }
 
@@ -28,6 +28,7 @@ let cameraX = canvas.width/2;
 let cameraY = canvas.width/2;
 let cameraNewX;
 let cameraNewY = cameraY;
+let idk = 0;
 
 arrayBox=[]
 arrayBox.push(new Box(300, 200, 100))
