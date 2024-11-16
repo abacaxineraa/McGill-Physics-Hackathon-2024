@@ -26,7 +26,7 @@ function spawnMonster() {
     
     // Random glow effect for the monster
     let glow = Math.random() < 0.5;
-    let ran = (1-spawnRate) * Math.random() * Math.min(canvas.height/2, canvas.width/2) + 2.5 * Math.min(player.w, player.h)
+    let ran = (1-spawnRate) * Math.random() * Math.min(canvas.height/3, canvas.width/3) + 2.5 * Math.min(player.w, player.h)
     
     // Create a new monster and add it to the monsters array
     monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow, ran));
@@ -129,7 +129,8 @@ function shoot(){
     let shootVX = c * Math.cos(aimer.angle);
     let shootVY = c * Math.sin(aimer.angle);  
     let shootR = Math.min(canvas.width/2,canvas.height/2);
-    photons.push(new Photons(aimer.x + aimer.w * Math.cos(aimer.angle), aimer.y + aimer.w * Math.sin(aimer.angle),5,5,shootVX,shootVY,shootR));
+    photons.push(new Photons(aimer.x + aimer.w * Math.cos(aimer.angle), aimer.y + aimer.w * Math.sin(aimer.angle),
+        5,5,shootVX,shootVY,shootR, "blue"));
     }
 }
 
