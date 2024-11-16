@@ -1,37 +1,76 @@
 
-class Player {
 
+
+class Player {    
     // position, width, height, velocity, acceleration, health
-    constructor(x,y,w,h,vx,vy,ax,ay,hp){
+    constructor(x, y, w, h, vx, vy, ax, ay, hp) {
         this.x = x;
         this.y = y;
-        this.w = w; 
+        this.w = w;
         this.h = h;
-        this.vx = vx; 
+        this.vx = vx;
         this.vy = vy;
         this.ax = ax;
-        this.ay = ay; 
+        this.ay = ay;
         this.hp = hp;
+        
+        // Sprite properties (moved to the constructor)
+	this.spriteSheet = new Image();
+	this.spriteSheet.src = "./img/Slime_Medium_Green copy.png"; //
+        this.spriteWidth = 128; // Width of each frame
+        this.spriteHeight = 128; // Height of each frame
+        this.totalFrames = 4; // Total number of frames in the idle animation
+        this.currentFrame = 0; // Track the current frame
+        this.frameRate = 10; // Frames per second
+        this.frameTimer = 0; // Timer for frame updates
 
+        // Define the starting row for the sprite png
+        this.animationRow = 2; // 0-based index for the third row
+        this.sourceY = this.animationRow * this.spriteHeight; // Y position in the sprite sheet
     }
     
-    move(){
-
-        if(this.vx != 0){
-            this.vx -= 0.10 * this.vx/Math.abs(this.vx) * this.ax;
-            
+    move() {
+        if (this.vx != 0) {
+            this.vx -= 0.10 * this.vx / Math.abs(this.vx) * this.ax;
         }
-        
-        if(this.vy != 0){
-            this.vy -= 0.10 * this.vy/Math.abs(this.vy) * this.ay;
+        if (this.vy != 0) {
+            this.vy -= 0.10 * this.vy / Math.abs(this.vy) * this.ay;
         }
-    
-        
         this.x += this.vx;
         this.y += this.vy;
     }
 
+    // Sprite animation function
+    draw(ctx, spriteSheet, cameraX, cameraY, canvas) {
+        this.move();
+        
+        // Update frame timer
+        this.frameTimer++;
+        if (this.frameTimer >= 60 / this.frameRate) {
+            this.currentFrame = (this.currentFrame + 1) % this.totalFrames; // Loop through frames
+            this.frameTimer = 0;
+        }
+
+        // Calculate the player's position relative to the camera
+        this.drawX = canvas.width / 2 + (this.x - cameraX) - this.spriteWidth / 2;
+        this.drawY = canvas.height / 2 + (this.y - cameraY) - this.spriteHeight / 2;
+
+        // Draw the sprite at the player's position
+        ctx.drawImage(
+            spriteSheet,
+            this.currentFrame * this.spriteWidth, // Source X position
+            this.sourceY, // Source Y position (calculated from the row)
+            this.spriteWidth,
+            this.spriteHeight,
+            canvas.width / 2 + this.x - cameraX - this.w / 2, // Center on the canvas
+            canvas.height / 2 + this.y - cameraY - this.h / 2, // Center on the canvas
+            this.w,
+            this.h
+        );
+        console.log(canvas.width / 2 + this.x - cameraX - this.w / 2);
+    }
 }
+
 
 
 class Aimer {
