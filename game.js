@@ -87,11 +87,8 @@ class Box {
 // Player and camera settings
 const smoothness = 0.1; // Smoothness for camera movement (lower is smoother but slower)
 
-let playerX = canvas.width / 2;
-let playerY = canvas.height / 2;
 let cameraX = canvas.width/2;
 let cameraY = canvas.height/2;
-let aimerAngle;
 
 arrayBox=[]
 arrayBox.push(new Box(300, 200, 100))
@@ -144,8 +141,10 @@ function movePlayer() {
         dy /= length;
 
         // Update player position with normalized speed
-        player.x += dx * player.dx;
-        player.y += dy * player.dy;
+        player.x += dx * player.vx;
+        player.y += dy * player.vy;
+
+        console.log(player.x, player.y)
     }
 
 }
@@ -159,34 +158,29 @@ function lerp(start, end, t) {
 // Draw the player
 function drawPlayer() {
     ctx.fillStyle = '#007bff';
-    ctx.fillRect(canvas.width/2  + player.x - cameraX - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Adjust for camera
+    console.log(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h)
+    ctx.fillRect(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h); // Adjust for camera
     ctx.fillStyle = "black";
-    ctx.
-    ctx.fillRect(canvas.width/2  + player.x - cameraX + 30*Math.cos(aimerAngle) -5 , canvas.height/2 + playerY - cameraY + 30*Math.sin(aimerAngle) - 5, 10, 10); // Adjust for camera
+    ctx.fillRect(canvas.width/2  + player.x - cameraX + 30*Math.cos(aimer.angle) -5 , canvas.height/2 + player.y - cameraY + 30*Math.sin(aimer.angle) - 5, 10, 10); // Adjust for camera
        
 }
 
 // Draw and update aimer()
 function moveAim(event){
-    let trueX = canvas.width/2 + playerX -cameraX
-    let trueY = canvas.height/2 + playerY -cameraY
-    console.log(trueX, trueY)
-    console.log(event.offsetX, event.offsetY)
+    let trueX = canvas.width/2 + player.x -cameraX
+    let trueY = canvas.height/2 + player.y -cameraY
     if (event.offsetX > (trueX)){
-        aimerAngle = Math.atan((event.offsetY - trueY)/(event.offsetX - trueX))
-        console.log(aimerAngle)
-        console.log("hi")
+        aimer.angle = Math.atan((event.offsetY - trueY)/(event.offsetX - trueX))
     } else if (event.offsetX < trueX){
-        aimerAngle = (Math.atan((event.offsetY - trueY)/(event.offsetX - trueX)) + Math.PI)
-        console.log("BEHIND: " + aimerAngle)
+        aimer.angle = (Math.atan((event.offsetY - trueY)/(event.offsetX - trueX)) + Math.PI)
     }
 }
 
 
 // Update the camera position smoothly
 function updateCamera() {
-    cameraX = lerp(cameraX, playerX, smoothness);
-    cameraY = lerp(cameraY, playerY, smoothness);
+    cameraX = lerp(cameraX, player.x, smoothness);
+    cameraY = lerp(cameraY, player.y, smoothness);
 }
 
 // Clear the canvas and redraw the game elements
