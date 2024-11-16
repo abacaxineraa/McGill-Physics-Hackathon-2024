@@ -7,7 +7,7 @@ class Box {
     constructor(x,y,c){this.x = x; this.y=y; this.c = c}
     draw() {
         ctx.fillStyle = 'red';
-        ctx.fillRect(this.x-this.c/2, canvas.height/2 + this.y - cameraY -this.c/2, this.c, this.c);
+        ctx.fillRect( canvas.width/2 + this.x - cameraX -this.c/2, canvas.height/2 + this.y - cameraY -this.c/2, this.c, this.c);
     }
 }
 
@@ -49,9 +49,11 @@ function movePlayer(event) {
     }
     if (event.key === 'ArrowLeft') {
         playerX -= playerSpeed;
+	updateCamera()
     }
     if (event.key === 'ArrowRight') {
         playerX += playerSpeed;
+	updateCamera()
     }
 }
 
@@ -63,12 +65,12 @@ function lerp(start, end, t) {
 // Draw the player
 function drawPlayer() {
     ctx.fillStyle = '#007bff';
-    ctx.fillRect(canvas.width/2 - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Adjust for camera
+    ctx.fillRect(canvas.width/2  + playerX - cameraX - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Adjust for camera
 }
 
 // Update the camera position smoothly
 function updateCamera() {
-    cameraX = lerp(cameraX, playerX - canvas.width / 2 + playerSize / 2, smoothness);
+    cameraX = lerp(cameraX, playerX, smoothness);
     cameraY = lerp(cameraY, playerY, smoothness);
 }
 
