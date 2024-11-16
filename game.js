@@ -233,7 +233,7 @@ spriteSheet.onload = () => {
 };
 
 
-function updateGame() {
+
 function updateGame(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     updateCamera()
