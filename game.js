@@ -176,12 +176,13 @@ function movePlayer() {
     let dx = 0;
     let dy = 0;
 
+    console.log(event.key)
     // Check the keys that are currently pressed and set dx and dy accordingly
-    if (keysPressed['ArrowUp']) dy = -1;
-    if (keysPressed['ArrowDown']) dy = 1;
-    if (keysPressed['ArrowLeft']) dx = -1;
-    if (keysPressed['ArrowRight']) dx = 1;
-
+    if (keysPressed['ArrowUp'] || keysPressed['w']) dy = -1;
+    if (keysPressed['ArrowDown'] || keysPressed['s']) dy = 1;
+    if (keysPressed['ArrowLeft'] || keysPressed['a']) dx = -1;
+    if (keysPressed['ArrowRight'] || keysPressed['d']) dx = 1;
+    
     // Normalize the movement vector if both x and y directions are active
     if (dx !== 0 || dy !== 0) {
         const length = Math.sqrt(dx * dx + dy * dy);
@@ -206,7 +207,6 @@ function lerp(start, end, t) {
 // Draw the player
 function drawPlayer() {
     ctx.fillStyle = '#007bff';
-    console.log(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h)
     ctx.fillRect(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h); // Adjust for camera
     
     // Draw aimer (Rotate, draw, rotate back)
