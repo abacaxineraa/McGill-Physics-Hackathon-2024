@@ -67,8 +67,8 @@ class Player {
             this.w,
             this.h
         );
-        console.log(canvas.width / 2 + this.x - cameraX - this.w / 2);
     }
+
 }
 
 
@@ -100,7 +100,6 @@ class Aimer {
         ctx.translate( - canvas.width/2 - this.x + cameraX, - canvas.height/2 - this.y + cameraY);
         ctx.globalAlpha = 1;
     }
-    
 }
 
 class Photons {
@@ -178,13 +177,5 @@ class Walls {
         this.w = w;
         this.h = h;
 
-    }
-}
-
-class Box {
-    constructor(x,y,c){this.x = x; this.y=y; this.c = c}
-    draw() {
-        ctx.fillStyle = 'red';
-        ctx.fillRect( canvas.width/2 + this.x - cameraX -this.c/2, canvas.height/2 + this.y - cameraY -this.c/2, this.c, this.c);
     }
 }
