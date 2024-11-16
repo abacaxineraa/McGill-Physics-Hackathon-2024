@@ -72,6 +72,21 @@ class Player {
         );
     }
 
+
+    getRelativisticFactor() {
+        const c = 1;  // Normalized speed of light (for this simulation, we use 1)
+        const speed = Math.sqrt(this.vx ** 2 + this.vy ** 2);  // Total speed (magnitude of velocity)
+        
+        // Limit the speed to 0.9c to avoid going faster than light
+        const realSpeed = Math.min(speed, 0.9 * c); 
+        
+        // Calculate the Lorentz factor (gamma)
+        const gamma = 1 / Math.sqrt(1 - (realSpeed / c) ** 2);
+        
+        // Return the contraction factor, which is the inverse of gamma
+        return gamma;
+    }
+    
 }
 
 
@@ -155,8 +170,8 @@ class Monsters {
 	// Sprite properties
 	this.spriteSheet = new Image();
 	this.spriteSheet.src =  "./img/monsters_image.png"; // Image file path for the monster sprite sheet
-	this.spriteWidth = 36;  
-	this.spriteHeight = 54; 
+	this.spriteWidth = 48;  
+	this.spriteHeight = 40; 
 	this.totalFrames = 3;    
 	this.currentFrame = 0;   
 	this.frameRate = 10;    
@@ -165,21 +180,26 @@ class Monsters {
 	this.sourceY = this.animationRow * this.spriteHeight; 
     }
 
-    // draw() {
-    //     ctx.fillStyle = this.glow ? 'yellow' : 'green';
-    //     ctx.fillRect(canvas.width / 2 + this.x - cameraX - this.w / 2, 
-    //                  canvas.height / 2 + this.y - cameraY - this.h / 2, 
-    //                  this.w, this.h);
-    // }
 
-    draw() {
-	// Update frame timer
+    
+    draw(player) {
+	// Calculate the relativistic factor based on player's velocity
+        const contractionFactor = 1 / player.getRelativisticFactor();
+        const contractedWidth = this.spriteWidth * contractionFactor;
+        const contractedHeight = this.spriteHeight * contractionFactor;
+
+        // Adjust monster's frame rate based on player's speed (time dilation)
+        const dilationFactor = player.getRelativisticFactor();
+        const adjustedFrameRate = this.frameRate * dilationFactor;  // Monsters' frame rate decreases as player goes faster
+
+
 	this.frameTimer++;
-	if (this.frameTimer >= 60 / this.frameRate) {
-            this.currentFrame = (this.currentFrame + 1) % this.totalFrames; // Loop through frames
+        if (this.frameTimer >= 60 / adjustedFrameRate*10) {
+            this.currentFrame = (this.currentFrame + 1) % this.totalFrames;
             this.frameTimer = 0;
-	}
+        }
 
+	
 	// Calculate the monster's position relative to the camera
 	this.drawX = canvas.width / 2 + (this.x - cameraX) - this.spriteWidth / 2;
         this.drawY = canvas.height / 2 + (this.y - cameraY) - this.spriteHeight / 2;
@@ -193,15 +213,10 @@ class Monsters {
             this.spriteHeight,
             this.drawX,  // Draw at monster position
             this.drawY,  // Draw at monster position
-            this.w,       // Scale to monster's width
-            this.h        // Scale to monster's height
+            contractedWidth,  // Scale to contracted width
+            contractedHeight // Scale to contracted height
         );
     }
-
-
-
-
-
     
 
     move() {
