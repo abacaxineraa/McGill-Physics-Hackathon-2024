@@ -43,11 +43,21 @@ let aimerAngle;
 arrayBox=[]
 arrayBox.push(new Box(300, 200, 100))
 arrayBox.push(new Box(400, 200, 50))
+
+function spawnRandomBox() {
+    const randomX = playerX + (Math.random() * 400 - 200); // Random x within ±200 pixels of player
+    const randomY = playerY + (Math.random() * 400 - 200); // Random y within ±200 pixels of player
+    const randomSize = Math.random() * 50 + 20; // Random size between 20 and 70
+    arrayBox.push(new Box(randomX, randomY, randomSize));
+}
+
+
+
+
 // setting up player
 let player = new Player()
 
 
-<<<<<<< HEAD
 let keysPressed = {}; // Tracks keys that are currently pressed
 
 document.addEventListener('keydown', (event) => {
@@ -92,7 +102,8 @@ function lerp(start, end, t) {
 // Draw the player
 function drawPlayer() {
     ctx.fillStyle = '#007bff';
-    ctx.fillRect(canvas.width/2  + playerX - cameraX - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Adjust for camera
+    ctx.fillRect(canvas.width/2  + playerX - cameraX - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize);
+    
     ctx.fillRect(canvas.width/2 - playerSize/2 + 30 *Math.cos(aimerAngle), canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Aimer for now
 }
 
@@ -103,27 +114,26 @@ function moveAim(event){
     } else if (MouseEvent.clientX < playerX){
         aimerAngle = (Math.atan((MouseEvent.clientY - playerY)/(MouseEvent.clientX - playerX)) + Math.PI)
     }
->>>>>>> 1d92afbedc7f028799025afbbf7bd6b9403cd0c5
 }
 
 // Update the camera position smoothly
 function updateCamera() {
-    cameraX = lerp(cameraX, playerX - canvas.width / 2 + playerSize / 2, smoothness);
+    cameraX = lerp(cameraX, playerX, smoothness);
     cameraY = lerp(cameraY, playerY, smoothness);
 }
 
 // Clear the canvas and redraw the game elements
 function updateGame() {
-    // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Update camera position
     updateCamera();
 
-    // Draw the player at the updated position
     drawPlayer();
     for(i=0; i < arrayBox.length; i++){
         arrayBox[i].create()
+    }
+
+    if (Math.random() < 0.01) { // Adjust probability as desired
+        spawnRandomBox();
     }
 
     // Request the next animation frame
