@@ -208,8 +208,19 @@ function drawPlayer() {
     ctx.fillStyle = '#007bff';
     console.log(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h)
     ctx.fillRect(canvas.width/2  + player.x - cameraX - player.w/2, canvas.height/2 + player.y - cameraY - player.h/2, player.w, player.h); // Adjust for camera
+    
+    // Draw aimer (Rotate, draw, rotate back)
     ctx.fillStyle = "black";
-    ctx.fillRect(canvas.width/2  + player.x - cameraX + 30*Math.cos(aimer.angle) -5 , canvas.height/2 + player.y - cameraY + 30*Math.sin(aimer.angle) - 5, 10, 10); // Adjust for camera
+    ctx.translate(aimer.x, aimer.y);
+    ctx.rotate(aimer.angle);
+    ctx.translate(-aimer.x, -aimer.y);
+    ctx.fillRect(aimer.x - aimer.w/2, aimer.y - aimer.h/2, aimer.w, aimer.h);
+    
+    ctx.translate(aimer.x, aimer.y);
+    ctx.rotate(-aimer.angle);
+    ctx.translate(-aimer.x, -aimer.y);
+ 
+    // ctx.fillRect(canvas.width/2  + player.x - cameraX + 30*Math.cos(aimer.angle) -5 , canvas.height/2 + player.y - cameraY + 30*Math.sin(aimer.angle) - 5, 10, 10); // Adjust for camera
        
 }
 
@@ -222,6 +233,8 @@ function moveAim(event){
     } else if (event.offsetX < trueX){
         aimer.angle = (Math.atan((event.offsetY - trueY)/(event.offsetX - trueX)) + Math.PI)
     }
+    aimer.x = canvas.width/2  + player.x - cameraX + 30*Math.cos(aimer.angle) 
+    aimer.y = canvas.height/2 + player.y - cameraY + 30*Math.sin(aimer.angle)
 }
 
 
