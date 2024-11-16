@@ -67,7 +67,6 @@ class Player {
             this.w,
             this.h
         );
-        console.log(canvas.width / 2 + this.x - cameraX - this.w / 2);
     }
 }
 
