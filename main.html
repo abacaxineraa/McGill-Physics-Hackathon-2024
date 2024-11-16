@@ -1,10 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movable Square Player</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #gameArea {
+            width: 500px;
+            height: 500px;
+            background-color: #e0e0e0;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #333;
+        }
+        #player {
+            width: 30px;
+            height: 30px;
+            background-color: #007bff;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
 </head>
 <body>
-    
+    <div id="gameArea">
+        <div id="player"></div>
+    </div>
+
+    <script src="game.js"></script>
 </body>
 </html>
