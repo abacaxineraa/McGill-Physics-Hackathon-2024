@@ -97,6 +97,17 @@ let aimerAngle;
 arrayBox=[]
 arrayBox.push(new Box(300, 200, 100))
 arrayBox.push(new Box(400, 200, 50))
+
+function spawnRandomBox() {
+    const randomX = playerX + (Math.random() * 400 - 200); // Random x within ±200 pixels of player
+    const randomY = playerY + (Math.random() * 400 - 200); // Random y within ±200 pixels of player
+    const randomSize = Math.random() * 50 + 20; // Random size between 20 and 70
+    arrayBox.push(new Box(randomX, randomY, randomSize));
+}
+
+
+
+
 // setting up player
 let player = new Player()
 // Math functions
@@ -104,7 +115,7 @@ function dist(x1, y1, x2, y2){
     return (Math.sqrt((x1-x2)**2 + (y1-y2)**2))
 }
 
-// <<<<<<< HEAD
+
 let keysPressed = {}; // Tracks keys that are currently pressed
 
 document.addEventListener('keydown', (event) => {
@@ -151,7 +162,7 @@ function drawPlayer() {
     ctx.fillRect(canvas.width/2  + playerX - cameraX - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Adjust for camera
     ctx.fillStyle = "black";
     ctx.fillRect(canvas.width/2  + playerX - cameraX + 30*Math.cos(aimerAngle) -5 , canvas.height/2 + playerY - cameraY + 30*Math.sin(aimerAngle) - 5, 10, 10); // Adjust for camera
-        
+       
 }
 
 // Draw and update aimer()
@@ -179,16 +190,16 @@ function updateCamera() {
 
 // Clear the canvas and redraw the game elements
 function updateGame() {
-    // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Update camera position
     updateCamera();
 
-    // Draw the player at the updated position
     drawPlayer();
     for(i=0; i < arrayBox.length; i++){
         arrayBox[i].draw()
+    }
+
+    if (Math.random() < 0.01) { // Adjust probability as desired
+        spawnRandomBox();
     }
 
     // Request the next animation frame
