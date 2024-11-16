@@ -2,18 +2,28 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+class Player {
+
+    constructor(x,y,w,h,vx,vy,ax,ay,hp,l){
+        this.x = x,
+        this.y = y,
+        this.w = w, 
+        this.h = h, 
+        this.vx = vx, 
+        this.vy = vy;
+        this.ax = ay, 
+        this.hp = hp
+        this.l = l};
+    
+
+
+}
 
 class Box {
     constructor(x,y,c){this.x = x; this.y=y; this.c = c}
-    draw() {
+    create() {
         ctx.fillStyle = 'red';
         ctx.fillRect(this.x-this.c/2, canvas.height/2 + this.y - cameraY -this.c/2, this.c, this.c);
-    }
-}
-
-class Player {
-    constructor(){
-
     }
 }
 
@@ -28,12 +38,12 @@ let cameraX = canvas.width/2;
 let cameraY = canvas.width/2;
 let cameraNewX;
 let cameraNewY = cameraY;
-let idk = 0;
 
 arrayBox=[]
 arrayBox.push(new Box(300, 200, 100))
 arrayBox.push(new Box(400, 200, 50))
-
+// setting up player
+let player = new Player()
 
 
 // Handle player movement
@@ -84,7 +94,7 @@ function updateGame() {
     // Draw the player at the updated position
     drawPlayer();
     for(i=0; i < arrayBox.length; i++){
-        arrayBox[i].draw()
+        arrayBox[i].create()
     }
 
     // Request the next animation frame
@@ -94,5 +104,8 @@ function updateGame() {
 // Listen for key presses to move the player
 document.addEventListener('keydown', movePlayer);
 
+for(i = 0; i < 5; i++){
+    i += 1;
+}
 // Start the game loop
 updateGame();
