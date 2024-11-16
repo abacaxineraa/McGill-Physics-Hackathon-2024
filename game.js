@@ -4,27 +4,83 @@ const ctx = canvas.getContext('2d');
 
 class Player {
 
-    constructor(x,y,w,h,vx,vy,ax,ay,hp,l){
-        this.x = x,
-        this.y = y,
-        this.w = w, 
-        this.h = h, 
-        this.vx = vx, 
+    // position, width, height, velocity, acceleration, health
+    constructor(x,y,w,h,vx,vy,ax,ay,hp){
+        this.x = x;
+        this.y = y;
+        this.w = w; 
+        this.h = h;
+        this.vx = vx; 
         this.vy = vy;
-        this.ax = ay, 
-        this.hp = hp
-        this.l = l};
-    
+        this.ax = ay; 
+        this.hp = hp;
 
+    }
 
 }
 
+
+class Aimer {
+
+
+    // angle, width of aimer and height of aimer
+    constructor(theta,w,h){
+        this.theta = theta;
+        this.w = w;
+        this.h = h;
+    }
+    
+}
+
+class Photons {
+
+    // position of photons, velocity of photons, radius, range of photons
+    constructor(x,y,vx,vy,rad,ran){
+        this.x = x;
+        this.y = y;
+        this.vx = vx;
+        this.vy = vy;
+        this.rad = rad;
+        this.ran = ran;
+    }
+
+}
+
+class Monsters {
+
+    // position of monsters, velocity of monsters, width of monsters, health of monsters, glow of monsters
+    constructor(x,y,vx,vy,w,h,hp,glow){
+        this.x = x;
+        this.y = y;
+        this.vx = vx;
+        this.vy = vy;
+        this.w = w;
+        this.h = h;
+        this.hp = hp;
+        this.glow = glow;
+    }
+}
+
+class Walls {
+    // position of walls, width of walls, height of walls
+    constructor(x,y,w,h){
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        
+    }
+}
+
+
+
+
 class Box {
     constructor(x,y,c){this.x = x; this.y=y; this.c = c}
-    create() {
+    draw() {
         ctx.fillStyle = 'red';
         ctx.fillRect( canvas.width/2 + this.x - cameraX -this.c/2, canvas.height/2 + this.y - cameraY -this.c/2, this.c, this.c);
-    }
+   }
 }
 
 // Player and camera settings
@@ -35,9 +91,7 @@ const smoothness = 0.2; // Smoothness for camera movement (lower is smoother but
 let playerX = canvas.width / 2;
 let playerY = canvas.height / 2;
 let cameraX = canvas.width/2;
-let cameraY = canvas.width/2;
-let cameraNewX;
-let cameraNewY = cameraY;
+let cameraY = canvas.height/2;
 let aimerAngle;
 
 arrayBox=[]
@@ -56,6 +110,10 @@ function spawnRandomBox() {
 
 // setting up player
 let player = new Player()
+// Math functions
+function dist(x1, y1, x2, y2){
+    return (Math.sqrt((x1-x2)**2 + (y1-y2)**2))
+}
 
 
 let keysPressed = {}; // Tracks keys that are currently pressed
@@ -90,7 +148,6 @@ function movePlayer() {
         playerY += dy * playerSpeed;
     }
 
-    updateCamera();
 }
 
 
@@ -102,19 +159,29 @@ function lerp(start, end, t) {
 // Draw the player
 function drawPlayer() {
     ctx.fillStyle = '#007bff';
-    ctx.fillRect(canvas.width/2  + playerX - cameraX - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize);
-    
-    ctx.fillRect(canvas.width/2 - playerSize/2 + 30 *Math.cos(aimerAngle), canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Aimer for now
+    ctx.fillRect(canvas.width/2 - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Adjust for camera
+    ctx.fillRect(canvas.width/2  + playerX - cameraX - playerSize/2, canvas.height/2 + playerY - cameraY - playerSize/2, playerSize, playerSize); // Adjust for camera
+    ctx.fillStyle = "black";
+    ctx.fillRect(canvas.width/2  + playerX - cameraX + 30*Math.cos(aimerAngle) -5 , canvas.height/2 + playerY - cameraY + 30*Math.sin(aimerAngle) - 5, 10, 10); // Adjust for camera
+       
 }
 
 // Draw and update aimer()
 function moveAim(event){
-    if (MouseEvent.clientX > playerX){
-        aimerAngle = Math.atan((MouseEvent.clientY - playerY)/(MouseEvent.clientX - playerX))
-    } else if (MouseEvent.clientX < playerX){
-        aimerAngle = (Math.atan((MouseEvent.clientY - playerY)/(MouseEvent.clientX - playerX)) + Math.PI)
+    let trueX = canvas.width/2 + playerX -cameraX
+    let trueY = canvas.height/2 + playerY -cameraY
+    console.log(trueX, trueY)
+    console.log(event.offsetX, event.offsetY)
+    if (event.offsetX > (trueX)){
+        aimerAngle = Math.atan((event.offsetY - trueY)/(event.offsetX - trueX))
+        console.log(aimerAngle)
+        console.log("hi")
+    } else if (event.offsetX < trueX){
+        aimerAngle = (Math.atan((event.offsetY - trueY)/(event.offsetX - trueX)) + Math.PI)
+        console.log("BEHIND: " + aimerAngle)
     }
 }
+
 
 // Update the camera position smoothly
 function updateCamera() {
@@ -129,7 +196,7 @@ function updateGame() {
 
     drawPlayer();
     for(i=0; i < arrayBox.length; i++){
-        arrayBox[i].create()
+        arrayBox[i].draw()
     }
 
     if (Math.random() < 0.01) { // Adjust probability as desired
@@ -144,8 +211,5 @@ function updateGame() {
 document.addEventListener('keydown', movePlayer);
 canvas.addEventListener('mousemove', moveAim)
 
-for(i = 0; i < 5; i++){
-    i += 1;
-}
 // Start the game loop
 updateGame();
