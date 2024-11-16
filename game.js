@@ -157,7 +157,7 @@ function updateGame(){
     // Draw the monsters
     for(i=0; i < monsters.length; i++){
         monsters[i].move()
-        monsters[i].draw();
+        monsters[i].draw(player);
 
     }
     
