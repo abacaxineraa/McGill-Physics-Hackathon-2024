@@ -3,8 +3,6 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
 
-
-// Array to store monsters
 let monsters = [];
 
 // Function to spawn monsters outside the frame
@@ -109,7 +107,6 @@ function movePlayer() {
     let dx = 0;
     let dy = 0;
 
-    console.log(event.key)
     // Check the keys that are currently pressed and set dx and dy accordingly
     if (keysPressed['ArrowUp'] || keysPressed['w']) dy = -1;
     if (keysPressed['ArrowDown'] || keysPressed['s']) dy = 1;

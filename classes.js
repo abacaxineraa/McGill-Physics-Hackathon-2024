@@ -1,7 +1,4 @@
-
 class Player {
-
-    // position, width, height, velocity, acceleration, health
     constructor(x,y,w,h,vx,vy,ax,ay,hp){
         this.x = x;
         this.y = y;
@@ -12,29 +9,20 @@ class Player {
         this.ax = ax;
         this.ay = ay; 
         this.hp = hp;
-
     }
-
 }
 
-
 class Aimer {
-
-
-    // angle, width of aimer and height of aimer
     constructor(theta,w,h){
         this.theta = theta;
         this.w = w;
         this.h = h;
     }
-    
 }
 
 class Photons {
-
-    // position of photons, velocity of photons, radius, range of photons
-    constructor(x,y,vx,vy,rad,ran){
-        this.x = x;
+  constructor(x,y,vx,vy,rad,ran){
+      this.x = x;
         this.y = y;
         this.vx = vx;
         this.vy = vy;
@@ -45,8 +33,6 @@ class Photons {
 }
 
 class Monsters {
-
-    // position of monsters, velocity of monsters, width of monsters, health of monsters, glow of monsters
     constructor(x,y,vx,vy,w,h,hp,glow){
         this.x = x;
         this.y = y;
@@ -66,4 +52,20 @@ class Monsters {
     }
 }
 
-console.log("hi")
+// class Walls {
+//     constructor(x,y,w,h){
+//         this.x = x;
+//         this.y = y;
+//         this.w = w;
+//         this.h = h;
+
+//     }
+// }
+
+// class Box {
+//     constructor(x,y,c){this.x = x; this.y=y; this.c = c}
+//     draw() {
+//         ctx.fillStyle = 'red';
+//         ctx.fillRect( canvas.width/2 + this.x - cameraX -this.c/2, canvas.height/2 + this.y - cameraY -this.c/2, this.c, this.c);
+//     }
+// }
