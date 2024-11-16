@@ -83,6 +83,9 @@ document.addEventListener('keyup', (event) => {
     keysPressed[event.key] = false;
 });
 
+
+canvas.addEventListener('click',shoot);
+
 function movePlayer() {
     let dx = 0;
     let dy = 0;
@@ -112,9 +115,6 @@ function movePlayer() {
         }
     }
     
-    
-    
-
 }
 
 
@@ -145,6 +145,19 @@ function moveAim(event){
     }
 }
 
+// Setting up photons
+let c = 5; // speed of light
+
+let photons = []
+
+function shoot(){
+    let shootVX = c * Math.cos(aimer.angle);
+    let shootVY = c * Math.sin(aimer.angle);  
+    let shootR = Math.min(canvas.width/2,canvas.height/2);
+    photons.push(new Photons(aimer.x + aimer.w * Math.cos(aimer.angle), aimer.y + aimer.w * Math.sin(aimer.angle),5,5,shootVX,shootVY,shootR));
+
+}
+
 
 // Update the camera position smoothly
 function updateCamera() {
@@ -171,6 +184,20 @@ function updateGame() {
     // Draw the monsters
     monsters.forEach(monster => monster.draw());
     
+    // Check photons
+    photons = photons.filter(checkRange);
+
+
+    function checkRange(photon) {
+        return photon.ran >= 0;
+    }
+
+    // Draw the photons
+    for(i = 0; i < photons.length; i++){
+        photons[i].draw();
+        photons[i].move();
+        
+    }
 
     // Request the next animation frame
     requestAnimationFrame(updateGame);

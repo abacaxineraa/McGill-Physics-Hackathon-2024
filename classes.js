@@ -38,8 +38,8 @@ class Aimer {
 
 
     // angle, width of aimer and height of aimer
-    constructor(theta,w,h){
-        this.theta = theta;
+    constructor(angle,w,h){
+        this.angle = angle;
         this.w = w;
         this.h = h;
     }
@@ -66,13 +66,26 @@ class Aimer {
 class Photons {
 
     // position of photons, velocity of photons, radius, range of photons
-    constructor(x,y,vx,vy,rad,ran){
+    constructor(x,y,w,h,vx,vy,ran){
         this.x = x;
         this.y = y;
+        this.w = w;
+        this.h = h;
         this.vx = vx;
         this.vy = vy;
-        this.rad = rad;
         this.ran = ran;
+    }
+
+    draw(){
+        ctx.fillStyle = 'red';
+        ctx.fillRect(canvas.width / 2 + this.x - cameraX - this.w / 2, 
+            canvas.height / 2 + this.y - cameraY - this.h / 2, 
+            this.w, this.h);
+    }
+    move(){
+        this.x += this.vx;
+        this.y += this.vy;
+        this.ran -= Math.sqrt((this.vx)**2+(this.vy)**2);
     }
 
 }
