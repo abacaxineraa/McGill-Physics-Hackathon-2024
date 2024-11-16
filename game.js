@@ -38,7 +38,7 @@ function spawnMonster() {
 
 
 // Player and camera settings
-const smoothness = 0.8; // Smoothness for camera movement (lower is smoother but slower)
+const smoothness = 0.1; // Smoothness for camera movement (lower is smoother but slower)
 
 let cameraX = canvas.width/2;
 let cameraY = canvas.height/2;
@@ -163,6 +163,8 @@ const sourceY = animationRow * spriteHeight; // Y position in the sprite sheet
 
 // Sprite animation function
 function drawSprite(player) {
+    player.move()
+
     // Update frame timer
     frameTimer++;
     if (frameTimer >= 60 / frameRate) {
@@ -177,11 +179,13 @@ function drawSprite(player) {
         sourceY, // Source Y position (calculated from the row)
         spriteWidth,
         spriteHeight,
-        canvas.width / 2 - player.w / 2, // Center on the canvas
-        canvas.height / 2 - player.h / 2, // Center on the canvas
+        canvas.width / 2 + player.x - cameraX - player.w / 2, // Center on the canvas
+        canvas.height / 2 + player.y - cameraY - player.h / 2, // Center on the canvas
         spriteWidth,
         spriteHeight
     );
+    
+    console.log(canvas.width / 2 + player.x - cameraX - player.w / 2)
 }
 
 

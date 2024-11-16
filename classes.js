@@ -114,7 +114,6 @@ class Monsters {
         }
         this.x += this.vx;
         this.y += this.vy;
-        console.log(this.vx, this.vy)
     }
 }
 
