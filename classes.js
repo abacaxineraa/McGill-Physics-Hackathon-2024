@@ -167,7 +167,6 @@ class Monsters {
 
     
     draw(him) {
-        console.log("hello")
 
 	const c = 1; // Normalized speed of light (for this simulation, we use 1)
 	const speed = Math.sqrt(him.vx ** 2 + him.vy ** 2); // Total speed (magnitude of velocity)
