@@ -31,6 +31,7 @@ function findId(anId) {
     for (i=0; i<monsters.length; i++){
         if (monsters[i].id == anId) return monsters[i]
     }
+    return (new Monsters(0,0,0,0,0,0,0,0,0,0,0,0))
 }
 
 // Function to spawn monsters outside the frame
@@ -62,6 +63,7 @@ function spawnCreature(maxCreature, object) {
         object.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, true, ran, time, null, id));
         object[object.length-1].interval = setInterval(increment,1000,id);
         id++
+        console.log(id)
 	}
 }
 }
@@ -75,6 +77,7 @@ function increment(smt){
         tempMonst.glow = (tempMonst.glow == false)
         let maxtime = 5
         let time = Math.round(2 + Math.random()*(maxtime-2)) 
+        tempMonst.t = time
         clearInterval(tempMonst.interval);
         tempMonst.interval = setInterval(increment, 1000, smt)
     }
@@ -409,6 +412,7 @@ function endGame() {
 
     // Show the end screen with fade-in effect
     const endScreen = document.getElementById('end-screen');
+    document.getElementById("play-again-button").innerText = "Play Again (Score:  " + monstersKilled + ")"
     endScreen.style.opacity = 1;
     endScreen.style.display = 'flex'; // Ensure it's visible
 }
