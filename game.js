@@ -34,6 +34,7 @@ function spawnMonster() {
     // Create a new monster and add it to the monsters array
     monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow, ran));
     // console.log("here!")
+    }
 }
 
 
@@ -348,5 +349,4 @@ console.log(myint);
 myInterval = setInterval(increment,1000);
 
 // Start the game loop
-
 
