@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-
+const scale = 1.4;
 
 let monsters = [];
 let spawnRate = 0.03;
@@ -28,15 +28,35 @@ function spawnMonster() {
     
     // Random glow effect for the monster
     let glow = Math.random() < 0.5;
+    let t = getRandInt();
+    console.log(t)
+
+    // myInterval = setInterval(increment(5),1000);
     let ran = (1-spawnRate) * Math.random() * Math.min(canvas.height/3, canvas.width/3) + 2.5 * Math.min(player.w, player.h)
     
-    // Create a new monster and add it to the monsters array
-    monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow, ran));
-    // console.log("here!")
+
+    let maxtime = 8 // multiplier for the max seconds -- implies that 10 seconds is the maxtime
+    monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow, ran, t, null));
+    console.log(monsters.length)
+    monsters[monsters.length-1].interval = setInterval(increment,1000,monsters.length-1);
 }
 
 
+function increment(smt){
+    console.log(smt, monsters.length)
+    monsters[smt].t -= 1
+    console.log(smt, monsters[smt].t)
+    
 
+    if(monsters[smt].t <= 0){
+        console.log("BOOM,")
+        clearInterval(monsters[smt].interval);
+    }
+}
+
+function getRandInt(){
+    return 2 + Math.floor(Math.random() * 8);
+}
 
 
 // Player and camera settings
@@ -44,8 +64,6 @@ const smoothness = 0.1; // Smoothness for camera movement (lower is smoother but
 
 let cameraX = canvas.width/2;
 let cameraY = canvas.height/2;
-
-
 
 
 // setting up player
@@ -65,19 +83,7 @@ function collision(obj1, obj2){
 
 
 // Time functions
-let maxtime = 10 // multiplier for the max seconds -- implies that 10 seconds is the maxtime
-function getRandInt(){
-    return Math.floor(Math.random() * maxtime);
-}
 
-function increment(){
-    myint -= 1
-    console.log(myint)
-
-    if(myint <= 0){
-        clearInterval(myInterval);
-    }
-}
 
 
 
@@ -166,7 +172,7 @@ function shoot(){
     let shootVY = c * Math.sin(aimer.angle);  
     let shootR = Math.min(canvas.width/2,canvas.height/2);
     photons.push(new Photons(aimer.x + aimer.w * Math.cos(aimer.angle), aimer.y + aimer.w * Math.sin(aimer.angle),
-        5,5,shootVX,shootVY,shootR, "blue"));
+        5,5,shootVX,shootVY,shootR, "cyan"));
     }
 }
 
@@ -183,7 +189,7 @@ function redshoot(monster, target){
     let shootVX = c * Math.cos(followAngle);
     let shootVY = c * Math.sin(followAngle);  
     let shootR = Math.min(canvas.width/2,canvas.height/2);
-    redphotons.push(new Photons(monster.x, monster.y, 5,5,shootVX,shootVY,shootR, "red"));
+    redphotons.push(new Photons(monster.x, monster.y, 5,5,shootVX,shootVY,shootR, "orange"));
     
 }
 
@@ -285,7 +291,7 @@ function updateGame(){
     // Draw the photons
     for(i = 0; i < photons.length; i++){
         photons[i].draw();
-        photons[i].move();  
+        photons[i].move();
     }
     for(i = 0; i < redphotons.length; i++){
         redphotons[i].draw();
@@ -337,9 +343,7 @@ document.addEventListener('keydown', movePlayer);
 canvas.addEventListener('mousemove', moveAim);
 
 
-var myint = getRandInt();
-console.log(myint);
-myInterval = setInterval(increment,1000);
+
 
 // Start the game loop
 updateGame();
