@@ -2,6 +2,7 @@
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
+const scale = 1.4;
 
 
 let monsters = [];
@@ -50,6 +51,7 @@ let cameraY = canvas.height/2;
 
 // setting up player
 let player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.25, 0.25, true)
+console.log(player.vx)
 let aimer = new Aimer(0, 30, 10)
 
 
@@ -248,9 +250,9 @@ function drawSprite(player) {
 
 
 // Start the game loop after the sprite sheet is loaded
-spriteSheet.onload = () => {
+/*spriteSheet.onload = () => {
     updateGame();
-};
+};*/
 
 
 
@@ -267,7 +269,7 @@ function updateGame(){
     // Draw the monsters
     for(i=0; i < monsters.length; i++){
         monsters[i].move();
-        monsters[i].draw();
+        monsters[i].draw(player);
 
 
         
@@ -296,9 +298,11 @@ function updateGame(){
     monsters = monsters.filter(checkCollision);
     function checkCollision(monster){
         for (i = 0; i < photons.length; i++){
+
+        console.log(monster.x)
             if (collision(monster, photons[i])) {
                 if (spawnRate < 1) spawnRate *= 1.05
-                 if (Math.random() < Math.min(5*spawnRate, 1)) redshoot(monster, player)
+                if (Math.random() < Math.min(5*spawnRate, 1)) redshoot(monster, player)
                 return false}
         }
         return true
@@ -326,6 +330,8 @@ function startGame() {
         ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
         updateGame(); // Start the game loop
     }, 500); // Duration of the fade-out effect (0.5s)
+
+    updateGame()
 }
 
 // Set up the Play button to start the game
@@ -342,5 +348,5 @@ console.log(myint);
 myInterval = setInterval(increment,1000);
 
 // Start the game loop
-updateGame();
+
 

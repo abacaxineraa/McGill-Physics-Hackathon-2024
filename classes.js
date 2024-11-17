@@ -56,8 +56,6 @@ class Player {
         this.drawX = canvas.width / 2 + (this.x - cameraX) - this.spriteWidth / 2;
         this.drawY = canvas.height / 2 + (this.y - cameraY) - this.spriteHeight / 2;
 
-        scale = 1.4
-
         // Draw the sprite at the player's position
         ctx.drawImage(
             spriteSheet,
@@ -166,10 +164,11 @@ class Monsters {
 
 
     
-    draw(player) {
+    draw(him) {
+        console.log("hello")
 
 	const c = 1; // Normalized speed of light (for this simulation, we use 1)
-	const speed = Math.sqrt(player.vx ** 2 + player.vy ** 2); // Total speed (magnitude of velocity)
+	const speed = Math.sqrt(him.vx ** 2 + him.vy ** 2); // Total speed (magnitude of velocity)
 
 	// Limit the speed to 0.9c to avoid going faster than light
 	const realSpeed = Math.min(speed, 0.9 * c);
@@ -183,8 +182,8 @@ class Monsters {
 	}
 
 	// Apply length contraction depending on the direction of movement
-	const contractionFactorX = 1/getContractionFactor(player.vx);
-	const contractionFactorY = 1/getContractionFactor(player.vy);
+	const contractionFactorX = 1/getContractionFactor(him.vx);
+	const contractionFactorY = 1/getContractionFactor(him.vy);
 
 	const contractedWidth = this.spriteWidth * scale * contractionFactorX;
 	const contractedHeight = this.spriteHeight * scale * contractionFactorY;
@@ -203,15 +202,15 @@ class Monsters {
 
 	
 	// Apply length contraction to the distance between player and monster
-	const deltaX = this.x - player.x;
-	const deltaY = this.y - player.y;
+	const deltaX = this.x - him.x;
+	const deltaY = this.y - him.y;
 	const contractedDeltaX = deltaX / gamma*0.2;
 	const contractedDeltaY = deltaY / gamma*0.2;
 	
 	// Calculate the monster's position based on contracted distances
 	this.drawX = canvas.width / 2 + contractedDeltaX - this.spriteWidth / 2 - cameraX;
 	this.drawY = canvas.height / 2 + contractedDeltaY - this.spriteHeight / 2 - cameraY;
-	
+
         // Draw the monster sprite at the calculated position
         ctx.drawImage(
             this.spriteSheet,
