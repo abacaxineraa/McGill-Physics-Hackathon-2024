@@ -53,9 +53,10 @@ function spawnCreature(maxCreature, object) {
 
 	let maxtime = 8
 	let time = Math.round(2 + Math.random()*maxtime) // multiplier for the max seconds -- implies that 10 seconds is the maxtime
-	console.log(time)
 	if (object == monsters) {
 	    object.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, true, ran, time, null, id));
+        object[object.length-1].interval = setInterval(increment,1000,id);
+        id++
 	}
 	else {
 	    let posX = player.x + randomizeWallPos();
@@ -65,9 +66,6 @@ function spawnCreature(maxCreature, object) {
 	    
 	    walls.push(new Walls(posX,posY,sizeX,sizeY,"black"));
 	}
-	console.log(object[object.length-1].t)
-	object[object.length-1].interval = setInterval(increment,1000,id);
-	id++
 }
 }
 
@@ -75,12 +73,11 @@ function spawnCreature(maxCreature, object) {
 function increment(smt){
     let tempMonst = findId(smt)
     tempMonst.t -= 1
-    console.log(smt, tempMonst.t)
     
-
     if(tempMonst.t <= 0){
+        tempMonst.glow *= false
         console.log("BOOM,")
-        clearInterval(monsters[smt].interval);
+        clearInterval(tempMonst.interval);
     }
 }
 
@@ -117,7 +114,6 @@ function dist(x1, y1, x2, y2){
 }
 
 function collision(obj1, obj2){
-    console.log(obj1.x, obj2.x, player.x, obj2.x, obj2.y,  player.y)
     return (Math.abs(obj1.x - obj2.x) <= (obj1.w/2 + obj2.w/2) && // Distance between x-coordinates <= Sum of half-widths
             Math.abs(obj1.y - obj2.y) <= (obj1.h/2 + obj2.h/2)) // Distance between y-coordinates <= Sum of half-heights  
 }
@@ -222,14 +218,12 @@ function shoot(){
 }
 
 function redshoot(monster, target){
-    console.log(monster.x, monster.y, target.x, target.y)
     let followAngle;
     if (target.x >= monster.x){
         followAngle = Math.atan((target.y - monster.y)/(target.x - monster.x))
     } else if (player.x < monster.x){
         followAngle = Math.atan((target.y - monster.y)/(target.x - monster.x)) + Math.PI
     }
-    console.log(followAngle)
     followAngle += Math.PI/12 - Math.random() * Math.PI/6 // Variety in Shooting
     let shootVX = c * Math.cos(followAngle);
     let shootVY = c * Math.sin(followAngle);  
