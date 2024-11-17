@@ -332,7 +332,7 @@ function updateGame(){
     // Draw the photons
     for(i = 0; i < photons.length; i++){
         photons[i].draw();
-        photons[i].move();  
+        photons[i].move();
     }
     for(i = 0; i < redphotons.length; i++){
         redphotons[i].draw();
