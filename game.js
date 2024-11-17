@@ -4,6 +4,7 @@ const ctx = canvas.getContext('2d');
 const scale = 1.4;
 
 let monsters = [];
+let walls = []
 let spawnRate = 0.03;
 
 // Function to spawn monsters outside the frame
@@ -68,6 +69,29 @@ let cameraY = canvas.height/2;
 let player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.25, 0.25, true)
 let aimer = new Aimer(0, 30, 10)
 
+// setting up walls
+function randomizeWallSize(){
+    return (-1)**Math.floor(Math.random()*100) * Math.floor(Math.random()*250);
+}
+
+function randomizeWallPos(){
+    return (-1)**Math.floor(Math.random()*100) * Math.floor(Math.random()*250);
+}
+
+function spawnWalls(){
+
+    if(walls.length >= 2) return; // if the number of walls exceeds 2, do not produce any more
+
+    let posX = player.x + randomizeWallPos();
+    let posY = player.y + randomizeWallPos();
+    let sizeX = randomizeWallSize();
+    let sizeY = randomizeWallSize();
+    let color = 'black';
+    walls.push(new Walls(posX,posY,sizeX,sizeY,color));
+
+}
+
+
 
 // Math functions
 function dist(x1, y1, x2, y2){
@@ -79,8 +103,6 @@ function collision(obj1, obj2){
             Math.abs(obj1.y - obj2.y) <= (obj1.h/2 + obj2.h/2)) // Distance between y-coordinates <= Sum of half-heights  
 }
 
-
-// Time functions
 
 
 
@@ -144,7 +166,6 @@ function drawPlayer() {
     ctx.fillRect(canvas.width/2  + player.x - cameraX + 30*Math.cos(aimer.angle) -5 , canvas.height/2 + player.y - cameraY + 30*Math.sin(aimer.angle) - 5, 10, 10); // Adjust for camera
        
 }
-
 
 
 // Draw and update aimer()
@@ -265,7 +286,6 @@ function updateGame(){
     // Inside updateGame function:
     player.draw(ctx, player.spriteSheet, cameraX, cameraY, canvas);
     aimer.draw();
-
     if (Math.random() < spawnRate) spawnMonster()
     
     // Draw the monsters
@@ -275,6 +295,10 @@ function updateGame(){
         
     }
     
+    if(spawnWalls.length < 2) spawnWalls();
+    for(i=0; i < walls.length; i++){
+        walls[i].draw();
+    }
     // Check photons
     photons = photons.filter(checkRange);
     redphotons = redphotons.filter(checkRange);
@@ -283,7 +307,7 @@ function updateGame(){
     function checkRange(photon) {
         return photon.ran >= 0;
     }
-
+    
     // Draw the photons
     for(i = 0; i < photons.length; i++){
         photons[i].draw();
@@ -293,6 +317,7 @@ function updateGame(){
         redphotons[i].draw();
         redphotons[i].move();  
     }
+
 
     // Check monsters-photons
     monsters = monsters.filter(checkCollision);
@@ -327,6 +352,9 @@ function startGame() {
         updateGame(); // Start the game loop
     }, 500); // Duration of the fade-out effect (0.5s)
 }
+
+
+
 
 // Set up the Play button to start the game
 playButton.addEventListener('click', startGame);
