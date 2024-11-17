@@ -103,7 +103,7 @@ button:active {
 
 @font-face {
     font-family: 'Halloween';
-    src: url('./fonts/HalloweenSlimePersonalUse-4B80D.ttf') format('truetype'); /* Adjust the path and font format */
+    src: url(./fonts/HalloweenSlimePersonalUse-4B80D.ttf) format('truetype'); 
     font-weight: normal;
     font-style: normal;
 }
