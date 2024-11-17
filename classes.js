@@ -184,11 +184,11 @@ class Monsters {
 	// Calculate the relativistic factor based on player's velocity
         const contractionFactor = 1 / player.getRelativisticFactor();
         const contractedWidth = this.spriteWidth *scale* contractionFactor;
-	const contractedHeight = this.spriteHeight *scale* contractionFactor;
+	    const contractedHeight = this.spriteHeight *scale* contractionFactor;
 
 	// Adjust monster's frame rate based on player's speed (time dilation)
-	const dilationFactor = player.getRelativisticFactor();
-	const adjustedFrameRate = this.frameRate * dilationFactor;  // Monsters' frame rate decreases as player goes faster
+	    const dilationFactor = player.getRelativisticFactor();
+	    const adjustedFrameRate = this.frameRate * dilationFactor;  // Monsters' frame rate decreases as player goes faster
 
 
 	this.frameTimer++;
@@ -214,6 +214,11 @@ class Monsters {
             contractedWidth,  // Scale to contracted width
             contractedHeight // Scale to contracted height
         );
+        if(this.glow){
+            ctx.globalAlpha = 0.5;
+            ctx.fillStyle = "yellow"
+            ctx.fillRect(this.drawX, this.drawY, contractedWidth, contractedHeight);
+        }
     }
 
 
