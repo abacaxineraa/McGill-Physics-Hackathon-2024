@@ -26,6 +26,7 @@ function spawnMonster() {
     
     // Random glow effect for the monster
     let glow = Math.random() < 0.5;
+
     let ran = (1-spawnRate) * Math.random() * Math.min(canvas.height/3, canvas.width/3) + 2.5 * Math.min(player.w, player.h)
     
     // Create a new monster and add it to the monsters array
@@ -281,7 +282,7 @@ function updateGame(){
     // Draw the photons
     for(i = 0; i < photons.length; i++){
         photons[i].draw();
-        photons[i].move();  
+        photons[i].move();
     }
     for(i = 0; i < redphotons.length; i++){
         redphotons[i].draw();
