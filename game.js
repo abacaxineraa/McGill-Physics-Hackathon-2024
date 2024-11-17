@@ -417,13 +417,11 @@ function endGame() {
 }
 
 // Set up the Play Again button
-function playerDeath(){
-const playAgainButton = document.getElementById('play-again-button');
-
-playAgainButton.addEventListener('click', () => {
+function resetting()  {
     // Fade out the end screen
     const endScreen = document.getElementById('end-screen');
     endScreen.style.opacity = 0;
+    console.log("WELP")
 
     // After fade-out, restart the game by calling startGame
     setTimeout(() => {
@@ -437,20 +435,28 @@ playAgainButton.addEventListener('click', () => {
         canvas.style.display = 'block';
         updateGame();  // Restart the game loop
     }, 500); // Fade-out duration (matches the CSS transition)
-})
 };
 
 function resetGame() {    //CAN SOMEONE FIX THIS RESETGAME FUNCTION PLZ THANKS
     // Reset the player's state
-    player.x = canvas.width / 2;
-    player.y = canvas.height / 2;
-    player.vx = 0;
-    player.vy = 0;
+    
+    player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.01 * c, 0.01*c, true)
+    aimer = new Aimer(0, 30, 10)
 
     // Reset any other game variables, such as monsters, walls, or score
     monsters = [];
     walls = [];
     spawnRate = 0.03;
+    monsters = [];
+    id=0;
+    monstersKilled = 0;
+    cameraX = canvas.width/2;
+    cameraY = canvas.height/2;
+    
+    photons = []
+    redphotons = []
+
+
 }
 
 

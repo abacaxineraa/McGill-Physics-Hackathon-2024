@@ -43,6 +43,7 @@
     </style>
 </head>
 <body>
+    <canvas id="gameCanvas"></canvas>
     <div id="welcome-screen">
         <h1>Relatively Monstrous</h1>
         <button id="play-button">Play</button>
@@ -55,9 +56,8 @@
     </div>
     <div id="end-screen">
         <h1>Game Over</h1>
-        <button id="play-again-button">Play Again</button>
+        <button id="play-again-button" onclick="resetting()">Play Again</button>
     </div>    
-    <canvas id="gameCanvas"></canvas>
 
     <script src="classes.js"></script>
       <script src="walls.js"></script>
