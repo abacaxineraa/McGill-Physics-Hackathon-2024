@@ -53,7 +53,7 @@ h1 {
     font-family: 'SuperPixel', sans-serif; /* Apply the custom font */
     font-size: 4rem;
     margin-top: 20px; /* Space from the top of the page */
-    color: #000;
+    color: black;
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
                  0 0 30px rgba(255, 255, 255, 0.6),
                  0 0 40px rgba(255, 255, 255, 0.4);
@@ -149,8 +149,8 @@ button:active {
 
 #end-screen h1 {
     font-size: 4rem;
-    margin-bottom: 30px;
-    color: #f9f9f9;
+    margin-bottom: 150px;
+    color: black;
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
                  0 0 30px rgba(255, 255, 255, 0.6),
                  0 0 40px rgba(255, 255, 255, 0.4);
