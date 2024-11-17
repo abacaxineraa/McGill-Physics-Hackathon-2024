@@ -77,4 +77,8 @@ class Walls {
         ctx.fillStyle = 'black';
         ctx.fill();
     }
+
+    move(){
+        
+    }
 }
