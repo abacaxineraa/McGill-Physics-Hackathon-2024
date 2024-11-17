@@ -432,7 +432,7 @@ playAgainButton.addEventListener('click', () => {
         // Show the canvas and start the game
         canvas.style.display = 'block';
         updateGame();  // Restart the game loop
-    }, 500); // Fade-out duration (matches the CSS transition)
+    }, 1500); // Fade-out duration (matches the CSS transition)
 });
 
 function resetGame() {    //CAN SOMEONE FIX THIS RESETGAME FUNCTION PLZ THANKS
