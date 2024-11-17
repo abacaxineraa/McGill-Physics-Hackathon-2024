@@ -38,8 +38,8 @@ class Player {
         }
 	
         
-        this.x += this.vx*0.8;
-        this.y += this.vy*0.8;
+        this.x += this.vx;
+        this.y += this.vy;
     }
     // Sprite animation function
     draw(ctx, spriteSheet, cameraX, cameraY, canvas) {
@@ -53,8 +53,8 @@ class Player {
         }
 
         // Calculate the player's position relative to the camera
-        this.drawX = canvas.width / 2 + (this.x - cameraX) - this.spriteWidth / 2;
-        this.drawY = canvas.height / 2 + (this.y - cameraY) - this.spriteHeight / 2;
+        this.drawX = canvas.width / 2 + (this.x - cameraX) - this.w / 2;
+        this.drawY = canvas.height / 2 + (this.y - cameraY) - this.h / 2;
 
         // Draw the sprite at the player's position
         ctx.drawImage(
@@ -63,10 +63,10 @@ class Player {
             this.sourceY, // Source Y position (calculated from the row)
             this.spriteWidth,
             this.spriteHeight,
-            canvas.width / 2 + this.x - cameraX - this.w / 2, // Center on the canvas
-            canvas.height / 2 + this.y - cameraY - this.h / 2, // Center on the canvas
-            this.w*scale*0.9,
-            this.h*scale*0.9
+            this.drawX, // Center on the canvas
+            this.drawY, // Center on the canvas
+            this.w,
+            this.h
         );
     }
 }
