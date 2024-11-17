@@ -5,6 +5,18 @@ const ctx = canvas.getContext('2d');
 const scale = 1.4;
 
 
+// Function to resize canvas to fit the window
+function resizeCanvas(canvas) {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+// Resize canvas on window load and resize
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas(canvas);
+
+
+
 let monsters = [];
 let spawnRate = 0.03;
 let id=0;
