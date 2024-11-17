@@ -72,8 +72,8 @@ class Monsters {
 	// Apply length contraction to the distance between player and monster
 	const deltaX = this.x - him.x;
 	const deltaY = this.y - him.x;
-	const contractedDeltaX = deltaX / gamma;
-	const contractedDeltaY = deltaY / gamma;
+	const contractedDeltaX = deltaX * contractionFactorX;
+	const contractedDeltaY = deltaY * contractionFactorY;
 	
 	this.drawX = canvas.width / 2 + contractedDeltaX;
 	this.drawY = canvas.height / 2 + contractedDeltaY;
@@ -86,15 +86,15 @@ class Monsters {
             this.sourceY, // Source Y position (based on the row)
             this.spriteWidth,
             this.spriteHeight,
-            this.drawX - this.contractedWidth ,  // Draw at monster position
-            this.drawY - this.contractedHeight,  // Draw at monster position
+            this.drawX - this.contractedWidth/2 ,  // Draw at monster position
+            this.drawY - this.contractedHeight/2,  // Draw at monster position
             this.contractedWidth,  // Scale to contracted width
             this.contractedHeight // Scale to contracted height
         );
         if(this.glow){
             ctx.globalAlpha = 0.2;
             ctx.fillStyle = "yellow"
-            ctx.fillRect(this.drawX-this.contractedWidth, this.drawY-this.contractedHeight, 
+            ctx.fillRect(this.drawX-this.contractedWidth/2, this.drawY-this.contractedHeight/2, 
                 this.contractedWidth, this.contractedHeight);
             ctx.globalAlpha = 1;
         }

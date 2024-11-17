@@ -3,6 +3,7 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scale = 1.4;
+let c = 5; // speed of light
 
 
 // Function to resize canvas to fit the window
@@ -33,26 +34,26 @@ function spawnCreature(maxCreature, object) {
     if (object.length <= Math.round(maxCreature + 10 * spawnRate) && object.length == 0) {
 
 	// Random position outside the player's current view
-	let spawnX = player.x + (Math.random() * 800 - 400);  // Spawn outside the screen on X-axis
-	let spawnY = player.y + (Math.random() * 800 - 400);  // Spawn outside the screen on Y-axis
+	let spawnX = player.x + ((-1) ** Math.floor(2*Math.random())) * (Math.random()* canvas.width/3 + canvas.width/6);  // Spawn inside the screen on X-axis
+	let spawnY = player.y + ((-1) ** Math.floor(2*Math.random())) * (Math.random()* canvas.width/3 + canvas.width/6);  // Spawn inside the screen on Y-axis
 
 	// Random size for the monster
-	let size = Math.random() * 40 + 20;
+	let size = Math.random() * 50 + 40;
 	
 	// Random velocity for the monster (to make them move)
-	let vx = Math.random() * 1.8 - 1; 
-	let vy = Math.random() * 1.8 - 1; 
+	let vx = ( 0.05 * c + 0.1 * c * Math.random() )* ((-1) ** Math.floor(2*Math.random())); 
+	let vy = (0.05 * c + 0.1 * c * Math.random() )* ((-1) ** Math.floor(2*Math.random())) ; 
 
 	
 	let hp = true;
 	
 	// Random glow effect for the monster
 	let glow = Math.random() < 0.5;
-	let ran = (1-spawnRate) * Math.random() * Math.min(canvas.height/3, canvas.width/3) + 2.5 * Math.min(player.w, player.h)
+	let ran = (5 - 4 * spawnRate) * Math.min(player.w, player.h)
 	
 
-	let maxtime = 8
-	let time = Math.round(2 + Math.random()*maxtime) // multiplier for the max seconds -- implies that 10 seconds is the maxtime
+    let maxtime = 5
+    let time = Math.round(2 + Math.random()*(maxtime-2)) // multiplier for the max seconds -- implies that 5 seconds is the maxtime
 	if (object == monsters) {
 	    object.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, true, ran, time, null, id));
         object[object.length-1].interval = setInterval(increment,1000,id);
@@ -79,6 +80,10 @@ function increment(smt){
         tempMonst.glow *= false
         console.log("BOOM,")
         clearInterval(tempMonst.interval);
+        let maxtime = 5
+	    let time = Math.round(2 + Math.random()*(maxtime-2))
+        tempMonst.t = time
+        tempMonst.interval = setInterval(increment, 1000, smt)
     }
 }
 
@@ -96,7 +101,7 @@ let cameraY = canvas.height/2;
 
 
 // setting up player
-let player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.25, 0.25, true)
+let player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.01 * c, 0.01*c, true)
 let aimer = new Aimer(0, 30, 10)
 
 // setting up walls
@@ -203,7 +208,7 @@ function moveAim(event){
 }
 
 // Setting up photons
-let c = 5; // speed of light
+
 
 let photons = []
 let redphotons = []
@@ -291,6 +296,7 @@ function drawSprite(player) {
 
 
 
+
 function updateGame(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     updateCamera();
@@ -300,8 +306,10 @@ function updateGame(){
     player.draw(ctx, player.spriteSheet, cameraX, cameraY, canvas);
     aimer.draw();
     if (Math.random() < spawnRate) spawnCreature(5, monsters)
-
-    spawnCreature(2, walls)
+    
+    calculateRelativeSpeed(player);
+    
+    spawnCreature(12, walls)
     
     // Draw the monsters
     for(i=0; i < monsters.length; i++){
@@ -371,7 +379,7 @@ function startGame() {
         updateGame(); // Start the game loop
     }, 500); // Duration of the fade-out effect (0.5s)
 
-    updateGame()
+    updateGame();
 }
 
 // Set up the Play button to start the game
