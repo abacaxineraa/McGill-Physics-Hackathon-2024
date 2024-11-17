@@ -352,7 +352,7 @@ function updateGame(){
 function displayKills(){
     ctx.font = "20px Arial";
     ctx.fillStyle = "white";
-    ctx.fillText(`Monsters Killed: ${monstersKilled}`, canvas.width - 200, 30);
+    ctx.fillText(`Monsters Killed: ${monstersKilled}`, canvas.width - 175, 30);
 
 }
 // Get the elements
