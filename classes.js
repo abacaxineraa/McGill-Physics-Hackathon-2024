@@ -61,12 +61,14 @@ class Photons {
 
 
 class Walls {
-    constructor(x,y,w,h,color){
-	this.x = x;
-	this.y = y;
-	this.w = w;
-	this.h = h;
-	this.color = color;
+    constructor(x,y,w,h,vx,vy,color){
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.vx = vx;
+        this.vy = vy;
+        this.color = color;
 
 	// Sprite properties
 	this.spriteSheet = new Image();
@@ -79,9 +81,16 @@ class Walls {
 	this.frameTimer = 0;   
 	this.animationRow = 0;  
 	this.sourceY = this.animationRow * this.spriteHeight; 
+
     }
 
+    draw(){
+        ctx.rect(this.x, this.y, this.w, this.h);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+    }
 
+<<<<<<< HEAD
     draw(him){
 	const c = 1; // Normalized speed of light (for this simulation, we use 1)
 	const speed = Math.sqrt(him.vx ** 2 + him.vy ** 2); // Total speed (magnitude of velocity)
@@ -147,5 +156,7 @@ class Walls {
             ctx.globalAlpha = 1;
 	}
 }
-
+    move(){
+	
+    }
 }
