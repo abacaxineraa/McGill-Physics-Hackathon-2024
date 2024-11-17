@@ -69,22 +69,6 @@ class Player {
             this.h*scale*0.9
         );
     }
-
-
-    getRelativisticFactor() {
-        const c = 1;  // Normalized speed of light (for this simulation, we use 1)
-        const speed = Math.sqrt(this.vx ** 2 + this.vy ** 2);  // Total speed (magnitude of velocity)
-        
-        // Limit the speed to 0.9c to avoid going faster than light
-        const realSpeed = Math.min(speed, 0.9 * c); 
-        
-        // Calculate the Lorentz factor (gamma)
-        const gamma = 1 / Math.sqrt(1 - (realSpeed / c) ** 2);
-        
-        // Return the contraction factor, which is the inverse of gamma
-        return gamma;
-    }
-    
 }
 
 
@@ -181,13 +165,24 @@ class Monsters {
 
     
     draw(player) {
+
+        const c = 1;  // Normalized speed of light (for this simulation, we use 1)
+        const speed = Math.sqrt(player.vx ** 2 + player.vy ** 2);  // Total speed (magnitude of velocity)
+            
+        // Limit the speed to 0.9c to avoid going faster than light
+        const realSpeed = Math.min(speed, 0.9 * c); 
+        
+        // Calculate the Lorentz factor (gamma)
+        const gamma = 1 / Math.sqrt(1 - (realSpeed / c) ** 2);
+
+	
 	// Calculate the relativistic factor based on player's velocity
-        const contractionFactor = 1 / player.getRelativisticFactor();
+        const contractionFactor = 1 /gamma;
         const contractedWidth = this.spriteWidth *scale* contractionFactor;
 	const contractedHeight = this.spriteHeight *scale* contractionFactor;
 
 	// Adjust monster's frame rate based on player's speed (time dilation)
-	const dilationFactor = player.getRelativisticFactor();
+	const dilationFactor = gamma;
 	const adjustedFrameRate = this.frameRate * dilationFactor;  // Monsters' frame rate decreases as player goes faster
 
 
