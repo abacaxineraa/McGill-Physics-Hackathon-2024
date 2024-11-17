@@ -332,7 +332,7 @@ function updateGame(){
     // Draw the photons
     for(i = 0; i < photons.length; i++){
         photons[i].draw();
-        photons[i].move();  
+        photons[i].move();
     }
     for(i = 0; i < redphotons.length; i++){
         redphotons[i].draw();
@@ -370,6 +370,7 @@ canvas.style.display = 'none' // So it is not visible initially!
 function startGame() {
     // Fade out the welcome screen
     welcomeScreen.style.opacity = 0;
+
     
     // After the fade-out is complete, hide the welcome screen and show the canvas
     setTimeout(() => {
@@ -379,11 +380,14 @@ function startGame() {
         updateGame(); // Start the game loop
     }, 500); // Duration of the fade-out effect (0.5s)
 
+    
+    // Listen for key presses to move the player
+    document.addEventListener('keydown', movePlayer);
+    canvas.addEventListener('mousemove', moveAim);
+    
     updateGame();
 }
 
-// Set up the Play button to start the game
-playButton.addEventListener('click', startGame);
 
 function endGame() {
     // Hide the game canvas
@@ -396,6 +400,7 @@ function endGame() {
 }
 
 // Set up the Play Again button
+function playerDeath(){
 const playAgainButton = document.getElementById('play-again-button');
 
 playAgainButton.addEventListener('click', () => {
@@ -415,7 +420,8 @@ playAgainButton.addEventListener('click', () => {
         canvas.style.display = 'block';
         updateGame();  // Restart the game loop
     }, 500); // Fade-out duration (matches the CSS transition)
-});
+})
+};
 
 function resetGame() {    //CAN SOMEONE FIX THIS RESETGAME FUNCTION PLZ THANKS
     // Reset the player's state
@@ -431,7 +437,4 @@ function resetGame() {    //CAN SOMEONE FIX THIS RESETGAME FUNCTION PLZ THANKS
 }
 
 
-// Listen for key presses to move the player
-document.addEventListener('keydown', movePlayer);
-canvas.addEventListener('mousemove', moveAim);
 
