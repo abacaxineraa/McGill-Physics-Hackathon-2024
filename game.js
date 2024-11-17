@@ -173,9 +173,9 @@ function movePlayer() {
         dy /= length;
 
         // Update player position with normalized speed
-        if (Math.abs(player.vx) < 0.9 * c) player.vx += dx * player.ax;
+        if (Math.sqrt(player.vx ** 2 + player.vy ** 2) < 0.9 * c) player.vx += dx * player.ax;
 
-        if (Math.abs(player.vy) < 0.9 * c) player.vy += dy * player.ay;
+        if (Math.sqrt(player.vx ** 2 + player.vy ** 2) < 0.9 * c) player.vy += dy * player.ay;
 
     
         
@@ -339,7 +339,7 @@ function updateGame(){
     // Draw the photons
     for(i = 0; i < photons.length; i++){
         photons[i].draw();
-        photons[i].move();  
+        photons[i].move();
     }
     for(i = 0; i < redphotons.length; i++){
         redphotons[i].draw();
@@ -365,6 +365,14 @@ function updateGame(){
         return true
     }
 
+    // Check monsters-player
+    if (monsters.length != 0) {
+        for (i=0; i < monsters.length; i++){
+            if (collision(player, monsters[i])) endGame();
+        }
+    }
+
+
     // Request the next animation frame
     requestAnimationFrame(updateGame);
 }
@@ -375,10 +383,15 @@ const playButton = document.getElementById('play-button');
 
 canvas.style.display = 'none' // So it is not visible initially!
 
-// Game initialization function (you can replace this with your actual game setup)
+// Set up the Play button to start the game
+playButton.addEventListener('click', startGame);
+
+
+// Game initialization function 
 function startGame() {
     // Fade out the welcome screen
     welcomeScreen.style.opacity = 0;
+
     
     // After the fade-out is complete, hide the welcome screen and show the canvas
     setTimeout(() => {
@@ -388,11 +401,14 @@ function startGame() {
         updateGame(); // Start the game loop
     }, 500); // Duration of the fade-out effect (0.5s)
 
+    
+    // Listen for key presses to move the player
+    document.addEventListener('keydown', movePlayer);
+    canvas.addEventListener('mousemove', moveAim);
+    
     updateGame();
 }
 
-// Set up the Play button to start the game
-playButton.addEventListener('click', startGame);
 
 function endGame() {
     // Hide the game canvas
@@ -405,6 +421,7 @@ function endGame() {
 }
 
 // Set up the Play Again button
+function playerDeath(){
 const playAgainButton = document.getElementById('play-again-button');
 
 playAgainButton.addEventListener('click', () => {
@@ -424,7 +441,8 @@ playAgainButton.addEventListener('click', () => {
         canvas.style.display = 'block';
         updateGame();  // Restart the game loop
     }, 500); // Fade-out duration (matches the CSS transition)
-});
+})
+};
 
 function resetGame() {    //CAN SOMEONE FIX THIS RESETGAME FUNCTION PLZ THANKS
     // Reset the player's state
@@ -440,7 +458,4 @@ function resetGame() {    //CAN SOMEONE FIX THIS RESETGAME FUNCTION PLZ THANKS
 }
 
 
-// Listen for key presses to move the player
-document.addEventListener('keydown', movePlayer);
-canvas.addEventListener('mousemove', moveAim);
 
