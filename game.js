@@ -296,6 +296,7 @@ function drawSprite(player) {
 
 
 
+
 function updateGame(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     updateCamera();
@@ -305,8 +306,10 @@ function updateGame(){
     player.draw(ctx, player.spriteSheet, cameraX, cameraY, canvas);
     aimer.draw();
     if (Math.random() < spawnRate) spawnCreature(5, monsters)
-
-    spawnCreature(2, walls)
+    
+    calculateRelativeSpeed(player);
+    
+    spawnCreature(12, walls)
     
     // Draw the monsters
     for(i=0; i < monsters.length; i++){
@@ -376,7 +379,7 @@ function startGame() {
         updateGame(); // Start the game loop
     }, 500); // Duration of the fade-out effect (0.5s)
 
-    updateGame()
+    updateGame();
 }
 
 

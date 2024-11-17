@@ -84,11 +84,6 @@ class Walls {
 
     }
 
-    draw(){
-        ctx.rect(th, this.y, this.w, this.h);
-        ctx.fillStyle = 'black';
-        ctx.fill();
-    }
 
     draw(him){
 	const c = 5; // Normalized speed of light (for this simulation, we use 5)
