@@ -69,22 +69,6 @@ class Player {
             this.h*scale*0.9
         );
     }
-
-
-    getRelativisticFactor() {
-        const c = 1;  // Normalized speed of light (for this simulation, we use 1)
-        const speed = Math.sqrt(this.vx ** 2 + this.vy ** 2);  // Total speed (magnitude of velocity)
-        
-        // Limit the speed to 0.9c to avoid going faster than light
-        const realSpeed = Math.min(speed, 0.9 * c); 
-        
-        // Calculate the Lorentz factor (gamma)
-        const gamma = 1 / Math.sqrt(1 - (realSpeed / c) ** 2);
-        
-        // Return the contraction factor, which is the inverse of gamma
-        return gamma;
-    }
-    
 }
 
 
@@ -181,14 +165,32 @@ class Monsters {
 
     
     draw(player) {
-	// Calculate the relativistic factor based on player's velocity
-        const contractionFactor = 1 / player.getRelativisticFactor();
-        const contractedWidth = this.spriteWidth *scale* contractionFactor;
-	const contractedHeight = this.spriteHeight *scale* contractionFactor;
+
+	const c = 1; // Normalized speed of light (for this simulation, we use 1)
+	const speed = Math.sqrt(player.vx ** 2 + player.vy ** 2); // Total speed (magnitude of velocity)
+
+	// Limit the speed to 0.9c to avoid going faster than light
+	const realSpeed = Math.min(speed, 0.9 * c);
+
+	// Calculate the Lorentz factor (gamma) based on total speed
+	const gamma = 1 / Math.sqrt(1 - (realSpeed / c) ** 2);
+
+	// Function to calculate contraction factor based on velocity direction
+	function getContractionFactor(velocity) {
+	    return 1 / Math.sqrt(1 - (Math.min(Math.abs(velocity), 0.9 * c) / c) ** 2);
+	}
+
+	// Apply length contraction depending on the direction of movement
+	const contractionFactorX = 1/getContractionFactor(player.vx);
+	const contractionFactorY = 1/getContractionFactor(player.vy);
+
+	const contractedWidth = this.spriteWidth * scale * contractionFactorX;
+	const contractedHeight = this.spriteHeight * scale * contractionFactorY;
 
 	// Adjust monster's frame rate based on player's speed (time dilation)
-	const dilationFactor = player.getRelativisticFactor();
-	const adjustedFrameRate = this.frameRate * dilationFactor;  // Monsters' frame rate decreases as player goes faster
+	const dilationFactor = gamma;
+	const adjustedFrameRate = this.frameRate * dilationFactor; // Monsters' frame rate decreases as player goes faster
+
 
 
 	this.frameTimer++;
@@ -214,6 +216,11 @@ class Monsters {
             contractedWidth,  // Scale to contracted width
             contractedHeight // Scale to contracted height
         );
+        if(this.glow){
+            ctx.globalAlpha = 0.5;
+            ctx.fillStyle = "yellow"
+            ctx.fillRect(this.drawX, this.drawY, contractedWidth, contractedHeight);
+        }
     }
 
 
