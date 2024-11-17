@@ -134,7 +134,7 @@ class Photons {
 class Monsters {
 
     // position of monsters, velocity of monsters, width of monsters, health of monsters, glow of monsters, glow of monsters on or off
-    constructor(x,y,vx,vy,w,h,hp,glow,ran, t, myinterval){
+    constructor(x,y,vx,vy,w,h,hp,glow,ran, t, myinterval,id){
         this.x = x;
         this.y = y;
         this.vx = vx;
@@ -146,6 +146,7 @@ class Monsters {
         this.ran = ran;
         this.t = t;
         this.myinterval = myinterval;
+        this.id = id;
 
 	
 
@@ -217,9 +218,10 @@ class Monsters {
             contractedHeight // Scale to contracted height
         );
         if(this.glow){
-            ctx.globalAlpha = 0.5;
+            ctx.globalAlpha = 0.2;
             ctx.fillStyle = "yellow"
             ctx.fillRect(this.drawX, this.drawY, contractedWidth, contractedHeight);
+            ctx.globalAlpha = 1;
         }
     }
 

@@ -5,6 +5,13 @@ const scale = 1.4;
 
 let monsters = [];
 let spawnRate = 0.03;
+let id=0;
+
+function findId(anId) {
+    for (i=0; i<monsters.length; i++){
+        if (monsters[i].id == anId) return monsters[i]
+    }
+}
 
 // Function to spawn monsters outside the frame
 function spawnMonster() {
@@ -34,14 +41,14 @@ function spawnMonster() {
     
 
     let maxtime = 8 // multiplier for the max seconds -- implies that 10 seconds is the maxtime
-    monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow, ran, t, null));
-    console.log(monsters.length)
-    monsters[monsters.length-1].interval = setInterval(increment,1000,monsters.length-1);
+    monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow, ran, t, null, id));
+    monsters[monsters.length-1].interval = setInterval(increment,1000,id);
+    id++
 }
 
 
 function increment(smt){
-    console.log(smt, monsters.length)
+    let tempMonst = findId(smt)
     monsters[smt].t -= 1
     console.log(smt, monsters[smt].t)
     
@@ -298,7 +305,8 @@ function updateGame(){
     monsters = monsters.filter(checkCollision);
     function checkCollision(monster){
         for (i = 0; i < photons.length; i++){
-            if (collision(monster, photons[i])) {
+            if (collision(monster, photons[i]) && monster.glow) {
+                clearInterval(monster.interval)
                 if (spawnRate < 1) spawnRate *= 1.05
                  if (Math.random() < Math.min(5*spawnRate, 1)) redshoot(monster, player)
                 return false}
