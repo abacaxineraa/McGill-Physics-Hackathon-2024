@@ -56,8 +56,8 @@ function spawnCreature(maxCreature, object) {
     let ran = (1-spawnRate) * Math.random() * Math.min(canvas.height/3, canvas.width/3) + 2.5 * Math.min(player.w, player.h)
     
 
-    let maxtime = 8
-    let time = Math.round(2 + Math.random()*maxtime) // multiplier for the max seconds -- implies that 10 seconds is the maxtime
+    let maxtime = 5
+    let time = Math.round(2 + Math.random()*(maxtime-2)) // multiplier for the max seconds -- implies that 5 seconds is the maxtime
     if (object == monsters) {
         object.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, true, ran, time, null, id));
         object[object.length-1].interval = setInterval(increment,1000,id);
@@ -72,9 +72,11 @@ function increment(smt){
     tempMonst.t -= 1
     
     if(tempMonst.t <= 0){
-        tempMonst.glow *= false
-        console.log("BOOM,")
+        tempMonst.glow = (tempMonst.glow == false)
+        let maxtime = 5
+        let time = Math.round(2 + Math.random()*(maxtime-2)) 
         clearInterval(tempMonst.interval);
+        tempMonst.interval = setInterval(increment, 1000, smt)
     }
 }
 
@@ -94,6 +96,8 @@ let cameraY = canvas.height/2;
 // setting up player
 let player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.003* c, 0.003*c, true)
 let aimer = new Aimer(0, 30, 10)
+
+let IRF = player;
 
 
 
@@ -222,8 +226,8 @@ function redshoot(monster, target){
 
 // Update the camera position smoothly
 function updateCamera() {
-    cameraX = lerp(cameraX, player.x, smoothness);
-    cameraY = lerp(cameraY, player.y, smoothness);
+    cameraX = lerp(cameraX, IRF.x, smoothness);
+    cameraY = lerp(cameraY, IRF.y, smoothness);
 }
 
 
@@ -281,20 +285,20 @@ function drawSprite(player) {
 function updateGame(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     updateCamera();
-    updateBackground();
+    updateBackground(IRF);
 
     // Inside updateGame function:
     player.draw(ctx, player.spriteSheet, cameraX, cameraY, canvas);
     aimer.draw();
     if (Math.random() < spawnRate) spawnCreature(5, monsters)
     
-    calculateRelativeSpeed(player);
+    calculateRelativeSpeed(IRF);
     displayKills();
     
     // Draw the monsters
     for(i=0; i < monsters.length; i++){
         monsters[i].move();
-        monsters[i].draw(player);        
+        monsters[i].draw(IRF);        
     }
 
 
@@ -311,11 +315,11 @@ function updateGame(){
     // Draw the photons
     for(i = 0; i < photons.length; i++){
         photons[i].draw();
-        photons[i].move(player);
+        photons[i].move(IRF);
     }
     for(i = 0; i < redphotons.length; i++){
         redphotons[i].draw();
-        redphotons[i].move(player);  
+        redphotons[i].move(IRF);  
     }
 
 
@@ -324,6 +328,9 @@ function updateGame(){
     function checkCollision(monster){
         for (i = 0; i < photons.length; i++){
             if (collision(monster, photons[i]) && monster.glow) {
+                if (monster === IRF) {
+                    IRF = player;
+                }
                 monstersKilled++
 
                 clearInterval(monster.interval)
@@ -340,6 +347,22 @@ function updateGame(){
     if (monsters.length != 0) {
         for (i=0; i < monsters.length; i++){
             if (collision(player, monsters[i])) endGame();
+        }
+    }
+
+    // Check player - redphotons
+    if (redphotons.length != 0){
+        for (i=0; i<redphotons.length; i++){
+            if (collision(redphotons[i], player)){
+                if (monsters.length != 0){
+                    let smallest = dist(monsters[0].x, monsters[0].y, player.x, player.y)
+                    let temp = 0
+                    for (j=0; j < monsters.length; j++) {
+                        if (dist(monsters[j].x, monsters[j].y, player.x, player.y) <= smallest ) temp = j
+                    }
+                    IRF = monsters[temp]
+                }
+            }
         }
     }
 
@@ -416,7 +439,8 @@ function resetGame() {    //CAN SOMEONE FIX THIS RESETGAME FUNCTION PLZ THANKS
     // Reset the player's state
     
     player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.003 * c, 0.003*c, true)
-    aimer = new Aimer(0, 30, 10)
+    aimer = new Aimer(0, 30, 10);
+    IRF = player;
 
     // Reset any other game variables, such as monsters, score, camera, etc.
     monsters = [];

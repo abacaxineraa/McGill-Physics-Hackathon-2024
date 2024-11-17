@@ -50,10 +50,12 @@ class Photons {
             this.w, this.h);
         
     }
-    move(){
-        this.x += this.vx;
+    move(him){
+        this.trueVX = this.vx + him.vx
+        this.trueVY = this.vy + him.vy
+        this.x += this.vx ;
         this.y += this.vy;
-        this.ran -= Math.sqrt((this.vx)**2+(this.vy)**2);
+        this.ran -= Math.sqrt((this.trueVX)**2+(this.trueVY)**2);
     }
 
 }

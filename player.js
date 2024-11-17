@@ -29,12 +29,12 @@ class Player {
     move(){
 
         if(this.vx != 0){
-            this.vx -= 0.20 * this.vx/Math.abs(this.vx) * this.ax;
+            this.vx -= 0.15 * this.vx/Math.abs(this.vx) * this.ax;
             
         }
         
         if(this.vy != 0){
-            this.vy -= 0.20 * this.vy/Math.abs(this.vy) * this.ay;
+            this.vy -= 0.15 * this.vy/Math.abs(this.vy) * this.ay;
         }
 	
         

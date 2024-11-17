@@ -144,7 +144,6 @@ button:active {
     color: white;
     text-align: center;
     opacity: 0;
-    transition: opacity 0.5s ease;
 }
 
 #end-screen h1 {
@@ -165,7 +164,7 @@ button:active {
     color: white;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(255, 70, 70, 0.4);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: opacity 1s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 #end-screen button:hover {
