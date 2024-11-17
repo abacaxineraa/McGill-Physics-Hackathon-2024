@@ -117,6 +117,7 @@ class Photons {
     }
 
     draw(){
+        ctx.globalAlpha = 1;
         ctx.fillStyle = this.color;
         ctx.fillRect(canvas.width / 2 + this.x - cameraX - this.w / 2, 
             canvas.height / 2 + this.y - cameraY - this.h / 2, 
