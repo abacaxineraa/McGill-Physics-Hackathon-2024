@@ -123,7 +123,7 @@ class Aimer {
 class Photons {
 
     // position of photons, velocity of photons, radius, range of photons
-    constructor(x,y,w,h,vx,vy,ran){
+    constructor(x,y,w,h,vx,vy,ran, color){
         this.x = x;
         this.y = y;
         this.w = w;
@@ -131,10 +131,11 @@ class Photons {
         this.vx = vx;
         this.vy = vy;
         this.ran = ran;
+        this.color = color;
     }
 
     draw(){
-        ctx.fillStyle = 'red';
+        ctx.fillStyle = this.color;
         ctx.fillRect(canvas.width / 2 + this.x - cameraX - this.w / 2, 
             canvas.height / 2 + this.y - cameraY - this.h / 2, 
             this.w, this.h);
