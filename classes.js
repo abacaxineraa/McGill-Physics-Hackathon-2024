@@ -71,8 +71,8 @@ class Walls {
 	// Sprite properties
 	this.spriteSheet = new Image();
 	this.spriteSheet.src =  "./img/stonesheet.png"; // Image file path for the monster sprite sheet
-	this.spriteWidth = 48;  
-	this.spriteHeight = 40; 
+	this.spriteWidth = 72;  
+	this.spriteHeight = 72; 
 	this.totalFrames = 2;    
 	this.currentFrame = 0;   
 	this.frameRate = 10;    
@@ -101,8 +101,8 @@ class Walls {
 	const contractionFactorX = 1/getContractionFactor(him.vx);
 	const contractionFactorY = 1/getContractionFactor(him.vy);
 
-	this.contractedWidth = this.w * scale * contractionFactorX;
-	this.contractedHeight = this.h * scale * contractionFactorY;
+	this.contractedWidth = (him.vx !== 0) ?  this.w * scale * contractionFactorX: this.w;
+	this.contractedHeight = (him.vx !== 0) ? this.h * scale * contractionFactorY: this.h;
 
 	// Adjust monster's frame rate based on player's speed (time dilation)
 	const dilationFactor = gamma;
