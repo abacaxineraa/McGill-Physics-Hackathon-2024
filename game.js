@@ -3,7 +3,6 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scale = 1.4;
-let c = 5; // speed of light
 
 
 // Function to resize canvas to fit the window
@@ -22,7 +21,6 @@ let monsters = [];
 let walls = []
 let spawnRate = 0.03;
 let id=0;
-let monstersKilled = 0; // counting kills!
 
 function findId(anId) {
     for (i=0; i<monsters.length; i++){
@@ -34,41 +32,41 @@ function findId(anId) {
 function spawnCreature(maxCreature, object) {
     if (object.length <= Math.round(maxCreature + 10 * spawnRate) && object.length == 0) {
 
-	// Random position outside the player's current view
-	let spawnX = player.x + ((-1) ** Math.floor(2*Math.random())) * (Math.random()* canvas.width/3 + canvas.width/6);  // Spawn inside the screen on X-axis
-	let spawnY = player.y + ((-1) ** Math.floor(2*Math.random())) * (Math.random()* canvas.width/3 + canvas.width/6);  // Spawn inside the screen on Y-axis
+    // Random position outside the player's current view
+    let spawnX = player.x + (Math.random() * 800 - 400);  // Spawn outside the screen on X-axis
+    let spawnY = player.y + (Math.random() * 800 - 400);  // Spawn outside the screen on Y-axis
 
-	// Random size for the monster
-	let size = Math.random() * 50 + 40;
-	
-	// Random velocity for the monster (to make them move)
-	let vx = ( 0.05 * c + 0.1 * c * Math.random() )* ((-1) ** Math.floor(2*Math.random())); 
-	let vy = (0.05 * c + 0.1 * c * Math.random() )* ((-1) ** Math.floor(2*Math.random())) ; 
+    // Random size for the monster
+    let size = Math.random() * 40 + 20;
+    
+    // Random velocity for the monster (to make them move)
+    let vx = Math.random() * 1.8 - 1; 
+    let vy = Math.random() * 1.8 - 1; 
 
-	
-	let hp = true;
-	
-	// Random glow effect for the monster
-	let glow = Math.random() < 0.5;
-	let ran = (5 - 4 * spawnRate) * Math.min(player.w, player.h)
-	
+    
+    let hp = true;
+    
+    // Random glow effect for the monster
+    let glow = Math.random() < 0.5;
+    let ran = (1-spawnRate) * Math.random() * Math.min(canvas.height/3, canvas.width/3) + 2.5 * Math.min(player.w, player.h)
+    
 
-    let maxtime = 5
-    let time = Math.round(2 + Math.random()*(maxtime-2)) // multiplier for the max seconds -- implies that 5 seconds is the maxtime
-	if (object == monsters) {
-	    object.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, true, ran, time, null, id));
+    let maxtime = 8
+    let time = Math.round(2 + Math.random()*maxtime) // multiplier for the max seconds -- implies that 10 seconds is the maxtime
+    if (object == monsters) {
+        object.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, true, ran, time, null, id));
         object[object.length-1].interval = setInterval(increment,1000,id);
         id++
-	}
-	else {
-	    let posX = player.x + randomizeWallPos();
-	    let posY = player.y + randomizeWallPos();
-	    let sizeX = randomizeWallSize();
-	    let sizeY = randomizeWallSize();
-	    
-	    walls.push(new Walls(posX,posY,sizeX,sizeY,0, 0, "black"));
+    }
+    else {
+        let posX = player.x + randomizeWallPos();
+        let posY = player.y + randomizeWallPos();
+        let sizeX = randomizeWallSize();
+        let sizeY = randomizeWallSize();
+        
+        walls.push(new Walls(posX,posY,sizeX,sizeY,0, 0, "black"));
         console.log("a WALL")
-	}
+    }
 }
 }
 
@@ -81,10 +79,6 @@ function increment(smt){
         tempMonst.glow *= false
         console.log("BOOM,")
         clearInterval(tempMonst.interval);
-        let maxtime = 5
-	    let time = Math.round(2 + Math.random()*(maxtime-2))
-        tempMonst.t = time
-        tempMonst.interval = setInterval(increment, 1000, smt)
     }
 }
 
@@ -102,7 +96,7 @@ let cameraY = canvas.height/2;
 
 
 // setting up player
-let player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.01 * c, 0.01*c, true)
+let player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.25, 0.25, true)
 let aimer = new Aimer(0, 30, 10)
 
 // setting up walls
@@ -132,12 +126,7 @@ function getRandInt(){
     return Math.floor(Math.random() * maxtime);
 }
 
-function displayKills(){
-    ctx.font = "20px Arial";
-	ctx.fillStyle = "white";
-	ctx.fillText(`Monsters Killed: ${monstersKilled}`, 1350, 30);
 
-}
 
 
 
@@ -173,9 +162,9 @@ function movePlayer() {
         dy /= length;
 
         // Update player position with normalized speed
-        if (Math.sqrt(player.vx ** 2 + player.vy ** 2) < 0.9 * c) player.vx += dx * player.ax;
+        if (Math.abs(player.vx) < 0.9 * c) player.vx += dx * player.ax;
 
-        if (Math.sqrt(player.vx ** 2 + player.vy ** 2) < 0.9 * c) player.vy += dy * player.ay;
+        if (Math.abs(player.vy) < 0.9 * c) player.vy += dy * player.ay;
 
     
         
@@ -214,7 +203,7 @@ function moveAim(event){
 }
 
 // Setting up photons
-
+let c = 5; // speed of light
 
 let photons = []
 let redphotons = []
@@ -302,7 +291,6 @@ function drawSprite(player) {
 
 
 
-
 function updateGame(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     updateCamera();
@@ -312,11 +300,8 @@ function updateGame(){
     player.draw(ctx, player.spriteSheet, cameraX, cameraY, canvas);
     aimer.draw();
     if (Math.random() < spawnRate) spawnCreature(5, monsters)
-    
-    calculateRelativeSpeed(player);
-    displayKills();
-    
-    spawnCreature(12, walls)
+
+    spawnCreature(2, walls)
     
     // Draw the monsters
     for(i=0; i < monsters.length; i++){
@@ -325,7 +310,7 @@ function updateGame(){
     }
     
     for(i=0; i < walls.length; i++){
-	walls[i].draw(player);
+    walls[i].draw(player);
     }
     // Check photons
     photons = photons.filter(checkRange);
@@ -339,7 +324,7 @@ function updateGame(){
     // Draw the photons
     for(i = 0; i < photons.length; i++){
         photons[i].draw();
-        photons[i].move();
+        photons[i].move();  
     }
     for(i = 0; i < redphotons.length; i++){
         redphotons[i].draw();
@@ -350,28 +335,18 @@ function updateGame(){
     // Check monsters-photons
     monsters = monsters.filter(checkCollision);
     function checkCollision(monster){
-        
         for (i = 0; i < photons.length; i++){
             if (collision(monster, photons[i]) && monster.glow) {
-                
+
                 clearInterval(monster.interval)
                 if (spawnRate < 1) {spawnRate *= 1.05}
                 if (Math.random() < Math.min(5*spawnRate, 1)) {redshoot(monster, player)}
-                monstersKilled++;
                 return false
 
             }
         }
         return true
     }
-
-    // Check monsters-player
-    if (monsters.length != 0) {
-        for (i=0; i < monsters.length; i++){
-            if (collision(player, monsters[i])) endGame();
-        }
-    }
-
 
     // Request the next animation frame
     requestAnimationFrame(updateGame);
@@ -383,11 +358,10 @@ const playButton = document.getElementById('play-button');
 
 canvas.style.display = 'none' // So it is not visible initially!
 
-// Game initialization function 
+// Game initialization function (you can replace this with your actual game setup)
 function startGame() {
     // Fade out the welcome screen
     welcomeScreen.style.opacity = 0;
-
     
     // After the fade-out is complete, hide the welcome screen and show the canvas
     setTimeout(() => {
@@ -397,14 +371,11 @@ function startGame() {
         updateGame(); // Start the game loop
     }, 500); // Duration of the fade-out effect (0.5s)
 
-    
-    // Listen for key presses to move the player
-    document.addEventListener('keydown', movePlayer);
-    canvas.addEventListener('mousemove', moveAim);
-    
-    updateGame();
+    updateGame()
 }
 
+// Set up the Play button to start the game
+playButton.addEventListener('click', startGame);
 
 function endGame() {
     // Hide the game canvas
@@ -417,11 +388,12 @@ function endGame() {
 }
 
 // Set up the Play Again button
-function resetting()  {
+const playAgainButton = document.getElementById('play-again-button');
+
+playAgainButton.addEventListener('click', () => {
     // Fade out the end screen
     const endScreen = document.getElementById('end-screen');
     endScreen.style.opacity = 0;
-    console.log("WELP")
 
     // After fade-out, restart the game by calling startGame
     setTimeout(() => {
@@ -435,29 +407,25 @@ function resetting()  {
         canvas.style.display = 'block';
         updateGame();  // Restart the game loop
     }, 500); // Fade-out duration (matches the CSS transition)
-};
+});
 
 function resetGame() {    //CAN SOMEONE FIX THIS RESETGAME FUNCTION PLZ THANKS
     // Reset the player's state
-    
-    player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.01 * c, 0.01*c, true)
-    aimer = new Aimer(0, 30, 10)
+    player.x = canvas.width / 2;
+    player.y = canvas.height / 2;
+    player.vx = 0;
+    player.vy = 0;
 
     // Reset any other game variables, such as monsters, walls, or score
     monsters = [];
     walls = [];
     spawnRate = 0.03;
-    monsters = [];
-    id=0;
-    monstersKilled = 0;
-    cameraX = canvas.width/2;
-    cameraY = canvas.height/2;
-    
-    photons = []
-    redphotons = []
-
-
 }
+
+// Listen for key presses to move the player
+document.addEventListener('keydown', movePlayer);
+canvas.addEventListener('mousemove', moveAim);
+
 
 
 
