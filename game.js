@@ -167,9 +167,9 @@ function movePlayer() {
         dy /= length;
 
         // Update player position with normalized speed
-        if (Math.abs(player.vx) < 0.9 * c) player.vx += dx * player.ax;
+        if (Math.sqrt(player.vx ** 2 + player.vy ** 2) < 0.9 * c) player.vx += dx * player.ax;
 
-        if (Math.abs(player.vy) < 0.9 * c) player.vy += dy * player.ay;
+        if (Math.sqrt(player.vx ** 2 + player.vy ** 2) < 0.9 * c) player.vy += dy * player.ay;
 
     
         
@@ -355,6 +355,14 @@ function updateGame(){
         }
         return true
     }
+
+    // Check monsters-player
+    if (monsters.length != 0) {
+        for (i=0; i < monsters.length; i++){
+            if (collision(player, monsters[i])) endGame();
+        }
+    }
+
 
     // Request the next animation frame
     requestAnimationFrame(updateGame);
