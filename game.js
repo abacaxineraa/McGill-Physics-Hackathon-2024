@@ -18,7 +18,7 @@ function findId(anId) {
 // Function to spawn monsters outside the frame
 function spawnMonster() {
     // Only spawn a monster if the number of monsters is less than 5
-    if (monsters.length <= Math.round(5 + 10 * spawnRate)) {
+    if (monsters.length <= Math.round(5 + 10 * spawnRate) && monsters.length == 0) {
 
     // Random position outside the player's current view
     let spawnX = player.x + (Math.random() * 800 - 400);  // Spawn outside the screen on X-axis
@@ -42,7 +42,7 @@ function spawnMonster() {
     let maxtime = 8
     let time = Math.round(2 + Math.random()*maxtime) // multiplier for the max seconds -- implies that 10 seconds is the maxtime
     console.log(time) 
-    monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow, ran, time, null, id));
+    monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, true, ran, time, null, id));
     console.log(monsters[monsters.length-1].t)
     monsters[monsters.length-1].interval = setInterval(increment,1000,id);
     id++
@@ -56,7 +56,7 @@ function increment(smt){
     console.log(smt, tempMonst.t)
     
 
-    if(monsters[smt].t <= 0){
+    if(tempMonst.t <= 0){
         console.log("BOOM,")
         clearInterval(monsters[smt].interval);
     }
@@ -317,10 +317,13 @@ function updateGame(){
     function checkCollision(monster){
         for (i = 0; i < photons.length; i++){
             if (collision(monster, photons[i]) && monster.glow) {
+
                 clearInterval(monster.interval)
-                if (spawnRate < 1) spawnRate *= 1.05
-                if (Math.random() < Math.min(5*spawnRate, 1)) redshoot(monster, player)
-                return false}
+                if (spawnRate < 1) {spawnRate *= 1.05}
+                if (Math.random() < Math.min(5*spawnRate, 1)) {redshoot(monster, player)}
+                return false
+
+            }
         }
         return true
     }
