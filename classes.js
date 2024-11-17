@@ -56,6 +56,8 @@ class Player {
         this.drawX = canvas.width / 2 + (this.x - cameraX) - this.spriteWidth / 2;
         this.drawY = canvas.height / 2 + (this.y - cameraY) - this.spriteHeight / 2;
 
+        scale = 1.4
+
         // Draw the sprite at the player's position
         ctx.drawImage(
             spriteSheet,
