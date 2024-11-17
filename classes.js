@@ -222,6 +222,11 @@ class Monsters {
             contractedWidth,  // Scale to contracted width
             contractedHeight // Scale to contracted height
         );
+        if(this.glow){
+            ctx.globalAlpha = 0.5;
+            ctx.fillStyle = "yellow"
+            ctx.fillRect(this.drawX, this.drawY, contractedWidth, contractedHeight);
+        }
     }
 
 

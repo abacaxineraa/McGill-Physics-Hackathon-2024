@@ -301,7 +301,7 @@ function updateGame(){
         for (i = 0; i < photons.length; i++){
             if (collision(monster, photons[i])) {
                 if (spawnRate < 1) spawnRate *= 1.05
-                /* if (Math.random() < Math.min(5*spawnRate, 1)) */ redshoot(monster, player)
+                 if (Math.random() < Math.min(5*spawnRate, 1)) redshoot(monster, player)
                 return false}
         }
         return true
