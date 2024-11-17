@@ -128,6 +128,7 @@ class Photons {
         this.x += this.vx;
         this.y += this.vy;
         this.ran -= Math.sqrt((this.vx)**2+(this.vy)**2);
+        console.log(this.x, this.y)
     }
 
 }
@@ -167,6 +168,7 @@ class Monsters {
 
     
     draw(him) {
+        // console.log(this.x, this.y)
 
 	const c = 1; // Normalized speed of light (for this simulation, we use 1)
 	const speed = Math.sqrt(him.vx ** 2 + him.vy ** 2); // Total speed (magnitude of velocity)
@@ -186,8 +188,8 @@ class Monsters {
 	const contractionFactorX = 1/getContractionFactor(him.vx);
 	const contractionFactorY = 1/getContractionFactor(him.vy);
 
-	const contractedWidth = this.spriteWidth * scale * contractionFactorX;
-	const contractedHeight = this.spriteHeight * scale * contractionFactorY;
+	this.contractedWidth = this.w * scale * contractionFactorX;
+	this.contractedHeight = this.h * scale * contractionFactorY;
 
 	// Adjust monster's frame rate based on player's speed (time dilation)
 	const dilationFactor = gamma;
@@ -209,8 +211,8 @@ class Monsters {
 	const contractedDeltaY = deltaY / gamma*0.1;
 	
 	// Calculate the monster's position based on contracted distances
-	this.drawX = canvas.width / 2 + contractedDeltaX - this.spriteWidth / 2 - cameraX;
-	this.drawY = canvas.height / 2 + contractedDeltaY - this.spriteHeight / 2 - cameraY;
+	this.drawX = canvas.width / 2 + contractedDeltaX - cameraX;
+	this.drawY = canvas.height / 2 + contractedDeltaY - cameraY;
 
         // Draw the monster sprite at the calculated position
         ctx.drawImage(
@@ -219,15 +221,16 @@ class Monsters {
             this.sourceY, // Source Y position (based on the row)
             this.spriteWidth,
             this.spriteHeight,
-            this.drawX,  // Draw at monster position
-            this.drawY,  // Draw at monster position
-            contractedWidth,  // Scale to contracted width
-            contractedHeight // Scale to contracted height
+            this.drawX - this.contractedWidth,  // Draw at monster position
+            this.drawY - this.contractedHeight,  // Draw at monster position
+            this.contractedWidth,  // Scale to contracted width
+            this.contractedHeight // Scale to contracted height
         );
         if(this.glow){
             ctx.globalAlpha = 0.2;
             ctx.fillStyle = "yellow"
-            ctx.fillRect(this.drawX, this.drawY, contractedWidth, contractedHeight);
+            ctx.fillRect(this.drawX-this.contractedWidth, this.drawY-this.contractedHeight, 
+                this.contractedWidth, this.contractedHeight);
             ctx.globalAlpha = 1;
         }
     }

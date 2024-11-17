@@ -12,8 +12,8 @@ const tileHeight = 100; // Height of each background tile
 
 
 function updateBackground() {
-    const offsetX = Math.floor(player.x / tileWidth) * tileWidth;
-    const offsetY = Math.floor(player.y / tileHeight) * tileHeight;
+    const offsetX = -player.x + Math.floor(player.x / tileWidth) * tileWidth;
+    const offsetY = -player.y + Math.floor(player.y / tileHeight) * tileHeight;
 
     // Redraw the background tiles in the grid
     for (let i = 0; i < Math.ceil(canvas.width / tileWidth) + 1; i++) {
