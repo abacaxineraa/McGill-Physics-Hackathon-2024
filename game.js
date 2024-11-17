@@ -1,7 +1,7 @@
 // Game setup
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-
+const scale = 1.4;
 
 let monsters = [];
 let spawnRate = 0.03;
@@ -62,8 +62,6 @@ const smoothness = 0.1; // Smoothness for camera movement (lower is smoother but
 
 let cameraX = canvas.width/2;
 let cameraY = canvas.height/2;
-
-
 
 
 // setting up player

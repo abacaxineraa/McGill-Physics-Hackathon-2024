@@ -12,20 +12,18 @@ class Player {
         this.ax = ax;
         this.ay = ay; 
         this.hp = hp;
-        // Sprite properties (moved to the constructor)
-        this.spriteSheet = new Image();
-        this.spriteSheet.src = "./img/Slime_Medium_Green copy.png"; //
-        this.spriteWidth = 128; // Width of each frame
-        this.spriteHeight = 128; // Height of each frame
-        this.totalFrames = 4; // Total number of frames in the idle animation
-        this.currentFrame = 0; // Track the current frame
-        this.frameRate = 10; // Frames per second
-        this.frameTimer = 0; // Timer for frame updates
 
-        // Define the starting row for the sprite png
-        this.animationRow = 2; // 0-based index for the third row
-        this.sourceY = this.animationRow * this.spriteHeight; // Y position in the sprite sheet
-
+	// Sprite properties
+	this.spriteSheet = new Image();
+	this.spriteSheet.src =  "./img/Slime yellow.png"; // Image file path for the monster sprite sheet
+	this.spriteWidth = 48;  
+	this.spriteHeight = 48; 
+	this.totalFrames = 4;    
+	this.currentFrame = 0;   
+	this.frameRate = 3;    
+	this.frameTimer = 0;   
+	this.animationRow = 2;  
+	this.sourceY = this.animationRow * this.spriteHeight; 
     }
     
     move(){
@@ -67,8 +65,8 @@ class Player {
             this.spriteHeight,
             canvas.width / 2 + this.x - cameraX - this.w / 2, // Center on the canvas
             canvas.height / 2 + this.y - cameraY - this.h / 2, // Center on the canvas
-            this.w,
-            this.h
+            this.w*scale*0.9,
+            this.h*scale*0.9
         );
     }
 
@@ -169,14 +167,14 @@ class Monsters {
 
 	// Sprite properties
 	this.spriteSheet = new Image();
-	this.spriteSheet.src =  "./img/monsters_image.png"; // Image file path for the monster sprite sheet
+	this.spriteSheet.src =  "./img/Slime purple.png"; // Image file path for the monster sprite sheet
 	this.spriteWidth = 48;  
 	this.spriteHeight = 40; 
-	this.totalFrames = 3;    
+	this.totalFrames = 4;    
 	this.currentFrame = 0;   
 	this.frameRate = 10;    
 	this.frameTimer = 0;   
-	this.animationRow = 0;  
+	this.animationRow = 5;  
 	this.sourceY = this.animationRow * this.spriteHeight; 
     }
 
@@ -185,18 +183,18 @@ class Monsters {
     draw(player) {
 	// Calculate the relativistic factor based on player's velocity
         const contractionFactor = 1 / player.getRelativisticFactor();
-        const contractedWidth = this.spriteWidth * contractionFactor;
-        const contractedHeight = this.spriteHeight * contractionFactor;
+        const contractedWidth = this.spriteWidth *scale* contractionFactor;
+	const contractedHeight = this.spriteHeight *scale* contractionFactor;
 
-        // Adjust monster's frame rate based on player's speed (time dilation)
-        const dilationFactor = player.getRelativisticFactor();
-        const adjustedFrameRate = this.frameRate * dilationFactor;  // Monsters' frame rate decreases as player goes faster
+	// Adjust monster's frame rate based on player's speed (time dilation)
+	const dilationFactor = player.getRelativisticFactor();
+	const adjustedFrameRate = this.frameRate * dilationFactor;  // Monsters' frame rate decreases as player goes faster
 
 
 	this.frameTimer++;
-        if (this.frameTimer >= 60 / adjustedFrameRate*10) {
-            this.currentFrame = (this.currentFrame + 1) % this.totalFrames;
-            this.frameTimer = 0;
+	if (this.frameTimer >= 60 / adjustedFrameRate*10) {
+	    this.currentFrame = (this.currentFrame + 1) % this.totalFrames;
+	    this.frameTimer = 0;
 	}
 
 	
