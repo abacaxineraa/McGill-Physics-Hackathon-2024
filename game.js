@@ -1,7 +1,7 @@
 // Game setup
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-
+const scale = 1.4;
 
 let monsters = [];
 let spawnRate = 0.03;
@@ -19,14 +19,18 @@ function spawnMonster() {
     let size = Math.random() * 40 + 20;
     
     // Random velocity for the monster (to make them move)
-    let vx = Math.random() * 2 - 1; // Random velocity between -1 and 1
-    let vy = Math.random() * 2 - 1; // Random velocity between -1 and 1
- 
+    let vx = Math.random() * 1.8 - 1; 
+    let vy = Math.random() * 1.8 - 1; 
+
+    
     let hp = true;
     
     // Random glow effect for the monster
     let glow = Math.random() < 0.5;
+    let t = getRandInt();
+    console.log(t)
 
+    // myInterval = setInterval(increment(5),1000);
     let ran = (1-spawnRate) * Math.random() * Math.min(canvas.height/3, canvas.width/3) + 2.5 * Math.min(player.w, player.h)
     
     // Create a new monster and add it to the monsters array
@@ -46,8 +50,6 @@ let cameraX = canvas.width/2;
 let cameraY = canvas.height/2;
 
 
-
-
 // setting up player
 let player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.25, 0.25, true)
 let aimer = new Aimer(0, 30, 10)
@@ -65,19 +67,7 @@ function collision(obj1, obj2){
 
 
 // Time functions
-let maxtime = 10 // multiplier for the max seconds -- implies that 10 seconds is the maxtime
-function getRandInt(){
-    return Math.floor(Math.random() * maxtime);
-}
 
-function increment(){
-    myint -= 1
-    console.log(myint)
-
-    if(myint <= 0){
-        clearInterval(myInterval);
-    }
-}
 
 
 
@@ -296,7 +286,7 @@ function updateGame(){
         for (i = 0; i < photons.length; i++){
             if (collision(monster, photons[i])) {
                 if (spawnRate < 1) spawnRate *= 1.05
-                /* if (Math.random() < Math.min(5*spawnRate, 1)) */ redshoot(monster, player)
+                 if (Math.random() < Math.min(5*spawnRate, 1)) redshoot(monster, player)
                 return false}
         }
         return true
@@ -333,9 +323,7 @@ document.addEventListener('keydown', movePlayer);
 canvas.addEventListener('mousemove', moveAim);
 
 
-var myint = getRandInt();
-console.log(myint);
-myInterval = setInterval(increment,1000);
+
 
 // Start the game loop
 updateGame();

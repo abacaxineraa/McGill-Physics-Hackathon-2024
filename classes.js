@@ -12,20 +12,18 @@ class Player {
         this.ax = ax;
         this.ay = ay; 
         this.hp = hp;
-        // Sprite properties (moved to the constructor)
-        this.spriteSheet = new Image();
-        this.spriteSheet.src = "./img/Slime_Medium_Green copy.png"; //
-        this.spriteWidth = 128; // Width of each frame
-        this.spriteHeight = 128; // Height of each frame
-        this.totalFrames = 4; // Total number of frames in the idle animation
-        this.currentFrame = 0; // Track the current frame
-        this.frameRate = 10; // Frames per second
-        this.frameTimer = 0; // Timer for frame updates
 
-        // Define the starting row for the sprite png
-        this.animationRow = 2; // 0-based index for the third row
-        this.sourceY = this.animationRow * this.spriteHeight; // Y position in the sprite sheet
-
+	// Sprite properties
+	this.spriteSheet = new Image();
+	this.spriteSheet.src =  "./img/Slime yellow.png"; // Image file path for the monster sprite sheet
+	this.spriteWidth = 48;  
+	this.spriteHeight = 48; 
+	this.totalFrames = 4;    
+	this.currentFrame = 0;   
+	this.frameRate = 3;    
+	this.frameTimer = 0;   
+	this.animationRow = 2;  
+	this.sourceY = this.animationRow * this.spriteHeight; 
     }
     
     move(){
@@ -67,26 +65,10 @@ class Player {
             this.spriteHeight,
             canvas.width / 2 + this.x - cameraX - this.w / 2, // Center on the canvas
             canvas.height / 2 + this.y - cameraY - this.h / 2, // Center on the canvas
-            this.w,
-            this.h
+            this.w*scale*0.9,
+            this.h*scale*0.9
         );
     }
-
-
-    getRelativisticFactor() {
-        const c = 1;  // Normalized speed of light (for this simulation, we use 1)
-        const speed = Math.sqrt(this.vx ** 2 + this.vy ** 2);  // Total speed (magnitude of velocity)
-        
-        // Limit the speed to 0.9c to avoid going faster than light
-        const realSpeed = Math.min(speed, 0.9 * c); 
-        
-        // Calculate the Lorentz factor (gamma)
-        const gamma = 1 / Math.sqrt(1 - (realSpeed / c) ** 2);
-        
-        // Return the contraction factor, which is the inverse of gamma
-        return gamma;
-    }
-    
 }
 
 
@@ -152,7 +134,7 @@ class Photons {
 class Monsters {
 
     // position of monsters, velocity of monsters, width of monsters, health of monsters, glow of monsters, glow of monsters on or off
-    constructor(x,y,vx,vy,w,h,hp,glow,ran,glowon, t, myinterval){
+    constructor(x,y,vx,vy,w,h,hp,glow,ran, t, myinterval){
         this.x = x;
         this.y = y;
         this.vx = vx;
@@ -169,41 +151,65 @@ class Monsters {
 
 	// Sprite properties
 	this.spriteSheet = new Image();
-	this.spriteSheet.src =  "./img/monsters_image.png"; // Image file path for the monster sprite sheet
+	this.spriteSheet.src =  "./img/Slime purple.png"; // Image file path for the monster sprite sheet
 	this.spriteWidth = 48;  
 	this.spriteHeight = 40; 
-	this.totalFrames = 3;    
+	this.totalFrames = 4;    
 	this.currentFrame = 0;   
 	this.frameRate = 10;    
 	this.frameTimer = 0;   
-	this.animationRow = 0;  
+	this.animationRow = 5;  
 	this.sourceY = this.animationRow * this.spriteHeight; 
     }
 
 
     
     draw(player) {
-	// Calculate the relativistic factor based on player's velocity
-        const contractionFactor = 1 / player.getRelativisticFactor();
-        const contractedWidth = this.spriteWidth * contractionFactor;
-        const contractedHeight = this.spriteHeight * contractionFactor;
 
-        // Adjust monster's frame rate based on player's speed (time dilation)
-        const dilationFactor = player.getRelativisticFactor();
-        const adjustedFrameRate = this.frameRate * dilationFactor;  // Monsters' frame rate decreases as player goes faster
+	const c = 1; // Normalized speed of light (for this simulation, we use 1)
+	const speed = Math.sqrt(player.vx ** 2 + player.vy ** 2); // Total speed (magnitude of velocity)
+
+	// Limit the speed to 0.9c to avoid going faster than light
+	const realSpeed = Math.min(speed, 0.9 * c);
+
+	// Calculate the Lorentz factor (gamma) based on total speed
+	const gamma = 1 / Math.sqrt(1 - (realSpeed / c) ** 2);
+
+	// Function to calculate contraction factor based on velocity direction
+	function getContractionFactor(velocity) {
+	    return 1 / Math.sqrt(1 - (Math.min(Math.abs(velocity), 0.9 * c) / c) ** 2);
+	}
+
+	// Apply length contraction depending on the direction of movement
+	const contractionFactorX = 1/getContractionFactor(player.vx);
+	const contractionFactorY = 1/getContractionFactor(player.vy);
+
+	const contractedWidth = this.spriteWidth * scale * contractionFactorX;
+	const contractedHeight = this.spriteHeight * scale * contractionFactorY;
+
+	// Adjust monster's frame rate based on player's speed (time dilation)
+	const dilationFactor = gamma;
+	const adjustedFrameRate = this.frameRate * dilationFactor; // Monsters' frame rate decreases as player goes faster
+
 
 
 	this.frameTimer++;
-        if (this.frameTimer >= 60 / adjustedFrameRate*10) {
-            this.currentFrame = (this.currentFrame + 1) % this.totalFrames;
-            this.frameTimer = 0;
-        }
+	if (this.frameTimer >= 60 / adjustedFrameRate*10) {
+	    this.currentFrame = (this.currentFrame + 1) % this.totalFrames;
+	    this.frameTimer = 0;
+	}
 
 	
-	// Calculate the monster's position relative to the camera
-	this.drawX = canvas.width / 2 + (this.x - cameraX) - this.spriteWidth / 2;
-        this.drawY = canvas.height / 2 + (this.y - cameraY) - this.spriteHeight / 2;
-
+	// Apply length contraction to the distance between player and monster
+	const deltaX = this.x - player.x;
+	const deltaY = this.y - player.y;
+	const contractedDeltaX = deltaX / gamma*0.2;
+	const contractedDeltaY = deltaY / gamma*0.2;
+	
+	// Calculate the monster's position based on contracted distances
+	this.drawX = canvas.width / 2 + contractedDeltaX - this.spriteWidth / 2 - cameraX;
+	this.drawY = canvas.height / 2 + contractedDeltaY - this.spriteHeight / 2 - cameraY;
+	
         // Draw the monster sprite at the calculated position
         ctx.drawImage(
             this.spriteSheet,
@@ -216,7 +222,17 @@ class Monsters {
             contractedWidth,  // Scale to contracted width
             contractedHeight // Scale to contracted height
         );
+        if(this.glow){
+            ctx.globalAlpha = 0.5;
+            ctx.fillStyle = "yellow"
+            ctx.fillRect(this.drawX, this.drawY, contractedWidth, contractedHeight);
+        }
     }
+
+
+
+
+
     
 
     move() {
