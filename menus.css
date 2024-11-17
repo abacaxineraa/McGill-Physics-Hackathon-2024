@@ -101,8 +101,15 @@ button:active {
     z-index: -1; /* Behind everything */
 }
 
-/* Instructions Styling */
+@font-face {
+    font-family: 'Halloween';
+    src: url('./fonts/HalloweenSlimePersonalUse-4B80D.ttf') format('truetype'); /* Adjust the path and font format */
+    font-weight: normal;
+    font-style: normal;
+}
+
 .instructions {
+    font-family: 'Halloween', sans-serif; /* Apply the custom font */
     max-width: 80%;
     font-size: 1.2rem;
     line-height: 1.8;
