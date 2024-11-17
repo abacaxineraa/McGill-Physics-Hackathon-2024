@@ -35,7 +35,7 @@ function findId(anId) {
 
 // Function to spawn monsters outside the frame
 function spawnCreature(maxCreature, object) {
-    if (object.length <= Math.round(maxCreature + 10 * spawnRate) && object.length == 0) {
+    if (object.length <= Math.round(maxCreature + 10 * spawnRate)) {
 
     // Random position outside the player's current view
     let spawnX = player.x + (Math.random() * 800 - 400);  // Spawn outside the screen on X-axis
