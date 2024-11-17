@@ -71,10 +71,10 @@ class Monsters {
 	
 	// Apply length contraction to the distance between player and monster
 	const deltaX = this.x - him.x;
-	const deltaY = this.y - him.x;
+	const deltaY = this.y - him.y;
 	const contractedDeltaX = deltaX * contractionFactorX;
 	const contractedDeltaY = deltaY * contractionFactorY;
-	
+	console.log (contractedDeltaX, contractedDeltaY)
 	this.drawX = canvas.width / 2 + contractedDeltaX;
 	this.drawY = canvas.height / 2 + contractedDeltaY;
 
