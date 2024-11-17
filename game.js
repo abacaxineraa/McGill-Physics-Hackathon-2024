@@ -1,7 +1,9 @@
 // Game setup
+
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scale = 1.4;
+
 
 let monsters = [];
 let spawnRate = 0.03;
@@ -27,16 +29,11 @@ function spawnMonster() {
     
     // Random glow effect for the monster
     let glow = Math.random() < 0.5;
-    let t = getRandInt();
-    console.log(t)
-
-    // myInterval = setInterval(increment(5),1000);
     let ran = (1-spawnRate) * Math.random() * Math.min(canvas.height/3, canvas.width/3) + 2.5 * Math.min(player.w, player.h)
     
     // Create a new monster and add it to the monsters array
     monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow, ran));
-
-    }
+    // console.log("here!")
 }
 
 
@@ -50,8 +47,11 @@ let cameraX = canvas.width/2;
 let cameraY = canvas.height/2;
 
 
+
+
 // setting up player
 let player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.25, 0.25, true)
+console.log(player.vx)
 let aimer = new Aimer(0, 30, 10)
 
 
@@ -67,7 +67,19 @@ function collision(obj1, obj2){
 
 
 // Time functions
+let maxtime = 10 // multiplier for the max seconds -- implies that 10 seconds is the maxtime
+function getRandInt(){
+    return Math.floor(Math.random() * maxtime);
+}
 
+function increment(){
+    myint -= 1
+    console.log(myint)
+
+    if(myint <= 0){
+        clearInterval(myInterval);
+    }
+}
 
 
 
@@ -156,7 +168,7 @@ function shoot(){
     let shootVY = c * Math.sin(aimer.angle);  
     let shootR = Math.min(canvas.width/2,canvas.height/2);
     photons.push(new Photons(aimer.x + aimer.w * Math.cos(aimer.angle), aimer.y + aimer.w * Math.sin(aimer.angle),
-        5,5,shootVX,shootVY,shootR, "cyan"));
+        5,5,shootVX,shootVY,shootR, "blue"));
     }
 }
 
@@ -173,7 +185,7 @@ function redshoot(monster, target){
     let shootVX = c * Math.cos(followAngle);
     let shootVY = c * Math.sin(followAngle);  
     let shootR = Math.min(canvas.width/2,canvas.height/2);
-    redphotons.push(new Photons(monster.x, monster.y, 5,5,shootVX,shootVY,shootR, "orange"));
+    redphotons.push(new Photons(monster.x, monster.y, 5,5,shootVX,shootVY,shootR, "red"));
     
 }
 
@@ -238,9 +250,9 @@ function drawSprite(player) {
 
 
 // Start the game loop after the sprite sheet is loaded
-spriteSheet.onload = () => {
+/*spriteSheet.onload = () => {
     updateGame();
-};
+};*/
 
 
 
@@ -258,6 +270,8 @@ function updateGame(){
     for(i=0; i < monsters.length; i++){
         monsters[i].move();
         monsters[i].draw(player);
+
+
         
     }
     
@@ -273,7 +287,7 @@ function updateGame(){
     // Draw the photons
     for(i = 0; i < photons.length; i++){
         photons[i].draw();
-        photons[i].move();
+        photons[i].move();  
     }
     for(i = 0; i < redphotons.length; i++){
         redphotons[i].draw();
@@ -284,9 +298,11 @@ function updateGame(){
     monsters = monsters.filter(checkCollision);
     function checkCollision(monster){
         for (i = 0; i < photons.length; i++){
+
+        console.log(monster.x)
             if (collision(monster, photons[i])) {
                 if (spawnRate < 1) spawnRate *= 1.05
-                 if (Math.random() < Math.min(5*spawnRate, 1)) redshoot(monster, player)
+                if (Math.random() < Math.min(5*spawnRate, 1)) redshoot(monster, player)
                 return false}
         }
         return true
@@ -300,6 +316,8 @@ function updateGame(){
 const welcomeScreen = document.getElementById('welcome-screen');
 const playButton = document.getElementById('play-button');
 
+canvas.style.display = 'none' // So it is not visible initially!
+
 // Game initialization function (you can replace this with your actual game setup)
 function startGame() {
     // Fade out the welcome screen
@@ -312,6 +330,8 @@ function startGame() {
         ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
         updateGame(); // Start the game loop
     }, 500); // Duration of the fade-out effect (0.5s)
+
+    updateGame()
 }
 
 // Set up the Play button to start the game
@@ -323,7 +343,10 @@ document.addEventListener('keydown', movePlayer);
 canvas.addEventListener('mousemove', moveAim);
 
 
-
+var myint = getRandInt();
+console.log(myint);
+myInterval = setInterval(increment,1000);
 
 // Start the game loop
-updateGame();
+
+
