@@ -70,8 +70,8 @@ class Monsters {
 
 	
 	// Apply length contraction to the distance between player and monster
-	const deltaX = this.x - cameraX;
-	const deltaY = this.y - cameraY;
+	const deltaX = this.x - him.x;
+	const deltaY = this.y - him.x;
 	const contractedDeltaX = deltaX / gamma;
 	const contractedDeltaY = deltaY / gamma;
 	
