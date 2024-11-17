@@ -94,7 +94,7 @@ let aimer = new Aimer(0, 30, 10)
 
 // setting up walls
 function randomizeWallSize(){
-    return (-1)**Math.floor(Math.random()*100) * Math.floor(Math.random()*250);
+    return (-1)**Math.floor(Math.random()*100) * Math.floor(Math.random()*100);
 }
 
 function randomizeWallPos(){
@@ -102,9 +102,8 @@ function randomizeWallPos(){
 }
 
 function spawnWalls(){
-
-    if(walls.length >= 2) return; // if the number of walls exceeds 2, do not produce any more
-
+    // if the number of walls exceeds 2, do not produce any more
+    if(walls.length >= 2) return;
     let posX = player.x + randomizeWallPos();
     let posY = player.y + randomizeWallPos();
     let sizeX = randomizeWallSize();
