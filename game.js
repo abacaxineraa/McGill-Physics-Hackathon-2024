@@ -382,11 +382,53 @@ function startGame() {
     updateGame();
 }
 
-
-
-
 // Set up the Play button to start the game
 playButton.addEventListener('click', startGame);
+
+function endGame() {
+    // Hide the game canvas
+    canvas.style.display = 'none';
+
+    // Show the end screen with fade-in effect
+    const endScreen = document.getElementById('end-screen');
+    endScreen.style.opacity = 1;
+    endScreen.style.display = 'flex'; // Ensure it's visible
+}
+
+// Set up the Play Again button
+const playAgainButton = document.getElementById('play-again-button');
+
+playAgainButton.addEventListener('click', () => {
+    // Fade out the end screen
+    const endScreen = document.getElementById('end-screen');
+    endScreen.style.opacity = 0;
+
+    // After fade-out, restart the game by calling startGame
+    setTimeout(() => {
+        // Hide the end screen
+        endScreen.style.display = 'none';
+
+        // Reset the game elements (reset player position, score, etc.)
+        resetGame();
+
+        // Show the canvas and start the game
+        canvas.style.display = 'block';
+        updateGame();  // Restart the game loop
+    }, 500); // Fade-out duration (matches the CSS transition)
+});
+
+function resetGame() {    //CAN SOMEONE FIX THIS RESETGAME FUNCTION PLZ THANKS
+    // Reset the player's state
+    player.x = canvas.width / 2;
+    player.y = canvas.height / 2;
+    player.vx = 0;
+    player.vy = 0;
+
+    // Reset any other game variables, such as monsters, walls, or score
+    monsters = [];
+    walls = [];
+    spawnRate = 0.03;
+}
 
 
 // Listen for key presses to move the player
