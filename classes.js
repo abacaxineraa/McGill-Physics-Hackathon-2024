@@ -166,24 +166,31 @@ class Monsters {
     
     draw(player) {
 
-        const c = 1;  // Normalized speed of light (for this simulation, we use 1)
-        const speed = Math.sqrt(player.vx ** 2 + player.vy ** 2);  // Total speed (magnitude of velocity)
-            
-        // Limit the speed to 0.9c to avoid going faster than light
-        const realSpeed = Math.min(speed, 0.9 * c); 
-        
-        // Calculate the Lorentz factor (gamma)
-        const gamma = 1 / Math.sqrt(1 - (realSpeed / c) ** 2);
+	const c = 1; // Normalized speed of light (for this simulation, we use 1)
+	const speed = Math.sqrt(player.vx ** 2 + player.vy ** 2); // Total speed (magnitude of velocity)
 
-	
-	// Calculate the relativistic factor based on player's velocity
-        const contractionFactor = 1 /gamma;
-        const contractedWidth = this.spriteWidth *scale* contractionFactor;
-	const contractedHeight = this.spriteHeight *scale* contractionFactor;
+	// Limit the speed to 0.9c to avoid going faster than light
+	const realSpeed = Math.min(speed, 0.9 * c);
+
+	// Calculate the Lorentz factor (gamma) based on total speed
+	const gamma = 1 / Math.sqrt(1 - (realSpeed / c) ** 2);
+
+	// Function to calculate contraction factor based on velocity direction
+	function getContractionFactor(velocity) {
+	    return 1 / Math.sqrt(1 - (Math.min(Math.abs(velocity), 0.9 * c) / c) ** 2);
+	}
+
+	// Apply length contraction depending on the direction of movement
+	const contractionFactorX = 1/getContractionFactor(player.vx);
+	const contractionFactorY = 1/getContractionFactor(player.vy);
+
+	const contractedWidth = this.spriteWidth * scale * contractionFactorX;
+	const contractedHeight = this.spriteHeight * scale * contractionFactorY;
 
 	// Adjust monster's frame rate based on player's speed (time dilation)
 	const dilationFactor = gamma;
-	const adjustedFrameRate = this.frameRate * dilationFactor;  // Monsters' frame rate decreases as player goes faster
+	const adjustedFrameRate = this.frameRate * dilationFactor; // Monsters' frame rate decreases as player goes faster
+
 
 
 	this.frameTimer++;
