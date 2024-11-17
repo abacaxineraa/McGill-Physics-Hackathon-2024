@@ -35,7 +35,7 @@ class Monsters {
     draw(him) {
         // console.log(this.x, this.y)
 
-	const c = 1; // Normalized speed of light (for this simulation, we use 1)
+	const c = 5; // Normalized speed of light (for this simulation, we use 5)
 	const speed = Math.sqrt(him.vx ** 2 + him.vy ** 2); // Total speed (magnitude of velocity)
 
 	// Limit the speed to 0.9c to avoid going faster than light
@@ -86,8 +86,8 @@ class Monsters {
             this.sourceY, // Source Y position (based on the row)
             this.spriteWidth,
             this.spriteHeight,
-            this.drawX,  // Draw at monster position
-            this.drawY,  // Draw at monster position
+            this.drawX - this.contractedWidth ,  // Draw at monster position
+            this.drawY - this.contractedHeight,  // Draw at monster position
             this.contractedWidth,  // Scale to contracted width
             this.contractedHeight // Scale to contracted height
         );

@@ -165,9 +165,9 @@ function movePlayer() {
         dy /= length;
 
         // Update player position with normalized speed
-        if (Math.abs(player.vx) < 3) player.vx += dx * player.ax;
+        if (Math.abs(player.vx) < 0.9 * c) player.vx += dx * player.ax;
 
-        if (Math.abs(player.vy) < 3) player.vy += dy * player.ay;
+        if (Math.abs(player.vy) < 0.9 * c) player.vy += dy * player.ay;
 
     
         
