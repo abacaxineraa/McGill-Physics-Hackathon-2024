@@ -26,12 +26,34 @@ function spawnMonster() {
     
     // Random glow effect for the monster
     let glow = Math.random() < 0.5;
+    let t = getRandInt();
+    console.log(t)
 
+    // myInterval = setInterval(increment(5),1000);
     let ran = (1-spawnRate) * Math.random() * Math.min(canvas.height/3, canvas.width/3) + 2.5 * Math.min(player.w, player.h)
     
-    // Create a new monster and add it to the monsters array
-    monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow, ran));
-    // console.log("here!")
+
+    let maxtime = 8 // multiplier for the max seconds -- implies that 10 seconds is the maxtime
+    monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow, ran, t, null));
+    console.log(monsters.length)
+    monsters[monsters.length-1].interval = setInterval(increment,1000,monsters.length-1);
+}
+
+
+function increment(smt){
+    console.log(smt, monsters.length)
+    monsters[smt].t -= 1
+    console.log(smt, monsters[smt].t)
+    
+
+    if(monsters[smt].t <= 0){
+        console.log("BOOM,")
+        clearInterval(monsters[smt].interval);
+    }
+}
+
+function getRandInt(){
+    return 2 + Math.floor(Math.random() * 8);
 }
 
 
@@ -59,19 +81,7 @@ function collision(obj1, obj2){
 
 
 // Time functions
-let maxtime = 10 // multiplier for the max seconds -- implies that 10 seconds is the maxtime
-function getRandInt(){
-    return Math.floor(Math.random() * maxtime);
-}
 
-function increment(){
-    myint -= 1
-    console.log(myint)
-
-    if(myint <= 0){
-        clearInterval(myInterval);
-    }
-}
 
 
 
@@ -327,9 +337,7 @@ document.addEventListener('keydown', movePlayer);
 canvas.addEventListener('mousemove', moveAim);
 
 
-var myint = getRandInt();
-console.log(myint);
-myInterval = setInterval(increment,1000);
+
 
 // Start the game loop
 updateGame();

@@ -134,7 +134,7 @@ class Photons {
 class Monsters {
 
     // position of monsters, velocity of monsters, width of monsters, health of monsters, glow of monsters, glow of monsters on or off
-    constructor(x,y,vx,vy,w,h,hp,glow,ran,glowon, t, myinterval){
+    constructor(x,y,vx,vy,w,h,hp,glow,ran, t, myinterval){
         this.x = x;
         this.y = y;
         this.vx = vx;
@@ -210,6 +210,11 @@ class Monsters {
             contractedHeight // Scale to contracted height
         );
     }
+
+
+
+
+
     
 
     move() {
