@@ -1,5 +1,5 @@
 const backgroundImage = new Image();
-backgroundImage.src = "img/grass.png"; // Your repeating background image
+backgroundImage.src = "img/smallgrass.png";
 
 backgroundImage.onload = () => {
     // Start drawing only once the image is fully loaded
@@ -7,8 +7,8 @@ backgroundImage.onload = () => {
 };
 
 
-const tileWidth = 100;  // Width of each background tile
-const tileHeight = 100; // Height of each background tile
+const tileWidth = 128;  // Width of each background tile
+const tileHeight = 128; // Height of each background tile
 function updateBackground() {
     // Speed of light and gamma factor for contraction
     const c = 1; // Speed of light in this simulation
@@ -17,8 +17,8 @@ function updateBackground() {
     const gamma = 1 / Math.sqrt(1 - (contractedSpeed / c) ** 2);
 
     // Contraction factors
-    const contractionFactorX = 1 / Math.sqrt(1 - (Math.min(Math.abs(player.vx), 0.9 * c) / c) ** 2);
-    const contractionFactorY = 1 / Math.sqrt(1 - (Math.min(Math.abs(player.vy), 0.9 * c) / c) ** 2);
+    const contractionFactorX =  Math.sqrt(1 - (Math.min(Math.abs(player.vx), 0.9 * c) / c) ** 2);
+    const contractionFactorY =  Math.sqrt(1 - (Math.min(Math.abs(player.vy), 0.9 * c) / c) ** 2);
 
     // Calculate the offset with contraction applied
     const offsetX = (-player.x + Math.floor(player.x / tileWidth) * tileWidth) * contractionFactorX;
@@ -26,15 +26,15 @@ function updateBackground() {
 
     // Redraw the background tiles in the grid, applying contraction
     for (let i = 0; i < Math.ceil(canvas.width / (tileWidth * contractionFactorX)) + 1; i++) {
-        for (let j = 0; j < Math.ceil(canvas.height / (tileHeight * contractionFactorY)) + 1; j++) {
+	for (let j = 0; j < Math.ceil(canvas.height / (tileHeight * contractionFactorY)) + 1; j++) {
             ctx.drawImage(
-                backgroundImage,
-                offsetX + i * tileWidth * contractionFactorX,
-                offsetY + j * tileHeight * contractionFactorY,
-                tileWidth * contractionFactorX,
-                tileHeight * contractionFactorY
+		backgroundImage,
+		offsetX + i * tileWidth * contractionFactorX,
+		offsetY + j * tileHeight * contractionFactorY,
+		tileWidth * contractionFactorX+1,
+		tileHeight * contractionFactorY+1
             );
-        }
+	}
     }
 }
 

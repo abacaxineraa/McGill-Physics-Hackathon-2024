@@ -38,8 +38,8 @@ class Player {
         }
 	
         
-        this.x += this.vx;
-        this.y += this.vy;
+        this.x += this.vx*0.8;
+        this.y += this.vy*0.8;
     }
     // Sprite animation function
     draw(ctx, spriteSheet, cameraX, cameraY, canvas) {
