@@ -21,25 +21,23 @@ function updateBackground() {
     const contractionFactorY =  Math.sqrt(1 - (Math.min(Math.abs(player.vy), 0.9 * c) / c) ** 2);
 
     // Calculate the offset with contraction applied
-    const offsetX = (-player.x + Math.floor(player.x / tileWidth) * tileWidth) / contractionFactorX;
-    const offsetY = (-player.y + Math.floor(player.y / tileHeight) * tileHeight) / contractionFactorY;
-
-    console.log(tileWidth * contractionFactorX)
+    const offsetX = (-player.x + Math.floor(player.x / tileWidth) * tileWidth) * contractionFactorX;
+    const offsetY = (-player.y + Math.floor(player.y / tileHeight) * tileHeight) * contractionFactorY;
 
     // Redraw the background tiles in the grid, applying contraction
-    for (let i = 0; i < Math.ceil(canvas.width / (tileWidth / contractionFactorX)) + 1; i++) {
-        for (let j = 0; j < Math.ceil(canvas.height / (tileHeight / contractionFactorY)) + 1; j++) {
+    for (let i = 0; i < Math.ceil(canvas.width / (tileWidth * contractionFactorX))+1; i++) {
+        for (let j = 0; j < Math.ceil(canvas.height / (tileHeight * contractionFactorY))+1; j++) {
             ctx.drawImage(
                 backgroundImage,
-                offsetX + i * tileWidth / contractionFactorX,
-                offsetY + j * tileHeight / contractionFactorY,
+                offsetX + i * tileWidth * contractionFactorX,
+                offsetY + j * tileHeight * contractionFactorY,
                 tileWidth * contractionFactorX,
                 tileHeight * contractionFactorY
             );
             ctx.strokeStyle = "black 0.5px"
             ctx.beginPath();
-            ctx.rect(offsetX + i * tileWidth / contractionFactorX,
-                offsetY + j * tileHeight / contractionFactorY,
+            ctx.rect(offsetX + i * tileWidth * contractionFactorX,
+                offsetY + j * tileHeight * contractionFactorY,
                 tileWidth * contractionFactorX,
                 tileHeight * contractionFactorY)     
             ctx.stroke();
