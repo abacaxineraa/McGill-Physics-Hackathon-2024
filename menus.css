@@ -52,7 +52,7 @@ body {
 h1 {
     font-family: 'SuperPixel', sans-serif; /* Apply the custom font */
     font-size: 4rem;
-    margin-top: 20px; /* Space from the top of the page */
+    margin-top: 80px; /* Space from the top of the page */
     color: black;
     text-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
                  0 0 30px rgba(255, 255, 255, 0.6),
@@ -68,7 +68,7 @@ h1 {
 
 /* Button Styling */
 button {
-    margin-top: -100px; /* Adjust position to be above the middle */
+    margin-top: -1px; /* Adjust position to be above the middle */
     padding: 20px 40px;
     font-size: 1.5rem;
     cursor: pointer;
