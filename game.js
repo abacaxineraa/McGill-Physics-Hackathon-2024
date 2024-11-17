@@ -4,6 +4,11 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scale = 1.4;
 
+let c = 5; // speed of light
+
+let photons = []
+let redphotons = []
+
 
 // Function to resize canvas to fit the window
 function resizeCanvas(canvas) {
@@ -18,6 +23,7 @@ resizeCanvas(canvas);
 
 
 let monsters = [];
+let monstersKilled = 0;
 let spawnRate = 0.03;
 let id=0;
 
@@ -187,10 +193,6 @@ function moveAim(event){
 }
 
 // Setting up photons
-let c = 5; // speed of light
-
-let photons = []
-let redphotons = []
 
 function shoot(){
     if (photons.length < 4){
@@ -322,6 +324,7 @@ function updateGame(){
     function checkCollision(monster){
         for (i = 0; i < photons.length; i++){
             if (collision(monster, photons[i]) && monster.glow) {
+                monstersKilled++
 
                 clearInterval(monster.interval)
                 if (spawnRate < 1) {spawnRate *= 1.05}
@@ -346,7 +349,12 @@ function updateGame(){
     // Request the next animation frame
     requestAnimationFrame(updateGame);
 }
+function displayKills(){
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "white";
+    ctx.fillText(`Monsters Killed: ${monstersKilled}`, canvas.width - 200, 30);
 
+}
 // Get the elements
 const welcomeScreen = document.getElementById('welcome-screen');
 const playButton = document.getElementById('play-button');
@@ -412,7 +420,10 @@ function resetGame() {    //CAN SOMEONE FIX THIS RESETGAME FUNCTION PLZ THANKS
 
     // Reset any other game variables, such as monsters, score, camera, etc.
     monsters = [];
+    monstersKilled = 0;
     spawnRate = 0.03;
+    cameraX = canvas.width/2;
+    cameraY = canvas.height/2;
 }
 
 // Listen for key presses to move the player
