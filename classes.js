@@ -147,4 +147,5 @@ class Walls {
             ctx.globalAlpha = 1;
 	}
 }
+
 }

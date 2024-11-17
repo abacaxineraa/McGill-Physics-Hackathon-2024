@@ -30,8 +30,7 @@ function findId(anId) {
 
 // Function to spawn monsters outside the frame
 function spawnCreature(maxCreature, object) {
-    // Only spawn a monster if the number of monsters is less than 5
-    if (object.length <= Math.round(maxCreature + 10 * spawnRate) && monsters.length == 0) {
+    if (object.length <= Math.round(maxCreature + 10 * spawnRate) && object.length == 0) {
 
 	// Random position outside the player's current view
 	let spawnX = player.x + (Math.random() * 800 - 400);  // Spawn outside the screen on X-axis
@@ -118,6 +117,7 @@ function dist(x1, y1, x2, y2){
 }
 
 function collision(obj1, obj2){
+    console.log(obj1.x, obj2.x, player.x, obj2.x, obj2.y,  player.y)
     return (Math.abs(obj1.x - obj2.x) <= (obj1.w/2 + obj2.w/2) && // Distance between x-coordinates <= Sum of half-widths
             Math.abs(obj1.y - obj2.y) <= (obj1.h/2 + obj2.h/2)) // Distance between y-coordinates <= Sum of half-heights  
 }
