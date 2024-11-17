@@ -266,22 +266,14 @@ function drawSprite(player) {
         player.w,
         player.h
     );
-    
-    // console.log(canvas.width / 2 + player.x - cameraX - player.w / 2)
 }
-
-
-
-// Start the game loop after the sprite sheet is loaded
-/*spriteSheet.onload = () => {
-    updateGame();
-};*/
 
 
 
 function updateGame(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    updateCamera()
+    updateCamera();
+    updateBackground();
 
     // Inside updateGame function:
     player.draw(ctx, player.spriteSheet, cameraX, cameraY, canvas);
@@ -368,6 +360,3 @@ canvas.addEventListener('mousemove', moveAim);
 var myint = getRandInt();
 console.log(myint);
 myInterval = setInterval(increment,1000);
-
-// Start the game loop
-
