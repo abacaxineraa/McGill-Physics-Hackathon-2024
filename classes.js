@@ -152,7 +152,7 @@ class Photons {
 class Monsters {
 
     // position of monsters, velocity of monsters, width of monsters, health of monsters, glow of monsters, glow of monsters on or off
-    constructor(x,y,vx,vy,w,h,hp,glow,ran,glowon, t, myinterval){
+    constructor(x,y,vx,vy,w,h,hp,glow,ran, t, myinterval){
         this.x = x;
         this.y = y;
         this.vx = vx;
@@ -197,7 +197,7 @@ class Monsters {
         if (this.frameTimer >= 60 / adjustedFrameRate*10) {
             this.currentFrame = (this.currentFrame + 1) % this.totalFrames;
             this.frameTimer = 0;
-        }
+	}
 
 	
 	// Calculate the monster's position relative to the camera
@@ -217,6 +217,11 @@ class Monsters {
             contractedHeight // Scale to contracted height
         );
     }
+
+
+
+
+
     
 
     move() {
