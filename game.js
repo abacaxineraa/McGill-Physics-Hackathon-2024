@@ -64,7 +64,8 @@ function spawnCreature(maxCreature, object) {
 	    let sizeX = randomizeWallSize();
 	    let sizeY = randomizeWallSize();
 	    
-	    walls.push(new Walls(posX,posY,sizeX,sizeY,"black"));
+	    walls.push(new Walls(posX,posY,sizeX,sizeY,0, 0, "black"));
+        console.log("a WALL")
 	}
 }
 }

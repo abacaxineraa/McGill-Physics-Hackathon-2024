@@ -90,9 +90,8 @@ class Walls {
         ctx.fill();
     }
 
-<<<<<<< HEAD
     draw(him){
-	const c = 1; // Normalized speed of light (for this simulation, we use 1)
+	const c = 5; // Normalized speed of light (for this simulation, we use 5)
 	const speed = Math.sqrt(him.vx ** 2 + him.vy ** 2); // Total speed (magnitude of velocity)
 
 	// Limit the speed to 0.9c to avoid going faster than light
