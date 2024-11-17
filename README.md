@@ -12,3 +12,6 @@ Made by:
 - Sohon Ye 
 
 Thanks to the organizers of the McGill Physics Hackathon for everything! It was so fun:)
+
+[Watch a demo on YouTube](https://youtu.be/HTOn_Vc_xOU)
+
