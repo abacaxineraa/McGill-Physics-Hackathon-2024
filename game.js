@@ -22,6 +22,7 @@ let monsters = [];
 let walls = []
 let spawnRate = 0.03;
 let id=0;
+let monstersKilled = 0; // counting kills!
 
 function findId(anId) {
     for (i=0; i<monsters.length; i++){
@@ -131,7 +132,12 @@ function getRandInt(){
     return Math.floor(Math.random() * maxtime);
 }
 
+function displayKills(){
+    ctx.font = "20px Arial";
+	ctx.fillStyle = "white";
+	ctx.fillText(`Monsters Killed: ${monstersKilled}`, 1350, 30);
 
+}
 
 
 
@@ -308,6 +314,7 @@ function updateGame(){
     if (Math.random() < spawnRate) spawnCreature(5, monsters)
     
     calculateRelativeSpeed(player);
+    displayKills();
     
     spawnCreature(12, walls)
     
@@ -343,12 +350,14 @@ function updateGame(){
     // Check monsters-photons
     monsters = monsters.filter(checkCollision);
     function checkCollision(monster){
+        
         for (i = 0; i < photons.length; i++){
             if (collision(monster, photons[i]) && monster.glow) {
-
+                
                 clearInterval(monster.interval)
                 if (spawnRate < 1) {spawnRate *= 1.05}
                 if (Math.random() < Math.min(5*spawnRate, 1)) {redshoot(monster, player)}
+                monstersKilled++;
                 return false
 
             }
