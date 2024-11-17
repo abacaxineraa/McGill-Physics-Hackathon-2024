@@ -15,3 +15,4 @@ Thanks to the organizers of the McGill Physics Hackathon for everything! It was 
 
 [Watch a demo on YouTube](https://youtu.be/HTOn_Vc_xOU)
 
+![GIF](demo.gif)
