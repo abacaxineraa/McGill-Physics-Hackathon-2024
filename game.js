@@ -1,4 +1,6 @@
 // Game setup
+document.addEventListener('DOMContentLoaded', () => {
+
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -265,7 +267,9 @@ function updateGame(){
     // Draw the monsters
     for(i=0; i < monsters.length; i++){
         monsters[i].move();
-        monsters[i].draw(player);
+        monsters[i].draw();
+
+
         
     }
     
@@ -308,6 +312,8 @@ function updateGame(){
 const welcomeScreen = document.getElementById('welcome-screen');
 const playButton = document.getElementById('play-button');
 
+canvas.style.display = 'none' // So it is not visible initially!
+
 // Game initialization function (you can replace this with your actual game setup)
 function startGame() {
     // Fade out the welcome screen
@@ -337,3 +343,5 @@ myInterval = setInterval(increment,1000);
 
 // Start the game loop
 updateGame();
+
+});
