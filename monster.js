@@ -74,7 +74,6 @@ class Monsters {
 	const deltaY = this.y - him.y;
 	const contractedDeltaX = deltaX * contractionFactorX;
 	const contractedDeltaY = deltaY * contractionFactorY;
-	console.log (contractedDeltaX, contractedDeltaY)
 	this.drawX = canvas.width / 2 + contractedDeltaX;
 	this.drawY = canvas.height / 2 + contractedDeltaY;
 
