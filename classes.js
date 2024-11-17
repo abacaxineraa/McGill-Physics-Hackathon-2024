@@ -202,10 +202,16 @@ class Monsters {
 	}
 
 	
-	// Calculate the monster's position relative to the camera
-	this.drawX = canvas.width / 2 + (this.x - cameraX) - this.spriteWidth / 2;
-        this.drawY = canvas.height / 2 + (this.y - cameraY) - this.spriteHeight / 2;
-
+	// Apply length contraction to the distance between player and monster
+	const deltaX = this.x - player.x;
+	const deltaY = this.y - player.y;
+	const contractedDeltaX = deltaX / gamma*0.2;
+	const contractedDeltaY = deltaY / gamma*0.2;
+	
+	// Calculate the monster's position based on contracted distances
+	this.drawX = canvas.width / 2 + contractedDeltaX - this.spriteWidth / 2 - cameraX;
+	this.drawY = canvas.height / 2 + contractedDeltaY - this.spriteHeight / 2 - cameraY;
+	
         // Draw the monster sprite at the calculated position
         ctx.drawImage(
             this.spriteSheet,

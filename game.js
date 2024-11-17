@@ -20,9 +20,10 @@ function spawnMonster() {
     let size = Math.random() * 40 + 20;
     
     // Random velocity for the monster (to make them move)
-    let vx = Math.random() * 2 - 1; // Random velocity between -1 and 1
-    let vy = Math.random() * 2 - 1; // Random velocity between -1 and 1
- 
+    let vx = Math.random() * 1.8 - 1; 
+    let vy = Math.random() * 1.8 - 1; 
+
+    
     let hp = true;
     
     // Random glow effect for the monster
