@@ -31,7 +31,7 @@ function findId(anId) {
     for (i=0; i<monsters.length; i++){
         if (monsters[i].id == anId) return monsters[i]
     }
-    return (new Monsters(0,0,0,0,0,0,0,0,0,0,0,0))
+    return (new Monsters(0,0,0,0,0,0,0,0,0,-10,0,0))
 }
 
 // Function to spawn monsters outside the frame
@@ -39,11 +39,12 @@ function spawnCreature(maxCreature, object) {
     if (object.length <= Math.round(maxCreature + 10 * spawnRate)) {
 
     // Random position outside the player's current view
-    let spawnX = player.x + (Math.random() * 800 - 400);  // Spawn outside the screen on X-axis
-    let spawnY = player.y + (Math.random() * 800 - 400);  // Spawn outside the screen on Y-axis
+    let spawnX = player.x + ((-1)**Math.floor(2*Math.random())) * (Math.random() * 3 + 3) * player.w;  // Spawn on X-axis (some dist from player)
+    let spawnY = player.y  + ((-1)**Math.floor(2*Math.random())) * (Math.random() * 3 + 3) * player.h;  // Spawn on Y-axis
 
     // Random size for the monster
-    let size = Math.random() * 40 + 20;
+    let tempSize = Math.min(canvas.width, canvas.height)
+    let size = Math.random() * tempSize/10 + tempSize/32;
     
     // Random velocity for the monster (to make them move)
     let vx = Math.random() * 1.8 - 1; 
@@ -54,13 +55,13 @@ function spawnCreature(maxCreature, object) {
     
     // Random glow effect for the monster
     let glow = Math.random() < 0.5;
-    let ran = (1-spawnRate) * Math.random() * Math.min(canvas.height/3, canvas.width/3) + 2.5 * Math.min(player.w, player.h)
+    let ran = (1-spawnRate) * Math.random() * Math.min(canvas.height/6, canvas.width/6) + 2.5 * Math.min(player.w, player.h)
     
 
     let maxtime = 5
     let time = Math.round(2 + Math.random()*(maxtime-2)) // multiplier for the max seconds -- implies that 5 seconds is the maxtime
     if (object == monsters) {
-        object.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, true, ran, time, null, id));
+        object.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, glow, ran, time, null, id));
         object[object.length-1].interval = setInterval(increment,1000,id);
         id++
         console.log(id)
@@ -73,7 +74,7 @@ function increment(smt){
     let tempMonst = findId(smt)
     tempMonst.t -= 1
     
-    if(tempMonst.t <= 0){
+    if(tempMonst.t <= 0 && tempMonst.t > -5){
         tempMonst.glow = (tempMonst.glow == false)
         let maxtime = 5
         let time = Math.round(2 + Math.random()*(maxtime-2)) 
@@ -218,10 +219,10 @@ function redshoot(monster, target){
     } else if (player.x < monster.x){
         followAngle = Math.atan((target.y - monster.y)/(target.x - monster.x)) + Math.PI
     }
-    followAngle += Math.PI/12 - Math.random() * Math.PI/6 // Variety in Shooting
+    followAngle += Math.PI/20 - Math.random() * Math.PI/10 // Variety in Shooting
     let shootVX = c * Math.cos(followAngle);
     let shootVY = c * Math.sin(followAngle);  
-    let shootR = Math.min(canvas.width/2,canvas.height/2);
+    let shootR = Math.min(canvas.width,canvas.height);
     redphotons.push(new Photons(monster.x, monster.y, 5,5,shootVX,shootVY,shootR, "red"));
     
 }
@@ -338,7 +339,7 @@ function updateGame(){
 
                 clearInterval(monster.interval)
                 if (spawnRate < 1) {spawnRate *= 1.05}
-                if (Math.random() < Math.min(5*spawnRate, 1)) {redshoot(monster, player)}
+                if (Math.random() < Math.min(10*spawnRate, 1)) {redshoot(monster, player)}
                 return false
 
             }
