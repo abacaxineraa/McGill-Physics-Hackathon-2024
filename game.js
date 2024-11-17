@@ -132,7 +132,12 @@ function getRandInt(){
     return Math.floor(Math.random() * maxtime);
 }
 
+function displayKills(){
+    ctx.font = "20px Arial";
+	ctx.fillStyle = "white";
+	ctx.fillText(`Monsters Killed: ${monstersKilled}`, 1350, 30);
 
+}
 
 
 
@@ -309,6 +314,7 @@ function updateGame(){
     if (Math.random() < spawnRate) spawnCreature(5, monsters)
     
     calculateRelativeSpeed(player);
+    displayKills();
     
     spawnCreature(12, walls)
     
