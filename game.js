@@ -31,11 +31,11 @@ function findId(anId) {
 
 // Function to spawn monsters outside the frame
 function spawnCreature(maxCreature, object) {
-    if (object.length <= Math.round(maxCreature + 10 * spawnRate) && object.length == 0) {
+    if (object.length <= Math.round(maxCreature + 10 * spawnRate)) {
 
 	// Random position outside the player's current view
-	let spawnX = player.x + ((-1) ** Math.floor(2*Math.random())) * (Math.random()* canvas.width/3 + canvas.width/6);  // Spawn inside the screen on X-axis
-	let spawnY = player.y + ((-1) ** Math.floor(2*Math.random())) * (Math.random()* canvas.width/3 + canvas.width/6);  // Spawn inside the screen on Y-axis
+	let spawnX = player.x + ((-1) ** Math.floor(2*Math.random())) * (Math.random() * 4 + 3 ) * player.w;  // Spawn within player zone X
+	let spawnY = player.y + ((-1) ** Math.floor(2*Math.random())) * (Math.random()* 4 + 3)  * player.h;  // Spawn within player zone Y
 
 	// Random size for the monster
 	let size = Math.random() * 50 + 40;
@@ -77,7 +77,7 @@ function increment(smt){
     tempMonst.t -= 1
     
     if(tempMonst.t <= 0){
-        tempMonst.glow *= false
+        tempMonst.glow  = (tempMonst.glow == false)
         console.log("BOOM,")
         clearInterval(tempMonst.interval);
         let maxtime = 5
