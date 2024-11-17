@@ -19,7 +19,6 @@ resizeCanvas(canvas);
 
 
 let monsters = [];
-let walls = []
 let spawnRate = 0.03;
 let id=0;
 let monstersKilled = 0; // counting kills!
@@ -60,15 +59,6 @@ function spawnCreature(maxCreature, object) {
         object[object.length-1].interval = setInterval(increment,1000,id);
         id++
 	}
-	else {
-	    let posX = player.x + randomizeWallPos();
-	    let posY = player.y + randomizeWallPos();
-	    let sizeX = randomizeWallSize();
-	    let sizeY = randomizeWallSize();
-	    
-	    walls.push(new Walls(posX,posY,sizeX,sizeY,0, 0, "black"));
-        console.log("a WALL")
-	}
 }
 }
 
@@ -102,17 +92,10 @@ let cameraY = canvas.height/2;
 
 
 // setting up player
-let player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.01 * c, 0.01*c, true)
+let player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.003* c, 0.003*c, true)
 let aimer = new Aimer(0, 30, 10)
 
-// setting up walls
-function randomizeWallSize(){
-    return (-1)**Math.floor(Math.random()*100) * Math.floor(Math.random()*100);
-}
 
-function randomizeWallPos(){
-    return (-1)**Math.floor(Math.random()*100) * Math.floor(Math.random()*250);
-}
 
 
 // Math functions
@@ -169,13 +152,14 @@ function movePlayer() {
     
     if (dx !== 0 || dy !== 0) {
         const length = Math.sqrt(dx * dx + dy * dy);
+        let speed = Math.sqrt(player.vx ** 2 + player.vy ** 2)
         dx /= length;
         dy /= length;
 
         // Update player position with normalized speed
-        if (Math.sqrt(player.vx ** 2 + player.vy ** 2) < 0.9 * c) player.vx += dx * player.ax;
+        if (speed < 0.8 * c) player.vx += dx * player.ax * Math.exp(1.1, -player.vx);
 
-        if (Math.sqrt(player.vx ** 2 + player.vy ** 2) < 0.9 * c) player.vy += dy * player.ay;
+        if (speed < 0.8 * c) player.vy += dy * player.ay * Math.exp(1.1, -player.vy);
 
     
         
@@ -252,57 +236,6 @@ function updateCamera() {
 }
 
 
-
-
-
-// Sprite animation setup
-const spriteSheet = new Image();
-spriteSheet.src = "./img/Slime_Medium_Green copy.png"; // Path to your sprite sheet
-
-// Sprite properties from png file
-const spriteWidth = 128; // Width of each frame
-const spriteHeight = 128; // Height of each frame
-const totalFrames = 4; // Total number of frames in the idle animation
-let currentFrame = 0; // Track the current frame
-const frameRate = 10; // Frames per second
-let frameTimer = 0; // Timer for frame updates
-
-// Define the starting row for the sprite png
-const animationRow = 2; // 0-based index for the third row
-const sourceY = animationRow * spriteHeight; // Y position in the sprite sheet
-
-// Sprite animation function
-function drawSprite(player) {
-    player.move()
-
-    // Update frame timer
-    frameTimer++;
-    if (frameTimer >= 60 / frameRate) {
-        currentFrame = (currentFrame + 1) % totalFrames; // Loop through frames
-        frameTimer = 0;
-    }
-    
-// Calculate the player's position relative to the camera
-   const drawX = canvas.width / 2 + (player.x - cameraX) - spriteWidth / 2;
-   const drawY = canvas.height / 2 + (player.y - cameraY) - spriteHeight / 2;
-
-    // Draw the sprite at the player's position
-    ctx.drawImage(
-        spriteSheet,
-        currentFrame * spriteWidth, // Source X position
-        sourceY, // Source Y position (calculated from the row)
-        spriteWidth,
-        spriteHeight,
-        canvas.width / 2 + player.x - cameraX - player.w / 2, // Center on the canvas
-        canvas.height / 2 + player.y - cameraY - player.h / 2, // Center on the canvas
-        player.w,
-        player.h
-    );
-}
-
-
-
-
 function updateGame(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     updateCamera();
@@ -316,17 +249,14 @@ function updateGame(){
     calculateRelativeSpeed(player);
     displayKills();
     
-    spawnCreature(12, walls)
-    
     // Draw the monsters
     for(i=0; i < monsters.length; i++){
         monsters[i].move();
         monsters[i].draw(player);        
     }
-    
-    for(i=0; i < walls.length; i++){
-	walls[i].draw(player);
-    }
+
+
+
     // Check photons
     photons = photons.filter(checkRange);
     redphotons = redphotons.filter(checkRange);
@@ -339,11 +269,11 @@ function updateGame(){
     // Draw the photons
     for(i = 0; i < photons.length; i++){
         photons[i].draw();
-        photons[i].move();
+        photons[i].move(player);
     }
     for(i = 0; i < redphotons.length; i++){
         redphotons[i].draw();
-        redphotons[i].move();  
+        redphotons[i].move(player);  
     }
 
 
@@ -371,6 +301,8 @@ function updateGame(){
             if (collision(player, monsters[i])) endGame();
         }
     }
+
+    
 
 
     // Request the next animation frame
@@ -444,12 +376,11 @@ function resetting()  {
 function resetGame() {    //CAN SOMEONE FIX THIS RESETGAME FUNCTION PLZ THANKS
     // Reset the player's state
     
-    player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.01 * c, 0.01*c, true)
+    player = new Player(canvas.width/2, canvas.height/2, 60, 60, 0, 0, 0.003 * c, 0.003*c, true)
     aimer = new Aimer(0, 30, 10)
 
-    // Reset any other game variables, such as monsters, walls, or score
+    // Reset any other game variables, such as monsters, score, camera, etc.
     monsters = [];
-    walls = [];
     spawnRate = 0.03;
     monsters = [];
     id=0;
