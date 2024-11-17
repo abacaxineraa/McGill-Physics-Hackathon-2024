@@ -128,7 +128,6 @@ class Photons {
         this.x += this.vx;
         this.y += this.vy;
         this.ran -= Math.sqrt((this.vx)**2+(this.vy)**2);
-        console.log(this.x, this.y)
     }
 
 }
@@ -188,8 +187,8 @@ class Monsters {
 	const contractionFactorX = 1/getContractionFactor(him.vx);
 	const contractionFactorY = 1/getContractionFactor(him.vy);
 
-	this.contractedWidth = this.w * scale * contractionFactorX;
-	this.contractedHeight = this.h * scale * contractionFactorY;
+	this.contractedWidth = this.w * contractionFactorX;
+	this.contractedHeight = this.h * contractionFactorY;
 
 	// Adjust monster's frame rate based on player's speed (time dilation)
 	const dilationFactor = gamma;
@@ -205,14 +204,14 @@ class Monsters {
 
 	
 	// Apply length contraction to the distance between player and monster
-	const deltaX = this.x - player.x;
-	const deltaY = this.y - player.y;
-	const contractedDeltaX = deltaX / gamma*0.1;
-	const contractedDeltaY = deltaY / gamma*0.1;
+	const deltaX = this.x - cameraX;
+	const deltaY = this.y - cameraY;
+	const contractedDeltaX = deltaX / gamma;
+	const contractedDeltaY = deltaY / gamma;
 	
 	// Calculate the monster's position based on contracted distances
-	this.drawX = canvas.width / 2 + contractedDeltaX - cameraX;
-	this.drawY = canvas.height / 2 + contractedDeltaY - cameraY;
+	this.drawX = canvas.width / 2 + contractedDeltaX;
+	this.drawY = canvas.height / 2 + contractedDeltaY;
 
         // Draw the monster sprite at the calculated position
         ctx.drawImage(
