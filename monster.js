@@ -77,8 +77,8 @@ class Monsters {
 	const contractedDeltaY = deltaY / gamma*0.1;
 	
 	// Calculate the monster's position based on contracted distances
-	this.drawX = canvas.width / 2 + contractedDeltaX - cameraX;
-	this.drawY = canvas.height / 2 + contractedDeltaY - cameraY;
+	this.drawX = canvas.width / 2 + contractedDeltaX - cameraX- this.contractedWidth;
+	this.drawY = canvas.height / 2 + contractedDeltaY - cameraY - this.contractedHeight;
 
         // Draw the monster sprite at the calculated position
         ctx.drawImage(
@@ -87,8 +87,8 @@ class Monsters {
             this.sourceY, // Source Y position (based on the row)
             this.spriteWidth,
             this.spriteHeight,
-            this.drawX - this.contractedWidth,  // Draw at monster position
-            this.drawY - this.contractedHeight,  // Draw at monster position
+            this.drawX,  // Draw at monster position
+            this.drawY,  // Draw at monster position
             this.contractedWidth,  // Scale to contracted width
             this.contractedHeight // Scale to contracted height
         );

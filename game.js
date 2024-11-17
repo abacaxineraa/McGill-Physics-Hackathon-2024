@@ -29,36 +29,46 @@ function findId(anId) {
 }
 
 // Function to spawn monsters outside the frame
-function spawnMonster() {
+function spawnCreature(maxCreature, object) {
     // Only spawn a monster if the number of monsters is less than 5
-    if (monsters.length <= Math.round(5 + 10 * spawnRate) && monsters.length == 0) {
+    if (object.length <= Math.round(maxCreature + 10 * spawnRate) && monsters.length == 0) {
 
-    // Random position outside the player's current view
-    let spawnX = player.x + (Math.random() * 800 - 400);  // Spawn outside the screen on X-axis
-    let spawnY = player.y + (Math.random() * 800 - 400);  // Spawn outside the screen on Y-axis
+	// Random position outside the player's current view
+	let spawnX = player.x + (Math.random() * 800 - 400);  // Spawn outside the screen on X-axis
+	let spawnY = player.y + (Math.random() * 800 - 400);  // Spawn outside the screen on Y-axis
 
-    // Random size for the monster
-    let size = Math.random() * 40 + 20;
-    
-    // Random velocity for the monster (to make them move)
-    let vx = Math.random() * 1.8 - 1; 
-    let vy = Math.random() * 1.8 - 1; 
+	// Random size for the monster
+	let size = Math.random() * 40 + 20;
+	
+	// Random velocity for the monster (to make them move)
+	let vx = Math.random() * 1.8 - 1; 
+	let vy = Math.random() * 1.8 - 1; 
 
-    
-    let hp = true;
-    
-    // Random glow effect for the monster
-    let glow = Math.random() < 0.5;
-    let ran = (1-spawnRate) * Math.random() * Math.min(canvas.height/3, canvas.width/3) + 2.5 * Math.min(player.w, player.h)
-    
+	
+	let hp = true;
+	
+	// Random glow effect for the monster
+	let glow = Math.random() < 0.5;
+	let ran = (1-spawnRate) * Math.random() * Math.min(canvas.height/3, canvas.width/3) + 2.5 * Math.min(player.w, player.h)
+	
 
-    let maxtime = 8
-    let time = Math.round(2 + Math.random()*maxtime) // multiplier for the max seconds -- implies that 10 seconds is the maxtime
-    console.log(time) 
-    monsters.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, true, ran, time, null, id));
-    console.log(monsters[monsters.length-1].t)
-    monsters[monsters.length-1].interval = setInterval(increment,1000,id);
-    id++
+	let maxtime = 8
+	let time = Math.round(2 + Math.random()*maxtime) // multiplier for the max seconds -- implies that 10 seconds is the maxtime
+	console.log(time)
+	if (object == monsters) {
+	    object.push(new Monsters(spawnX, spawnY, vx, vy, size, size, hp, true, ran, time, null, id));
+	}
+	else {
+	    let posX = player.x + randomizeWallPos();
+	    let posY = player.y + randomizeWallPos();
+	    let sizeX = randomizeWallSize();
+	    let sizeY = randomizeWallSize();
+	    
+	    walls.push(new Walls(posX,posY,sizeX,sizeY,"black"));
+	}
+	console.log(object[object.length-1].t)
+	object[object.length-1].interval = setInterval(increment,1000,id);
+	id++
 }
 }
 
@@ -100,21 +110,6 @@ function randomizeWallSize(){
 function randomizeWallPos(){
     return (-1)**Math.floor(Math.random()*100) * Math.floor(Math.random()*250);
 }
-
-function spawnWalls(){
-    // if the number of walls exceeds 2, do not produce any more
-    if(walls.length >= 2) return;
-    let posX = player.x + randomizeWallPos();
-    let posY = player.y + randomizeWallPos();
-    let sizeX = randomizeWallSize();
-    let sizeY = randomizeWallSize();
-    let vx = 0;
-    let vy = 0;
-    let color = 'black';
-    walls.push(new Walls(posX,posY,sizeX,sizeY,color));
-
-}
-
 
 
 // Math functions
@@ -309,21 +304,18 @@ function updateGame(){
     // Inside updateGame function:
     player.draw(ctx, player.spriteSheet, cameraX, cameraY, canvas);
     aimer.draw();
-    if (Math.random() < spawnRate) spawnMonster()
+    if (Math.random() < spawnRate) spawnCreature(5, monsters)
+
+    spawnCreature(2, walls)
     
     // Draw the monsters
     for(i=0; i < monsters.length; i++){
         monsters[i].move();
-        monsters[i].draw(player);
-
-
-        
+        monsters[i].draw(player);        
     }
     
-    if(spawnWalls.length < 2) spawnWalls();
     for(i=0; i < walls.length; i++){
-        walls[i].draw();
-        walls[i].move();
+	walls[i].draw(player);
     }
     // Check photons
     photons = photons.filter(checkRange);
