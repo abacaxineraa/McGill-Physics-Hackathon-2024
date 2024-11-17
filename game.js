@@ -108,6 +108,8 @@ function spawnWalls(){
     let posY = player.y + randomizeWallPos();
     let sizeX = randomizeWallSize();
     let sizeY = randomizeWallSize();
+    let vx = 0;
+    let vy = 0;
     let color = 'black';
     walls.push(new Walls(posX,posY,sizeX,sizeY,color));
 
@@ -321,6 +323,7 @@ function updateGame(){
     if(spawnWalls.length < 2) spawnWalls();
     for(i=0; i < walls.length; i++){
         walls[i].draw();
+        walls[i].move();
     }
     // Check photons
     photons = photons.filter(checkRange);

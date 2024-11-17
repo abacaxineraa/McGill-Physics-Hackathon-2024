@@ -261,18 +261,21 @@ class Monsters {
 
 
 class Walls {
-    constructor(x,y,w,h,color){
+    constructor(x,y,w,h,vx,vy,color){
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
+        this.vx = vx;
+        this.vy = vy;
         this.color = color;
 
     }
 
     draw(){
         ctx.rect(this.x, this.y, this.w, this.h);
-        ctx.fillStyle = this.color;
+        ctx.fillStyle = 'black';
         ctx.fill();
     }
+
 }
