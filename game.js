@@ -4,8 +4,6 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scale = 1.4;
 
-let c = 5; // speed of light
-
 let photons = []
 let redphotons = []
 
@@ -21,10 +19,9 @@ window.addEventListener('resize', resizeCanvas);
 resizeCanvas(canvas);
 
 
-
+let spawnRate = TrueSpawnRate
 let monsters = [];
 let monstersKilled = 0;
-let spawnRate = 0.03;
 let id=0;
 
 function findId(anId) {
@@ -450,7 +447,7 @@ function resetGame() {    //CAN SOMEONE FIX THIS RESETGAME FUNCTION PLZ THANKS
     // Reset any other game variables, such as monsters, score, camera, etc.
     monsters = [];
     monstersKilled = 0;
-    spawnRate = 0.03;
+    spawnRate = TrueSpawnRate;
     cameraX = canvas.width/2;
     cameraY = canvas.height/2;
 }

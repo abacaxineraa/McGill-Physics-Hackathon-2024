@@ -68,7 +68,7 @@ h1 {
 
 /* Button Styling */
 button {
-    margin-top: -1px; /* Adjust position to be above the middle */
+    margin-top: 20px; /* Adjust position to be above the middle */
     padding: 20px 40px;
     font-size: 1.5rem;
     cursor: pointer;

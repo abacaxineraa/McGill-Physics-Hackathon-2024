@@ -35,7 +35,6 @@ class Monsters {
     draw(him) {
         // console.log(this.x, this.y)
 
-	const c = 5; // Normalized speed of light (for this simulation, we use 5)
 	const speed = Math.sqrt(him.vx ** 2 + him.vy ** 2); // Total speed (magnitude of velocity)
 
 	// Limit the speed to 0.9c to avoid going faster than light
@@ -74,7 +73,6 @@ class Monsters {
 	const deltaY = this.y - him.y;
 	const contractedDeltaX = deltaX * contractionFactorX;
 	const contractedDeltaY = deltaY * contractionFactorY;
-    console.log (deltaX, contractedDeltaX)
 	this.drawX = canvas.width / 2 + contractedDeltaX;
 	this.drawY = canvas.height / 2 + contractedDeltaY;
 

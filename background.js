@@ -11,7 +11,6 @@ const tileWidth = 128;  // Width of each background tile
 const tileHeight = 128; // Height of each background tile
 function updateBackground(him) {
     // Speed of light and gamma factor for contraction
-    const c = 5; // Speed of light in this simulation
     const playerSpeed = Math.sqrt(him.vx ** 2 + him.vy ** 2);
     const contractedSpeed = Math.min(playerSpeed, 0.9 * c); // Limiting to <0.9c
     const gamma = 1 / Math.sqrt(1 - (contractedSpeed / c) ** 2);
