@@ -74,6 +74,7 @@ class Monsters {
 	const deltaY = this.y - him.y;
 	const contractedDeltaX = deltaX * contractionFactorX;
 	const contractedDeltaY = deltaY * contractionFactorY;
+    console.log (deltaX, contractedDeltaX)
 	this.drawX = canvas.width / 2 + contractedDeltaX;
 	this.drawY = canvas.height / 2 + contractedDeltaY;
 
@@ -85,8 +86,8 @@ class Monsters {
             this.sourceY, // Source Y position (based on the row)
             this.spriteWidth,
             this.spriteHeight,
-            this.drawX - this.contractedWidth/2 ,  // Draw at monster position
-            this.drawY - this.contractedHeight/2,  // Draw at monster position
+            this.drawX - this.contractedWidth/2,  // Draw at monster position
+            this.drawY - this.contractedHeight/2 ,  // Draw at monster position
             this.contractedWidth,  // Scale to contracted width
             this.contractedHeight // Scale to contracted height
         );
