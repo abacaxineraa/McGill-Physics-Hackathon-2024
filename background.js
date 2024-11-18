@@ -16,14 +16,14 @@ function updateBackground(him) {
     const gamma = 1 / Math.sqrt(1 - (contractedSpeed / c) ** 2);
 
     // Contraction factors
-    const contractionFactorX =  1 //Math.sqrt(1 - (Math.min(Math.abs(him.vx), 0.9 * c) / c) ** 2);
-    const contractionFactorY =  1 //Math.sqrt(1 - (Math.min(Math.abs(him.vy), 0.9 * c) / c) ** 2);
+    const contractionFactorX =  Math.sqrt(1 - (Math.min(Math.abs(him.vx), 0.9 * c) / c) ** 2);
+    const contractionFactorY =  Math.sqrt(1 - (Math.min(Math.abs(him.vy), 0.9 * c) / c) ** 2);
 
     
 
     // Calculate the offset with contraction applied
-    const offsetX = (-cameraX + Math.floor(him.x / tileWidth) * tileWidth) * contractionFactorX;
-    const offsetY = (-cameraY + Math.floor(him.y / tileHeight) * tileHeight) * contractionFactorY;
+    const offsetX = (-cameraX + Math.floor(him.x / tileWidth / contractionFactorX) * tileWidth* contractionFactorX) ;
+    const offsetY = (-cameraY + Math.floor(him.y / tileHeight / contractionFactorY) * tileHeight* contractionFactorY) ;
 
     // Redraw the background tiles in the grid, applying contraction
     for (let i = 0; i < Math.ceil(canvas.width / (tileWidth * contractionFactorX))+1; i++) {

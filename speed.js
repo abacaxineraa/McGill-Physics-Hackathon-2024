@@ -31,4 +31,5 @@ function frameStop() {
     console.log(framecount, Kframecount)
     button1.style.display = "block"
     button2.style.display = "block"
+    framecount = 0;
 }
